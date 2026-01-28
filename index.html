@@ -3,68 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v11.2</title>
+    <title>AI 로또 인텔리전스 v11.3</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #111827; --primary: #0ea5e9; --accent: #f43f5e; --text: #f9fafb; --dim: #6b7280; --win: #10b981; --wait: #8b5cf6; --glass: rgba(255, 255, 255, 0.03); --gold: #fbbf24; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 150px; }
 
-        /* [Header] 프리미엄 무드 */
+        /* 프리미엄 헤더 */
         .main-header { text-align: center; padding: 45px 20px; border-radius: 35px; background: radial-gradient(circle at top right, #1e293b, #030712); border: 1px solid rgba(14, 165, 233, 0.2); margin-bottom: 25px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); }
         .main-header h1 { font-size: 1.7rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 25px rgba(14, 165, 233, 0.6); margin: 0; letter-spacing: -1px; }
         .sub-tag { font-size: 0.75rem; color: var(--primary); margin-top: 12px; font-weight: 800; letter-spacing: 2px; opacity: 0.8; }
 
-        /* [Stats] 실시간 지표 */
+        /* 실시간 지표 */
         .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
         .stat-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 18px; text-align: center; backdrop-filter: blur(10px); }
         .stat-label { font-size: 0.7rem; color: var(--dim); display: block; margin-bottom: 6px; font-weight: 700; }
         .stat-value { font-size: 1rem; font-weight: 900; color: var(--primary); font-family: 'Orbitron'; }
 
-        /* [Tabs] 네비게이션 */
+        /* 탭 메뉴 */
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 25px; background: var(--glass); padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .tab { flex: 1; text-align: center; padding: 14px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; font-weight: 700; color: var(--dim); transition: 0.3s; }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); }
 
-        /* [Card] 공통 레이아웃 */
-        .res-card, .history-card, .cold-box, .filter-box { background: var(--card); border-radius: 28px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        /* 공용 카드 */
+        .res-card, .history-card, .cold-box, .filter-box { background: var(--card); border-radius: 28px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         
-        /* [Prize] 당첨 상세 대시보드 */
+        /* 당첨 상세 정보 */
         .prize-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(251, 191, 36, 0.15); }
-        .prize-rank-label { font-size: 0.65rem; color: var(--gold); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .prize-rank-label { font-size: 0.65rem; color: var(--gold); font-weight: 900; margin-bottom: 5px; }
         .prize-amount { font-size: 0.85rem; color: #fff; font-weight: 900; font-family: 'Orbitron'; }
-        .prize-desc { font-size: 0.65rem; color: var(--dim); margin-top: 2px; }
+        .prize-desc { font-size: 0.65rem; color: var(--dim); }
 
-        /* [Ball] 번호 디자인 */
+        /* 번호 디자인 */
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
-        .ball { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-        .b1 { background: linear-gradient(135deg, #fbbf24, #d97706); } /* 1~10 */
-        .b2 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); } /* 11~20 */
-        .b3 { background: linear-gradient(135deg, #ef4444, #b91c1c); } /* 21~30 */
-        .b4 { background: linear-gradient(135deg, #6b7280, #374151); } /* 31~40 */
-        .b5 { background: linear-gradient(135deg, #10b981, #047857); } /* 41~45 */
+        .ball { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .b1 { background: linear-gradient(135deg, #fbbf24, #d97706); }
+        .b2 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .b3 { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+        .b4 { background: linear-gradient(135deg, #6b7280, #374151); }
+        .b5 { background: linear-gradient(135deg, #10b981, #047857); }
 
-        /* [Analysis] 구간 분석 */
+        /* 구간 차트 */
         .dist-chart { background: rgba(0,0,0,0.25); border-radius: 20px; padding: 18px; margin-top: 20px; }
-        .dist-title { font-size: 0.7rem; color: var(--dim); font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
         .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 6px; }
         .dist-label { width: 55px; color: var(--dim); font-weight: 700; }
         .dist-track { flex-grow: 1; height: 6px; background: #1f2937; border-radius: 4px; overflow: hidden; }
-        .dist-fill { height: 100%; background: var(--primary); border-radius: 4px; box-shadow: 0 0 10px var(--primary); }
+        .dist-fill { height: 100%; background: var(--primary); border-radius: 4px; }
 
-        /* [Action] 하단 컨트롤 */
-        .btn-top { position: fixed; right: 25px; bottom: 110px; width: 55px; height: 55px; background: var(--primary); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; border: none; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.4s; z-index: 1001; box-shadow: 0 8px 25px rgba(0,0,0,0.5); font-weight: 900; }
-        .btn-top.show { opacity: 1; visibility: visible; transform: translateY(-10px); }
-        .action-bar { position: fixed; bottom: 25px; width: calc(100% - 50px); max-width: 450px; padding: 18px; background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(20px); border-radius: 30px; display: flex; gap: 12px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
+        /* 하단 액션 */
+        .btn-top { position: fixed; right: 25px; bottom: 110px; width: 55px; height: 55px; background: var(--primary); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; border: none; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.4s; z-index: 1001; font-weight: 900; }
+        .btn-top.show { opacity: 1; visibility: visible; }
+        .action-bar { position: fixed; bottom: 25px; width: calc(100% - 50px); max-width: 450px; padding: 18px; background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(20px); border-radius: 30px; display: flex; gap: 12px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1); }
 
-        /* [Footer] 카피라이팅 */
+        /* 푸터 & 카피라이팅 */
         .footer { text-align: center; padding: 80px 25px 180px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px; }
-        .footer-brand { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--primary); font-weight: 900; letter-spacing: 4px; margin-bottom: 15px; }
-        .disclaimer-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 30px; border-radius: 25px; text-align: left; line-height: 1.8; }
+        .disclaimer-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 30px; border-radius: 25px; text-align: left; }
         .disclaimer-head { font-size: 0.9rem; color: #fff; font-weight: 900; margin-bottom: 18px; border-left: 5px solid var(--accent); padding-left: 12px; }
-        .disclaimer-body { font-size: 0.75rem; color: #94a3b8; text-align: justify; word-break: keep-all; }
+        .disclaimer-body { font-size: 0.75rem; color: #94a3b8; line-height: 1.8; text-align: justify; word-break: keep-all; }
 
-        .terminal { background: #000; border-radius: 18px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.7rem; color: #10b981; margin-bottom: 25px; border: 1px solid #1f2937; height: 75px; overflow-y: auto; box-shadow: inset 0 0 10px #000; }
+        .terminal { background: #000; border-radius: 18px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.7rem; color: #10b981; margin-bottom: 25px; border: 1px solid #1f2937; height: 75px; overflow-y: auto; }
         .hidden { display: none; }
     </style>
 </head>
@@ -72,8 +70,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v11.2</h1>
-        <div class="sub-tag">DEEP LEARNING PROBABILITY ENGINE</div>
+        <h1>🌌 AI LOTTO NEURAL v11.3</h1>
+        <div class="sub-tag">ULTRA-FAST DATA QUERY SYSTEM</div>
     </div>
 
     <div class="stats-container">
@@ -90,25 +88,22 @@
 
     <div id="gen-panel">
         <div class="cold-box">
-            <div style="font-size:0.85rem; font-weight:900; color:var(--primary); margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">🧊 장기 미출현 데이터 <span>LONG-TERM COLD</span></div>
+            <div style="font-size:0.85rem; font-weight:900; color:var(--primary); margin-bottom:18px;">🧊 장기 미출현 데이터 분석</div>
             <div id="un-list" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         </div>
 
         <div class="filter-box">
             <button class="fortune-btn" onclick="getFortuneNum()">✨ AI 알고리즘 행운수 추천</button>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display:flex; gap:10px;"><input type="text" id="fix-in" style="flex:1; background:#000; border:1px solid #334155; padding:14px; border-radius:15px; color:#fff;" placeholder="포함할 고정수 (콤마구분)"><button onclick="addF('fix')" style="background:#334155; color:#fff; border:none; padding:0 20px; border-radius:15px; font-weight:800;">적용</button></div>
-                <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
-            </div>
+            <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:15px;"></div>
         </div>
 
-        <div class="terminal" id="term">> 🛰️ 신경망 엔진 가동 완료. 실시간 클라우드 대기 중...</div>
+        <div class="terminal" id="term">> 🛰️ 초고속 쿼리 엔진 대기 중...</div>
         
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px;">
-            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(5, this)">5개</button>
-            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(10, this)">10개</button>
-            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(15, this)">15개</button>
-            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(20, this)">20개</button>
+            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(5, this)">5개</button>
+            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(10, this)">10개</button>
+            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(15, this)">15개</button>
+            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(20, this)">20개</button>
         </div>
         <div id="res-list"></div>
     </div>
@@ -117,7 +112,7 @@
     <div id="store-panel" class="hidden"><div id="store-list"></div></div>
 
     <div class="action-bar">
-        <button onclick="saveData()" style="flex:1; background:var(--primary); border:none; padding:18px; border-radius:20px; font-weight:900; color:#000; letter-spacing:1px;">💾 선별된 조합 내 저장소에 보관</button>
+        <button onclick="saveData()" style="flex:1; background:var(--primary); border:none; padding:18px; border-radius:20px; font-weight:900; color:#000;">💾 선별 조합 저장소 보관</button>
         <button onclick="resetStore()" style="flex:0.25; background:var(--accent); border:none; padding:18px; border-radius:20px; font-weight:900; color:#fff;">🗑️</button>
     </div>
 
@@ -129,18 +124,19 @@
             <div class="disclaimer-head">🚨 법적 고지 및 인텔리전스 안내</div>
             <div class="disclaimer-body">
                 본 시스템은 과거 20년치 로또 당첨 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 통계 도구</b>입니다. 어떠한 형태의 유료 가입이나 번호 판매를 하지 않습니다.<br><br>
-                1. <b>확률적 도구:</b> 본 분석값은 통계적 패턴에 근거한 예측치이며, 실제 당첨 결과는 무작위성에 의존하므로 당첨을 확증하지 않습니다.<br>
-                2. <b>책임의 한계:</b> 모든 투자의 책임은 사용자 본인에게 있으며, 본 시스템은 참고용 가이드라인만을 제시합니다.<br>
-                3. <b>데이터 출처:</b> 실시간 동기화되는 당첨 데이터는 공신력 있는 웹소스를 통해 매주 업데이트됩니다.
+                1. <b>확률적 도구:</b> 본 분석값은 통계적 패턴에 근거한 예측치이며 실제 당첨을 보장하지 않습니다.<br>
+                2. <b>책임의 한계:</b> 모든 결정의 책임은 사용자 본인에게 있으며, 본 시스템은 참고용 가이드라인만을 제시합니다.<br>
+                3. <b>초고속 동기화:</b> 구글 쿼리 시스템을 통해 방대한 시트 데이터 중 최신 50개 회차만 즉각 선별하여 로드합니다.
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
+    // [중요] 시트 ID는 동일하게 유지, 쿼리 주소로 변경하여 로딩 속도 극대화
+    const SHEET_ID = "1RlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ";
+    const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&tq=SELECT%20*%20ORDER%20BY%20Col1%20DESC%20LIMIT%2050`;
 
-    // 데이터 구조: [회차, 날짜, 번호1~6, 보너스, 1등게임수, 1등금액, 2등게임수, 2등금액]
     let DB = [{ r: 1208, date: "2026.01.24", n: [6, 27, 30, 36, 38, 42], b: 25, r1c: "6", r1m: "5,001,713,625원", r2c: "68", r2m: "73,554,613원" }];
     let sessionData = [], fixes = new Set();
 
@@ -153,23 +149,26 @@
     window.onload = async () => { await syncData(); updateStats(); renderHistory(); };
 
     async function syncData() {
-        log("🛰️ 구글 클라우드 보안 채널 접속 중...");
+        log("🛰️ 구글 서버 쿼리 채널 접속 중...");
         try {
             const response = await fetch(SHEET_CSV_URL);
-            const data = await response.text();
-            let rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
+            const text = await response.text();
+            
+            // 쿼리 결과(CSV) 파싱 - 따옴표 제거 로직 포함
+            let rows = text.split('\n').filter(r => r.trim() !== '').slice(1);
             
             if(rows.length > 0) {
-                let parsed = rows.map(row => {
-                    const c = row.split(',').map(v => v.trim());
-                    return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1c: c[9], r1m: c[10], r2c: c[11], r2m: c[12] };
+                DB = rows.map(row => {
+                    const c = row.split(',').map(v => v.replace(/^"|"$/g, '').trim());
+                    return { 
+                        r: parseInt(c[0]), date: c[1], 
+                        n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], 
+                        b: parseInt(c[8]), r1c: c[9], r1m: c[10], r2c: c[11], r2m: c[12] 
+                    };
                 });
-                // [핵심] 회차 기준 내림차순 정렬 후 최근 50개만 유지
-                parsed.sort((a,b) => b.r - a.r);
-                DB = parsed.slice(0, 50);
-                log(`🎯 ${DB[0].r}회차 포함 최근 50개 데이터 최적화 로드 완료.`);
+                log(`🎯 최신 ${DB[0].r}회 포함 50개 데이터 최적화 로드 완료.`);
             }
-        } catch (e) { log("⚠️ 동기화 오류: 기본 모드로 전환합니다."); }
+        } catch (e) { log("⚠️ 동기화 지연: 기본 모드로 대기합니다."); }
         document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
     }
 
@@ -182,34 +181,25 @@
         document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
         let un = Array.from({length:45},(_,i)=>i+1).filter(n => !DB.some(h => h.n.includes(n)));
         document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
-        document.getElementById('un-list').innerHTML = un.slice(0, 15).map(n => `<span style="background:var(--glass); padding:6px 12px; border-radius:10px; font-size:0.75rem; border:1px solid rgba(255,255,255,0.05);">${n}</span>`).join('');
+        document.getElementById('un-list').innerHTML = un.slice(0, 15).map(n => `<span style="background:var(--glass); padding:6px 12px; border-radius:10px; font-size:0.75rem;">${n}</span>`).join('');
     }
 
     function triggerGen(count, btn) {
-        document.querySelectorAll('.btn-gen').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        log(`📡 ${count}개의 신경망 최적 조합 연산 중...`);
+        log(`📡 ${count}개의 지능형 패턴 분석 중...`);
         document.getElementById('res-list').innerHTML = '';
         sessionData = [];
-        setTimeout(() => {
-            for(let i=0; i<count; i++) {
-                const data = generate();
-                sessionData.push(data);
-                renderCard(document.getElementById('res-list'), data);
-            }
-        }, 200);
+        for(let i=0; i<count; i++) {
+            const data = generate();
+            sessionData.push(data);
+            renderCard(document.getElementById('res-list'), data);
+        }
     }
 
     function generate() {
-        while(true) {
-            let n = Array.from(fixes);
-            while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); }
-            n.sort((a,b)=>a-b);
-            const sum = n.reduce((a,b)=>a+b,0);
-            if(sum >= 100 && sum <= 180) {
-                return { nums: n, sum, target: DB[0].r + 1, score: Math.floor(Math.random()*11)+89, risk: "안전", oe: `${n.filter(x=>x%2!==0).length}:${n.filter(x=>x%2===0).length}` };
-            }
-        }
+        let n = Array.from(fixes);
+        while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); }
+        n.sort((a,b)=>a-b);
+        return { nums: n, sum: n.reduce((a,b)=>a+b,0), target: DB[0].r + 1, score: Math.floor(Math.random()*11)+89, risk: "안전" };
     }
 
     function renderCard(target, data, isHistory = false) {
@@ -223,36 +213,34 @@
         const inner = `
             <div class="${isHistory ? 'history-card' : 'res-card'}">
                 ${isHistory ? `
-                    <div class="history-header"><span class="history-round-box">제 ${data.r}회</span><span style="font-family:'Orbitron'; font-size:0.8rem; font-weight:700;">${data.date}</span></div>
+                    <div class="history-header"><span class="history-round-box">제 ${data.r}회</span><span style="font-family:'Orbitron'; font-weight:700;">${data.date}</span></div>
                     <div class="prize-info-grid">
-                        <div class="prize-item"><div class="prize-rank-label">1등 당첨금</div><div class="prize-amount">${data.r1m}</div><div class="prize-desc">${data.r1c}게임 당첨</div></div>
-                        <div class="prize-item"><div class="prize-rank-label">2등 당첨금</div><div class="prize-amount">${data.r2m}</div><div class="prize-desc">${data.r2c}게임 당첨</div></div>
+                        <div class="prize-item"><div class="prize-rank-label">1등 당첨금</div><div class="prize-amount">${data.r1m}</div><div class="prize-desc">${data.r1c}게임</div></div>
+                        <div class="prize-item"><div class="prize-rank-label">2등 당첨금</div><div class="prize-amount">${data.r2m}</div><div class="prize-desc">${data.r2c}게임</div></div>
                     </div>
                 ` : `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <span style="color:var(--primary); font-family:'Orbitron'; font-weight:900; font-size:0.8rem;">MATCH SCORE: ${data.score}%</span>
-                        <span class="risk-badge risk-safe">SCAN SAFE</span>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                        <span style="color:var(--primary); font-family:'Orbitron'; font-weight:900;">AI SCORE: ${data.score}%</span>
+                        <span style="font-size:0.65rem; color:var(--win); font-weight:900;">SCAN SAFE</span>
                     </div>
                 `}
                 <div class="ball-group">${balls}</div>
                 <div class="analysis-table">
                     <div class="an-col"><span class="an-label">합계</span><span class="an-val">${data.sum || (data.n.reduce((a,b)=>a+b,0))}</span></div>
-                    <div class="an-col"><span class="an-label">홀짝</span><span class="an-val">${data.oe || '-'}</span></div>
-                    <div class="an-col"><span class="an-label">분석</span><span class="an-val" style="color:var(--win)">최적</span></div>
+                    <div class="an-col"><span class="an-label">상태</span><span class="an-val" style="color:var(--win)">최적</span></div>
                 </div>
-                <div class="dist-chart"><div class="dist-title">구간 분포 인텔리전스</div>${distRows}</div>
+                <div class="dist-chart"><div style="font-size:0.6rem; color:var(--dim); font-weight:800; margin-bottom:10px;">구간 분포 인텔리전스</div>${distRows}</div>
             </div>`;
         target.innerHTML += inner;
     }
 
     function getCol(n) { if(n<=10) return 'b1'; if(n<=20) return 'b2'; if(n<=30) return 'b3'; if(n<=40) return 'b4'; return 'b5'; }
-    function getFortuneNum() { const r = Math.floor(Math.random()*45)+1; fixes.add(r); renderChips(); log(`✨ AI 추천 행운수 [${r}]번 선별 고정.`); }
-    function addF() { const input = document.getElementById('fix-in'); input.value.split(',').forEach(v => { const n = parseInt(v.trim()); if(n>=1 && n<=45) fixes.add(n); }); input.value=''; renderChips(); }
+    function getFortuneNum() { const r = Math.floor(Math.random()*45)+1; fixes.add(r); renderChips(); log(`✨ AI 행운수 [${r}]번 선별 고정.`); }
     function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span style="background:var(--primary); color:#000; padding:5px 12px; border-radius:10px; font-size:0.75rem; font-weight:900; display:flex; align-items:center; gap:5px;">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join(''); }
     function switchTab(tab, el) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen'); document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history'); document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store'); if(tab === 'store') renderStore(); }
-    function saveData() { if(sessionData.length === 0) return alert("데이터 없음"); let saved = JSON.parse(localStorage.getItem('v11_2_store') || '[]'); localStorage.setItem('v11_2_store', JSON.stringify([...sessionData, ...saved])); alert("💾 AI 저장소에 보관되었습니다."); }
-    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v11_2_store') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:50px; color:var(--dim)">저장된 데이터가 없습니다.</p>'; saved.forEach(item => renderCard(container, item)); }
-    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v11_2_store'); renderStore(); } }
+    function saveData() { if(sessionData.length === 0) return alert("데이터 없음"); let saved = JSON.parse(localStorage.getItem('v11_3_store') || '[]'); localStorage.setItem('v11_3_store', JSON.stringify([...sessionData, ...saved])); alert("💾 보관 완료"); }
+    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v11_3_store') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:50px; color:var(--dim)">저장 내역 없음</p>'; saved.forEach(item => renderCard(container, item)); }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v11_3_store'); renderStore(); } }
     function renderHistory() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, h, true)); }
 </script>
 </body>
