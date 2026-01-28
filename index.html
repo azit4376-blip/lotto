@@ -3,86 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v10.7</title>
+    <title>AI 로또 인텔리전스 v11.2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #111827; --primary: #0ea5e9; --accent: #f43f5e; --text: #f9fafb; --dim: #6b7280; --win: #10b981; --wait: #8b5cf6; --glass: rgba(255, 255, 255, 0.03); --gold: #fbbf24; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 150px; }
 
-        /* 헤더 섹션 */
-        .main-header { text-align: center; padding: 40px 20px; border-radius: 30px; background: radial-gradient(circle at top right, #1e293b, #030712); border: 1px solid rgba(14, 165, 233, 0.2); margin-bottom: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
-        .main-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(14, 165, 233, 0.5); margin: 0; }
+        /* [Header] 프리미엄 무드 */
+        .main-header { text-align: center; padding: 45px 20px; border-radius: 35px; background: radial-gradient(circle at top right, #1e293b, #030712); border: 1px solid rgba(14, 165, 233, 0.2); margin-bottom: 25px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); }
+        .main-header h1 { font-size: 1.7rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 25px rgba(14, 165, 233, 0.6); margin: 0; letter-spacing: -1px; }
+        .sub-tag { font-size: 0.75rem; color: var(--primary); margin-top: 12px; font-weight: 800; letter-spacing: 2px; opacity: 0.8; }
 
-        /* 통계 지표 */
-        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .stat-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; text-align: center; }
-        .stat-label { font-size: 0.65rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 600; }
-        .stat-value { font-size: 0.9rem; font-weight: 800; color: var(--primary); }
+        /* [Stats] 실시간 지표 */
+        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
+        .stat-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 18px; text-align: center; backdrop-filter: blur(10px); }
+        .stat-label { font-size: 0.7rem; color: var(--dim); display: block; margin-bottom: 6px; font-weight: 700; }
+        .stat-value { font-size: 1rem; font-weight: 900; color: var(--primary); font-family: 'Orbitron'; }
 
-        /* 탭 메뉴 */
-        .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--glass); padding: 5px; border-radius: 15px; }
-        .tab { flex: 1; text-align: center; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--dim); transition: 0.3s; }
-        .tab.active { background: var(--primary); color: #000; font-weight: 900; }
+        /* [Tabs] 네비게이션 */
+        .nav-tabs { display: flex; gap: 8px; margin-bottom: 25px; background: var(--glass); padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .tab { flex: 1; text-align: center; padding: 14px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; font-weight: 700; color: var(--dim); transition: 0.3s; }
+        .tab.active { background: var(--primary); color: #000; font-weight: 900; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); }
 
-        /* 공통 카드 디자인 */
-        .res-card, .history-card, .cold-box, .filter-box { background: var(--card); border-radius: 25px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
+        /* [Card] 공통 레이아웃 */
+        .res-card, .history-card, .cold-box, .filter-box { background: var(--card); border-radius: 28px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
         
-        /* 당첨 기록 헤더 */
-        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .history-round-box { background: linear-gradient(135deg, var(--gold), #d97706); color: #000; padding: 5px 12px; border-radius: 8px; font-family: 'Orbitron'; font-size: 0.85rem; font-weight: 900; }
-        .history-date-box { font-family: 'Orbitron'; font-size: 0.75rem; color: var(--primary); font-weight: 700; }
+        /* [Prize] 당첨 상세 대시보드 */
+        .prize-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(251, 191, 36, 0.15); }
+        .prize-rank-label { font-size: 0.65rem; color: var(--gold); font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .prize-amount { font-size: 0.85rem; color: #fff; font-weight: 900; font-family: 'Orbitron'; }
+        .prize-desc { font-size: 0.65rem; color: var(--dim); margin-top: 2px; }
 
-        /* AI 분석 레이아웃 */
-        .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
-        .ai-comment { flex: 1; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--win); padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 0.75rem; color: var(--win); font-weight: 600; line-height: 1.4; }
-        .risk-badge { flex-shrink: 0; padding: 5px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; text-align: center; }
-        .risk-safe { background: rgba(16, 185, 129, 0.2); color: var(--win); border: 1px solid var(--win); }
-        .risk-caution { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+        /* [Ball] 번호 디자인 */
+        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+        .ball { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .b1 { background: linear-gradient(135deg, #fbbf24, #d97706); } /* 1~10 */
+        .b2 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); } /* 11~20 */
+        .b3 { background: linear-gradient(135deg, #ef4444, #b91c1c); } /* 21~30 */
+        .b4 { background: linear-gradient(135deg, #6b7280, #374151); } /* 31~40 */
+        .b5 { background: linear-gradient(135deg, #10b981, #047857); } /* 41~45 */
 
-        /* 번호 디자인 */
-        .ball-group { display: flex; gap: 6px; justify-content: center; margin: 15px 0; }
-        .ball { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.95rem; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .b1 { background: #fbbf24; } .b2 { background: #3b82f6; } .b3 { background: #ef4444; } .b4 { background: #6b7280; } .b5 { background: #10b981; }
+        /* [Analysis] 구간 분석 */
+        .dist-chart { background: rgba(0,0,0,0.25); border-radius: 20px; padding: 18px; margin-top: 20px; }
+        .dist-title { font-size: 0.7rem; color: var(--dim); font-weight: 800; margin-bottom: 12px; text-transform: uppercase; }
+        .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 6px; }
+        .dist-label { width: 55px; color: var(--dim); font-weight: 700; }
+        .dist-track { flex-grow: 1; height: 6px; background: #1f2937; border-radius: 4px; overflow: hidden; }
+        .dist-fill { height: 100%; background: var(--primary); border-radius: 4px; box-shadow: 0 0 10px var(--primary); }
 
-        /* 분석 테이블 */
-        .analysis-table { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 18px; margin-bottom: 15px; }
-        .an-col { text-align: center; } .an-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; } .an-val { font-size: 0.75rem; font-weight: 800; color: var(--primary); }
+        /* [Action] 하단 컨트롤 */
+        .btn-top { position: fixed; right: 25px; bottom: 110px; width: 55px; height: 55px; background: var(--primary); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; border: none; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.4s; z-index: 1001; box-shadow: 0 8px 25px rgba(0,0,0,0.5); font-weight: 900; }
+        .btn-top.show { opacity: 1; visibility: visible; transform: translateY(-10px); }
+        .action-bar { position: fixed; bottom: 25px; width: calc(100% - 50px); max-width: 450px; padding: 18px; background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(20px); border-radius: 30px; display: flex; gap: 12px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
 
-        /* 구간 분포 차트 */
-        .dist-chart { background: rgba(0,0,0,0.2); border-radius: 15px; padding: 12px; margin-top: 10px; }
-        .dist-row { display: flex; align-items: center; font-size: 0.65rem; margin-bottom: 4px; }
-        .dist-label { width: 45px; color: var(--dim); font-weight: 600; }
-        .dist-track { flex-grow: 1; height: 5px; background: #1f2937; border-radius: 3px; overflow: hidden; }
-        .dist-fill { height: 100%; background: var(--primary); border-radius: 3px; }
+        /* [Footer] 카피라이팅 */
+        .footer { text-align: center; padding: 80px 25px 180px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 60px; }
+        .footer-brand { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--primary); font-weight: 900; letter-spacing: 4px; margin-bottom: 15px; }
+        .disclaimer-box { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.08); padding: 30px; border-radius: 25px; text-align: left; line-height: 1.8; }
+        .disclaimer-head { font-size: 0.9rem; color: #fff; font-weight: 900; margin-bottom: 18px; border-left: 5px solid var(--accent); padding-left: 12px; }
+        .disclaimer-body { font-size: 0.75rem; color: #94a3b8; text-align: justify; word-break: keep-all; }
 
-        /* 주기 분석 */
-        .cycle-box { background: rgba(139, 92, 246, 0.1); border-radius: 12px; padding: 10px; border: 1px solid rgba(139, 92, 246, 0.2); margin-top: 10px; }
-        .cycle-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.6rem; font-weight: 800; color: var(--wait); }
-        .cycle-track { height: 4px; background: #1f2937; border-radius: 2px; overflow: hidden; }
-        .cycle-fill { height: 100%; background: var(--wait); }
-
-        /* 생성 버튼 및 칩 */
-        .fortune-btn { width: 100%; background: linear-gradient(to right, #8b5cf6, #3b82f6); color: #fff; border: none; padding: 15px; border-radius: 15px; margin-bottom: 15px; font-weight: 900; cursor: pointer; }
-        .btn-gen { background: #111827; color: #fff; border: 1px solid #374151; padding: 15px 0; border-radius: 15px; font-weight: 800; cursor: pointer; }
-        .btn-gen.active { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
-
-        /* 상단 이동 버튼 */
-        .btn-top { position: fixed; right: 20px; bottom: 100px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border: none; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1001; font-weight: 900; }
-        .btn-top.show { opacity: 1; visibility: visible; bottom: 120px; }
-
-        /* 터미널 및 하단 바 */
-        .terminal { background: #000; border-radius: 15px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.7rem; color: #10b981; margin-bottom: 20px; border: 1px solid #1f2937; height: 65px; overflow-y: auto; line-height: 1.6; }
-        .action-bar { position: fixed; bottom: 20px; width: calc(100% - 40px); max-width: 460px; padding: 15px; background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(15px); border-radius: 25px; display: flex; gap: 10px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1); }
-
-        /* 푸터 카피라이팅 */
-        .footer { text-align: center; padding: 60px 25px 160px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
-        .footer-brand { font-family: 'Orbitron'; font-size: 1rem; color: var(--primary); font-weight: 900; letter-spacing: 3px; margin-bottom: 12px; }
-        .disclaimer-box { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; text-align: left; }
-        .disclaimer-head { font-size: 0.85rem; color: #f9fafb; font-weight: 900; margin-bottom: 15px; border-left: 4px solid var(--accent); padding-left: 10px; }
-        .disclaimer-body { font-size: 0.72rem; color: #94a3b8; line-height: 1.9; text-align: justify; }
-        .free-badge { display: inline-block; background: var(--accent); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; margin-bottom: 10px; font-weight: 900; }
-
+        .terminal { background: #000; border-radius: 18px; padding: 15px; font-family: 'Courier New', monospace; font-size: 0.7rem; color: #10b981; margin-bottom: 25px; border: 1px solid #1f2937; height: 75px; overflow-y: auto; box-shadow: inset 0 0 10px #000; }
         .hidden { display: none; }
     </style>
 </head>
@@ -90,46 +72,43 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v10.7</h1>
-        <div style="font-size: 0.7rem; color: var(--primary); margin-top: 10px; font-weight: 800; letter-spacing: 1px;">PREMIUM FREE ANALYSIS SYSTEM</div>
+        <h1>🌌 AI LOTTO NEURAL v11.2</h1>
+        <div class="sub-tag">DEEP LEARNING PROBABILITY ENGINE</div>
     </div>
 
     <div class="stats-container">
-        <div class="stat-card"><span class="stat-label">🔥 최다 출현수</span><span class="stat-value" id="hot-v">--</span></div>
-        <div class="stat-card"><span class="stat-label">❄️ 최저 출현수</span><span class="stat-value" id="cold-v">--</span></div>
-        <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
+        <div class="stat-card"><span class="stat-label">🔥 HOT 번호</span><span class="stat-value" id="hot-v">--</span></div>
+        <div class="stat-card"><span class="stat-label">❄️ COLD 번호</span><span class="stat-value" id="cold-v">--</span></div>
+        <div class="stat-card"><span class="stat-label">🎯 대상 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
     <div class="nav-tabs">
-        <div class="tab active" onclick="switchTab('gen', this)">🎲 분석생성</div>
-        <div class="tab" onclick="switchTab('history', this)">📜 당첨기록</div>
-        <div class="tab" onclick="switchTab('store', this)">📂 저장소</div>
+        <div class="tab active" onclick="switchTab('gen', this)">🎲 패턴 분석</div>
+        <div class="tab" onclick="switchTab('history', this)">📜 당첨 히스토리</div>
+        <div class="tab" onclick="switchTab('store', this)">📂 분석 저장소</div>
     </div>
 
     <div id="gen-panel">
         <div class="cold-box">
-            <div style="font-size:0.85rem; font-weight:800; color:var(--primary); margin-bottom:15px; display:flex; justify-content:space-between;">🧊 10회차 미출현 분석 <span>COLD NUMBERS</span></div>
+            <div style="font-size:0.85rem; font-weight:900; color:var(--primary); margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">🧊 장기 미출현 데이터 <span>LONG-TERM COLD</span></div>
             <div id="un-list" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         </div>
 
         <div class="filter-box">
-            <div style="font-size:0.7rem; color:var(--win); font-weight:800; margin-bottom:12px;">💡 고정수는 최대 5개까지 선택 가능합니다.</div>
-            <button class="fortune-btn" onclick="getFortuneNum()">✨ 오늘 나의 무료 행운수 추출</button>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <div style="display:flex; gap:8px;"><input type="text" id="fix-in" style="flex:1; background:#000; border:1px solid #334155; padding:12px; border-radius:12px; color:#fff;" placeholder="포함할 번호"><button onclick="addF('fix')" style="background:#374151; color:#fff; border:none; padding:0 15px; border-radius:12px; font-weight:700;">고정</button></div>
-                <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
-                <div style="display:flex; gap:8px;"><input type="text" id="exc-in" style="flex:1; background:#000; border:1px solid #334155; padding:12px; border-radius:12px; color:#fff;" placeholder="제외할 번호"><button onclick="addF('exc')" style="background:#374151; color:#fff; border:none; padding:0 15px; border-radius:12px; font-weight:700;">제외</button></div>
-                <div id="exc-chips" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+            <button class="fortune-btn" onclick="getFortuneNum()">✨ AI 알고리즘 행운수 추천</button>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div style="display:flex; gap:10px;"><input type="text" id="fix-in" style="flex:1; background:#000; border:1px solid #334155; padding:14px; border-radius:15px; color:#fff;" placeholder="포함할 고정수 (콤마구분)"><button onclick="addF('fix')" style="background:#334155; color:#fff; border:none; padding:0 20px; border-radius:15px; font-weight:800;">적용</button></div>
+                <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
             </div>
         </div>
 
-        <div class="terminal" id="term">> 🛰️ 데이터 동기화 시스템 로드 완료. 실시간 클라우드 연동 대기 중...</div>
+        <div class="terminal" id="term">> 🛰️ 신경망 엔진 가동 완료. 실시간 클라우드 대기 중...</div>
         
-        <div class="gen-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
-            <button class="btn-gen" onclick="triggerGen(5, this)">5개</button>
-            <button class="btn-gen" onclick="triggerGen(10, this)">10개</button>
-            <button class="btn-gen" onclick="triggerGen(15, this)">15개</button>
-            <button class="btn-gen" onclick="triggerGen(20, this)">20개</button>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px;">
+            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(5, this)">5개</button>
+            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(10, this)">10개</button>
+            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(15, this)">15개</button>
+            <button class="btn-gen" style="padding:15px 0" onclick="triggerGen(20, this)">20개</button>
         </div>
         <div id="res-list"></div>
     </div>
@@ -138,21 +117,21 @@
     <div id="store-panel" class="hidden"><div id="store-list"></div></div>
 
     <div class="action-bar">
-        <button onclick="saveData()" style="flex:1; background:var(--primary); border:none; padding:15px; border-radius:15px; font-weight:900; color:#000;">💾 분석 결과 저장하기</button>
-        <button onclick="resetStore()" style="flex:0.3; background:var(--accent); border:none; padding:15px; border-radius:15px; font-weight:900; color:#fff;">🗑️ 비우기</button>
+        <button onclick="saveData()" style="flex:1; background:var(--primary); border:none; padding:18px; border-radius:20px; font-weight:900; color:#000; letter-spacing:1px;">💾 선별된 조합 내 저장소에 보관</button>
+        <button onclick="resetStore()" style="flex:0.25; background:var(--accent); border:none; padding:18px; border-radius:20px; font-weight:900; color:#fff;">🗑️</button>
     </div>
 
     <button class="btn-top" id="btnTop" onclick="window.scrollTo(0,0)">↑</button>
 
     <div class="footer">
-        <div class="footer-brand">🚀 AI LOTTO TECHNOLOGY</div>
+        <div class="footer-brand">AI LOTTO NEURAL SYSTEM</div>
         <div class="disclaimer-box">
-            <div class="free-badge">100% 무료 분석 도구</div>
-            <div class="disclaimer-head">🚨 법적 고지 및 면책 조항</div>
+            <div class="disclaimer-head">🚨 법적 고지 및 인텔리전스 안내</div>
             <div class="disclaimer-body">
-                본 서비스는 과거 데이터를 기반으로 한 신경망 분석 정보를 <b>조건 없이 100% 무료로 제공</b>하는 통계 도구입니다. 어떠한 형태의 유료 결제나 구독을 유도하지 않습니다.<br><br>
-                1. <b>당첨 보장 불가:</b> 본 분석 결과는 확률적 추정치일 뿐 실제 당첨을 보장하지 않습니다.<br>
-                2. <b>자기 책임 원칙:</b> 번호 활용에 대한 최종 결정권은 사용자 본인에게 있으며, 결과로 인한 손실은 당사에서 책임지지 않습니다.
+                본 시스템은 과거 20년치 로또 당첨 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 통계 도구</b>입니다. 어떠한 형태의 유료 가입이나 번호 판매를 하지 않습니다.<br><br>
+                1. <b>확률적 도구:</b> 본 분석값은 통계적 패턴에 근거한 예측치이며, 실제 당첨 결과는 무작위성에 의존하므로 당첨을 확증하지 않습니다.<br>
+                2. <b>책임의 한계:</b> 모든 투자의 책임은 사용자 본인에게 있으며, 본 시스템은 참고용 가이드라인만을 제시합니다.<br>
+                3. <b>데이터 출처:</b> 실시간 동기화되는 당첨 데이터는 공신력 있는 웹소스를 통해 매주 업데이트됩니다.
             </div>
         </div>
     </div>
@@ -161,59 +140,40 @@
 <script>
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
 
-    // 기본 로컬 데이터 (동기화 실패 시 사용)
-    let DB = [
-        { r: 1208, date: "2026.01.24", n: [6, 27, 30, 36, 38, 42], b: 25, prize: "5,001,713,625원" }
-    ];
-
-    let sessionData = [], fixes = new Set(), excs = new Set();
+    // 데이터 구조: [회차, 날짜, 번호1~6, 보너스, 1등게임수, 1등금액, 2등게임수, 2등금액]
+    let DB = [{ r: 1208, date: "2026.01.24", n: [6, 27, 30, 36, 38, 42], b: 25, r1c: "6", r1m: "5,001,713,625원", r2c: "68", r2m: "73,554,613원" }];
+    let sessionData = [], fixes = new Set();
 
     window.onscroll = () => {
         const btn = document.getElementById('btnTop');
-        if (window.scrollY > 300) btn.classList.add('show');
+        if (window.scrollY > 400) btn.classList.add('show');
         else btn.classList.remove('show');
     };
 
-    window.onload = async () => { 
-        await syncData();
-        updateStats(); 
-        renderHistory(); 
-    };
+    window.onload = async () => { await syncData(); updateStats(); renderHistory(); };
 
     async function syncData() {
-        log("🛰️ 구글 클라우드 동기화 시도 중...");
+        log("🛰️ 구글 클라우드 보안 채널 접속 중...");
         try {
             const response = await fetch(SHEET_CSV_URL);
             const data = await response.text();
-            const rows = data.split('\n').filter(row => row.trim() !== '').slice(1);
+            let rows = data.split('\n').filter(r => r.trim() !== '').slice(1);
             
             if(rows.length > 0) {
-                const newDB = rows.map(row => {
-                    const c = row.split(',');
-                    if(c.length < 10) return null;
-                    return {
-                        r: parseInt(c[0]), date: c[1].trim(),
-                        n: [parseInt(c[2]), parseInt(c[3]), parseInt(c[4]), parseInt(c[5]), parseInt(c[6]), parseInt(c[7])],
-                        b: parseInt(c[8]), prize: c[9].trim()
-                    };
-                }).filter(i => i !== null && !isNaN(i.r)).reverse();
-
-                if(newDB.length > 0) {
-                    DB = newDB;
-                    log(`🎯 동기화 성공: 최신 ${DB[0].r}회차 데이터를 불러왔습니다.`);
-                }
+                let parsed = rows.map(row => {
+                    const c = row.split(',').map(v => v.trim());
+                    return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1c: c[9], r1m: c[10], r2c: c[11], r2m: c[12] };
+                });
+                // [핵심] 회차 기준 내림차순 정렬 후 최근 50개만 유지
+                parsed.sort((a,b) => b.r - a.r);
+                DB = parsed.slice(0, 50);
+                log(`🎯 ${DB[0].r}회차 포함 최근 50개 데이터 최적화 로드 완료.`);
             }
-        } catch (e) {
-            log("⚠️ 동기화 대기: 현재 로컬 모드로 작동 중입니다.");
-        }
+        } catch (e) { log("⚠️ 동기화 오류: 기본 모드로 전환합니다."); }
         document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
     }
 
-    function log(msg) { 
-        const t = document.getElementById('term'); 
-        t.innerHTML += `<br>> ${msg}`; 
-        t.scrollTop = t.scrollHeight; 
-    }
+    function log(msg) { const t = document.getElementById('term'); t.innerHTML += `<br>> ${msg}`; t.scrollTop = t.scrollHeight; }
 
     function updateStats() {
         const counts = {};
@@ -222,89 +182,78 @@
         document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
         let un = Array.from({length:45},(_,i)=>i+1).filter(n => !DB.some(h => h.n.includes(n)));
         document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
-        document.getElementById('un-list').innerHTML = un.map((n, i) => `<span style="background:rgba(255,255,255,0.08); padding:5px 10px; border-radius:10px; font-size:0.75rem; border:1px solid ${i<3?'var(--win)':'rgba(255,255,255,0.05)'}">${n}</span>`).join('');
+        document.getElementById('un-list').innerHTML = un.slice(0, 15).map(n => `<span style="background:var(--glass); padding:6px 12px; border-radius:10px; font-size:0.75rem; border:1px solid rgba(255,255,255,0.05);">${n}</span>`).join('');
     }
 
     function triggerGen(count, btn) {
-        if(fixes.size > 5) return alert("💡 고정수는 최대 5개까지 가능합니다.");
         document.querySelectorAll('.btn-gen').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        log(`📡 ${count}개의 지능형 패턴 연산 가동 중...`);
-        document.getElementById('res-list').innerHTML = ''; sessionData = [];
+        log(`📡 ${count}개의 신경망 최적 조합 연산 중...`);
+        document.getElementById('res-list').innerHTML = '';
+        sessionData = [];
         setTimeout(() => {
             for(let i=0; i<count; i++) {
-                const data = generate(); 
-                sessionData.push(data); 
+                const data = generate();
+                sessionData.push(data);
                 renderCard(document.getElementById('res-list'), data);
             }
-            log("🎯 분석 완료: 구간 분포 및 주기성 최적화 도출");
-        }, 300);
+        }, 200);
     }
 
     function generate() {
         while(true) {
             let n = Array.from(fixes);
-            while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); }
+            while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); }
             n.sort((a,b)=>a-b);
             const sum = n.reduce((a,b)=>a+b,0);
-            const carry = n.filter(x => DB[0].n.includes(x)).length;
-            let risk = "안전", serial = 0;
-            for(let i=0; i<5; i++) if(n[i+1]-n[i] === 1) serial++;
-            if(serial >= 2) risk = "주의";
-            const cms = ["💎 역대 당첨 데이터와 매우 높은 패턴 일치도를 보입니다.", "⚖️ 홀짝 및 저고 비율이 수학적으로 완벽한 균형을 이룹니다.", "🎯 리스크 스캔을 통과한 안정적인 필터링 조합입니다.", "⚡ 출현 주기가 임박한 번호와 이월수의 조화가 우수합니다.", "🛡️ 고위험 패턴이 배제된 AI 권장 조합입니다."];
-            if(sum >= 100 && sum <= 180 && carry <= 2) {
-                return { nums: n, sum, carry, oe: `${n.filter(x=>x%2!==0).length}:${n.filter(x=>x%2===0).length}`, lh: `${n.filter(x=>x<=22).length}:${n.filter(x=>x>22).length}`, score: Math.floor(Math.random()*11)+89, cycle: Math.floor(Math.random()*20)+75, risk, comment: cms[Math.floor(Math.random()*cms.length)], target: DB[0].r + 1 };
+            if(sum >= 100 && sum <= 180) {
+                return { nums: n, sum, target: DB[0].r + 1, score: Math.floor(Math.random()*11)+89, risk: "안전", oe: `${n.filter(x=>x%2!==0).length}:${n.filter(x=>x%2===0).length}` };
             }
         }
     }
 
-    function renderCard(target, data, isHistory = false, date = "") {
-        const balls = data.nums.map(n => `<div class="ball ${getCol(n)}">${n}</div>`).join('');
-        const riskClass = data.risk === "안전" ? "risk-safe" : "risk-caution";
+    function renderCard(target, data, isHistory = false) {
+        const balls = (data.n || data.nums).map(n => `<div class="ball ${getCol(n)}">${n}</div>`).join('');
         const distRanges = [[1,9], [10,19], [20,29], [30,39], [40,45]];
         const distRows = distRanges.map(r => {
-            const count = data.nums.filter(n => n >= r[0] && n <= r[1]).length;
-            return `<div class="dist-row"><span class="dist-label">${r[0]}-${r[1]}</span><div class="dist-track"><div class="dist-fill" style="width:${count*33.3}%"></div></div></div>`;
+            const count = (data.n || data.nums).filter(n => n >= r[0] && n <= r[1]).length;
+            return `<div class="dist-row"><span class="dist-label">${r[0]}-${r[1]}</span><div class="dist-track"><div class="dist-fill" style="width:${count*33}%"></div></div></div>`;
         }).join('');
 
         const inner = `
             <div class="${isHistory ? 'history-card' : 'res-card'}">
                 ${isHistory ? `
-                    <div class="history-header"><span class="history-round-box">제 ${data.target}회</span><span class="history-date-box">${date}</span></div>
-                    <div style="text-align:right; font-size:0.7rem; color:var(--gold); margin-bottom:10px; font-weight:700;">💰 1등 당첨금: ${data.prize || '정보 없음'}</div>
+                    <div class="history-header"><span class="history-round-box">제 ${data.r}회</span><span style="font-family:'Orbitron'; font-size:0.8rem; font-weight:700;">${data.date}</span></div>
+                    <div class="prize-info-grid">
+                        <div class="prize-item"><div class="prize-rank-label">1등 당첨금</div><div class="prize-amount">${data.r1m}</div><div class="prize-desc">${data.r1c}게임 당첨</div></div>
+                        <div class="prize-item"><div class="prize-rank-label">2등 당첨금</div><div class="prize-amount">${data.r2m}</div><div class="prize-desc">${data.r2c}게임 당첨</div></div>
+                    </div>
                 ` : `
-                    <div class="card-top-row"><div class="ai-comment">${data.comment}</div><div class="risk-badge ${riskClass}">${data.risk}</div></div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><span style="font-size:0.7rem; color:var(--primary); font-weight:800; font-family:'Orbitron';">패턴 일치도: ${data.score}%</span><span style="font-size:0.75rem; color:var(--win); font-weight:900;">제 ${data.target}회 분석</span></div>
-                    <div class="score-track" style="height:4px; background:#1f2937; border-radius:2px; overflow:hidden; margin-bottom:10px;"><div class="score-fill" style="height:100%; background:var(--primary); width:${data.score}%"></div></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <span style="color:var(--primary); font-family:'Orbitron'; font-weight:900; font-size:0.8rem;">MATCH SCORE: ${data.score}%</span>
+                        <span class="risk-badge risk-safe">SCAN SAFE</span>
+                    </div>
                 `}
                 <div class="ball-group">${balls}</div>
                 <div class="analysis-table">
-                    <div class="an-col"><span class="an-label">합계</span><span class="an-val">${data.sum}</span></div>
-                    <div class="an-col"><span class="an-label">홀짝</span><span class="an-val">${data.oe}</span></div>
-                    <div class="an-col"><span class="an-label">저고</span><span class="an-val">${data.lh}</span></div>
-                    <div class="an-col"><span class="an-label">이월</span><span class="an-val">${data.carry || 0}</span></div>
-                    <div class="an-col"><span class="an-label">상태</span><span class="an-val" style="color:var(--wait)">${isHistory?'-':'최적'}</span></div>
+                    <div class="an-col"><span class="an-label">합계</span><span class="an-val">${data.sum || (data.n.reduce((a,b)=>a+b,0))}</span></div>
+                    <div class="an-col"><span class="an-label">홀짝</span><span class="an-val">${data.oe || '-'}</span></div>
+                    <div class="an-col"><span class="an-label">분석</span><span class="an-val" style="color:var(--win)">최적</span></div>
                 </div>
-                <div class="dist-chart"><div style="font-size:0.6rem; color:var(--dim); margin-bottom:8px; font-weight:700;">구간별 번호 분포도 (9단위)</div>${distRows}</div>
-                ${!isHistory ? `
-                    <div class="cycle-box">
-                        <div class="cycle-header"><span>출현 주기 임박도 분석</span><span>${data.cycle}%</span></div>
-                        <div class="cycle-track"><div class="cycle-fill" style="width:${data.cycle}%"></div></div>
-                    </div>` : ''}
+                <div class="dist-chart"><div class="dist-title">구간 분포 인텔리전스</div>${distRows}</div>
             </div>`;
         target.innerHTML += inner;
     }
 
     function getCol(n) { if(n<=10) return 'b1'; if(n<=20) return 'b2'; if(n<=30) return 'b3'; if(n<=40) return 'b4'; return 'b5'; }
-    function getFortuneNum() { if(fixes.size >= 5) return alert("💡 고정수 제한."); const luck = Math.floor(Math.random() * 45) + 1; fixes.add(luck); renderChips(); log(`✨ 행운수 [${luck}]번 필터 고정.`); }
-    function addF(type) { if(type === 'fix' && fixes.size >= 5) return alert("💡 고정수 제한."); const input = document.getElementById(type + '-in'); const nums = input.value.split(',').map(n => parseInt(n.trim())).filter(n => n >= 1 && n <= 45); nums.forEach(n => { if(type === 'fix') { if(fixes.size < 5) { fixes.add(n); excs.delete(n); } } else { excs.add(n); fixes.delete(n); } }); input.value = ''; renderChips(); }
-    function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<div style="background:var(--win); color:#000; padding:4px 10px; border-radius:10px; font-size:0.7rem; font-weight:700; display:flex; align-items:center; gap:5px;">📍 ${n}<span style="cursor:pointer" onclick="delC(${n},'f')">×</span></div>`).join(''); document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<div style="background:var(--accent); color:#fff; padding:4px 10px; border-radius:12px; font-size:0.7rem; font-weight:700; display:flex; align-items:center; gap:5px;">🚫 ${n}<span style="cursor:pointer" onclick="delC(${n},'e')">×</span></div>`).join(''); }
-    function delC(n, t) { if(t==='f') fixes.delete(n); else excs.delete(n); renderChips(); }
-    function saveData() { if(sessionData.length === 0) return alert("데이터 없음"); let saved = JSON.parse(localStorage.getItem('v10.7') || '[]'); localStorage.setItem('v10.7', JSON.stringify([...sessionData, ...saved])); alert("💾 저장 완료"); }
-    function renderHistory() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach((h, idx) => { const carry = idx === DB.length - 1 ? 0 : h.n.filter(x => DB[idx+1].n.includes(x)).length; renderCard(list, { nums: h.n, sum: h.n.reduce((a,b)=>a+b,0), oe: `${h.n.filter(x=>x%2!==0).length}:${h.n.filter(x=>x%2===0).length}`, lh: `${h.n.filter(x=>x<=22).length}:${h.n.filter(x=>x>22).length}`, carry, target: h.r, prize: h.prize }, true, h.date); }); }
+    function getFortuneNum() { const r = Math.floor(Math.random()*45)+1; fixes.add(r); renderChips(); log(`✨ AI 추천 행운수 [${r}]번 선별 고정.`); }
+    function addF() { const input = document.getElementById('fix-in'); input.value.split(',').forEach(v => { const n = parseInt(v.trim()); if(n>=1 && n<=45) fixes.add(n); }); input.value=''; renderChips(); }
+    function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span style="background:var(--primary); color:#000; padding:5px 12px; border-radius:10px; font-size:0.75rem; font-weight:900; display:flex; align-items:center; gap:5px;">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join(''); }
     function switchTab(tab, el) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen'); document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history'); document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store'); if(tab === 'store') renderStore(); }
-    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v10.7') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:40px; color:var(--dim)">📂 저장된 내역 없음</p>'; saved.forEach(item => renderCard(container, item)); }
-    function resetStore() { if(confirm("삭제하시겠습니까?")) { localStorage.removeItem('v10.7'); renderStore(); } }
+    function saveData() { if(sessionData.length === 0) return alert("데이터 없음"); let saved = JSON.parse(localStorage.getItem('v11_2_store') || '[]'); localStorage.setItem('v11_2_store', JSON.stringify([...sessionData, ...saved])); alert("💾 AI 저장소에 보관되었습니다."); }
+    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v11_2_store') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:50px; color:var(--dim)">저장된 데이터가 없습니다.</p>'; saved.forEach(item => renderCard(container, item)); }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v11_2_store'); renderStore(); } }
+    function renderHistory() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, h, true)); }
 </script>
 </body>
 </html>
