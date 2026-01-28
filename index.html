@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v10.5</title>
+    <title>AI 로또 인텔리전스 v10.6</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #111827; --primary: #0ea5e9; --accent: #f43f5e; --text: #f9fafb; --dim: #6b7280; --win: #10b981; --wait: #8b5cf6; --glass: rgba(255, 255, 255, 0.03); --gold: #fbbf24; }
@@ -49,6 +49,7 @@
 
         .cycle-box { background: rgba(139, 92, 246, 0.1); border-radius: 12px; padding: 10px; border: 1px solid rgba(139, 92, 246, 0.2); margin-top: 10px; }
         .cycle-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .cycle-title { font-size: 0.6rem; color: var(--wait); font-weight: 800; }
         .cycle-track { height: 4px; background: #1f2937; border-radius: 2px; overflow: hidden; }
         .cycle-fill { height: 100%; background: var(--wait); }
 
@@ -76,15 +77,16 @@
 <body>
 
 <div class="dashboard">
+    <div id="top"></div>
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v10.5</h1>
+        <h1>🌌 AI LOTTO NEURAL v10.6</h1>
         <div style="font-size: 0.7rem; color: var(--primary); margin-top: 10px; font-weight: 800; letter-spacing: 1px;">PREMIUM FREE ANALYSIS SYSTEM</div>
     </div>
 
     <div class="stats-container">
         <div class="stat-card"><span class="stat-label">🔥 최다 출현수</span><span class="stat-value" id="hot-v">--</span></div>
         <div class="stat-card"><span class="stat-label">❄️ 최저 출현수</span><span class="stat-value" id="cold-v">--</span></div>
-        <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">1209회</span></div>
+        <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
     <div class="nav-tabs">
@@ -110,7 +112,7 @@
             </div>
         </div>
 
-        <div class="terminal" id="term">> 🛰️ 실시간 당첨 정보 동기화 시스템 대기 중...</div>
+        <div class="terminal" id="term">> 🛰️ 클라우드 데이터 동기화 시스템 대기 중...</div>
         
         <div class="gen-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;">
             <button class="btn-gen" onclick="triggerGen(5, this)">5개</button>
@@ -135,10 +137,10 @@
         <div class="footer-brand">🚀 AI LOTTO TECHNOLOGY</div>
         <div class="footer-copy">© 2026 AI-LOTTO NEURAL INTELLIGENCE. All rights reserved.</div>
         <div class="disclaimer-box">
-            <div class="free-badge">100% 무료 분석 서비스</div>
+            <div class="free-badge">100% 무료 분석 도구</div>
             <div class="disclaimer-head">🚨 법적 고지 및 이용 안내</div>
             <div class="disclaimer-body">
-                본 서비스는 과거 데이터를 기반으로 한 신경망 분석 정보를 <b>조건 없이 100% 무료로 제공</b>하는 통계 도구입니다. 어떠한 형태의 유료 구독이나 결제를 요구하지 않습니다.<br><br>
+                본 서비스는 과거 데이터를 기반으로 한 신경망 분석 정보를 <b>조건 없이 100% 무료로 제공</b>하는 통계 도구입니다. 어떠한 형태의 유료 구독이나 결제를 유도하지 않습니다.<br><br>
                 1. <b>당첨 보장 불가:</b> 로또는 무작위 추출 게임으로, 본 분석 결과는 실제 당첨을 보장하지 않습니다.<br>
                 2. <b>자기 책임 원칙:</b> 번호 활용에 대한 최종 결정권은 사용자 본인에게 있으며, 결과로 인한 손실은 책임지지 않습니다.
             </div>
@@ -147,12 +149,11 @@
 </div>
 
 <script>
-    // [중요] 구글 스프레드시트 웹 게시(CSV) 주소를 여기에 입력하세요.
-    const SHEET_CSV_URL = "여기에_구글시트_CSV_주소를_넣으세요";
+    // [연동 완료] 구글 스프레드시트 CSV 주소
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
 
     let DB = [
-        { r: 1208, date: "2026.01.24", n: [6, 27, 30, 36, 38, 42], b: 25, prize: "5,001,713,625원" },
-        { r: 1207, date: "2026.01.17", n: [10, 22, 24, 27, 38, 45], b: 11, prize: "2,354,124,561원" }
+        { r: 1208, date: "2026.01.24", n: [6, 27, 30, 36, 38, 42], b: 25, prize: "5,001,713,625원" }
     ];
 
     let sessionData = [], fixes = new Set(), excs = new Set();
@@ -170,10 +171,6 @@
     };
 
     async function syncData() {
-        if(SHEET_CSV_URL.includes("여기에")) {
-            log("⚠️ 구글 시트 주소가 설정되지 않아 기본 데이터를 사용합니다.");
-            return;
-        }
         log("🛰️ 구글 클라우드로부터 최신 당첨 데이터 동기화 중...");
         try {
             const response = await fetch(SHEET_CSV_URL);
@@ -183,19 +180,20 @@
                 const c = row.split(',');
                 if(c.length < 10) return null;
                 return {
-                    r: parseInt(c[0]), date: c[1],
+                    r: parseInt(c[0]), date: c[1].trim(),
                     n: [parseInt(c[2]), parseInt(c[3]), parseInt(c[4]), parseInt(c[5]), parseInt(c[6]), parseInt(c[7])],
-                    b: parseInt(c[8]), prize: c[9]
+                    b: parseInt(c[8]), prize: c[9].trim()
                 };
             }).filter(i => i !== null).reverse();
 
             if(newDB.length > 0) {
                 DB = newDB;
                 document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
-                log(`🎯 ${DB[0].r}회차 데이터 수집 완료.`);
+                log(`🎯 ${DB[0].r}회차 데이터 수집 완료. 시스템 정렬 중...`);
             }
         } catch (e) {
-            log("⚠️ 동기화 실패: 오프라인 모드로 전환합니다.");
+            log("⚠️ 동기화 실패: 오프라인 모드(기본 데이터)를 사용합니다.");
+            document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
         }
     }
 
@@ -205,9 +203,9 @@
         const counts = {};
         DB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
         const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-        document.getElementById('hot-v').innerText = sorted[0][0] + "번";
+        document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
         let un = Array.from({length:45},(_,i)=>i+1).filter(n => !DB.some(h => h.n.includes(n)));
-        document.getElementById('cold-v').innerText = un[0] + "번";
+        document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
         document.getElementById('un-list').innerHTML = un.map((n, i) => `<span style="background:rgba(255,255,255,0.08); padding:5px 10px; border-radius:10px; font-size:0.75rem; border:1px solid ${i<3?'var(--win)':'rgba(255,255,255,0.05)'}">${n}</span>`).join('');
     }
 
@@ -215,7 +213,7 @@
         if(fixes.size > 5) return alert("💡 고정수는 최대 5개까지 가능합니다.");
         document.querySelectorAll('.btn-gen').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        log(`📡 ${count}개의 최적 패턴 분석 가동 중...`);
+        log(`📡 ${count}개의 최적 패턴 분석 연산 가동 중...`);
         document.getElementById('res-list').innerHTML = ''; sessionData = [];
         setTimeout(() => {
             for(let i=0; i<count; i++) {
@@ -235,7 +233,7 @@
             let risk = "안전", serial = 0;
             for(let i=0; i<5; i++) if(n[i+1]-n[i] === 1) serial++;
             if(serial >= 2) risk = "주의";
-            const cms = ["💎 역대 당첨 데이터와 매우 높은 패턴 일치도를 보옵니다.", "⚖️ 홀짝 및 저고 비율이 수학적으로 완벽한 균형을 이룹니다.", "🎯 리스크 스캔을 통과한 안정적인 신경망 필터링 조합입니다.", "⚡ 출현 주기가 임박한 번호와 이월수의 조화가 우수합니다.", "🛡️ 고위험 패턴이 배제된 AI 권장 최적화 조합입니다."];
+            const cms = ["💎 역대 당첨 데이터와 매우 높은 패턴 일치도를 보입니다.", "⚖️ 홀짝 및 저고 비율이 수학적으로 완벽한 균형을 이룹니다.", "🎯 리스크 스캔을 통과한 안정적인 신경망 필터링 조합입니다.", "⚡ 출현 주기가 임박한 번호와 이월수의 조화가 우수합니다.", "🛡️ 고위험 패턴이 배제된 AI 권장 최적화 조합입니다."];
             if(sum >= 100 && sum <= 180 && carry <= 2) {
                 return { nums: n, sum, carry, oe: `${n.filter(x=>x%2!==0).length}:${n.filter(x=>x%2===0).length}`, lh: `${n.filter(x=>x<=22).length}:${n.filter(x=>x>22).length}`, score: Math.floor(Math.random()*11)+89, cycle: Math.floor(Math.random()*20)+75, risk, comment: cms[Math.floor(Math.random()*cms.length)], target: DB[0].r + 1 };
             }
@@ -278,15 +276,15 @@
     }
 
     function getCol(n) { if(n<=10) return 'b1'; if(n<=20) return 'b2'; if(n<=30) return 'b3'; if(n<=40) return 'b4'; return 'b5'; }
-    function getFortuneNum() { if(fixes.size >= 5) return alert("💡 고정수 제한."); const luck = Math.floor(Math.random() * 45) + 1; fixes.add(luck); renderChips(); log(`✨ 행운수 [${luck}]번 추가.`); }
+    function getFortuneNum() { if(fixes.size >= 5) return alert("💡 고정수는 최대 5개까지 가능합니다."); const luck = Math.floor(Math.random() * 45) + 1; fixes.add(luck); renderChips(); log(`✨ 행운수 [${luck}]번 필터 고정.`); }
     function addF(type) { if(type === 'fix' && fixes.size >= 5) return alert("💡 고정수 제한."); const input = document.getElementById(type + '-in'); const nums = input.value.split(',').map(n => parseInt(n.trim())).filter(n => n >= 1 && n <= 45); nums.forEach(n => { if(type === 'fix') { if(fixes.size < 5) { fixes.add(n); excs.delete(n); } } else { excs.add(n); fixes.delete(n); } }); input.value = ''; renderChips(); }
     function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<div style="background:var(--win); color:#000; padding:4px 10px; border-radius:10px; font-size:0.7rem; font-weight:700; display:flex; align-items:center; gap:5px;">📍 ${n}<span style="cursor:pointer" onclick="delC(${n},'f')">×</span></div>`).join(''); document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<div style="background:var(--accent); color:#fff; padding:4px 10px; border-radius:12px; font-size:0.7rem; font-weight:700; display:flex; align-items:center; gap:5px;">🚫 ${n}<span style="cursor:pointer" onclick="delC(${n},'e')">×</span></div>`).join(''); }
     function delC(n, t) { if(t==='f') fixes.delete(n); else excs.delete(n); renderChips(); }
-    function saveData() { if(sessionData.length === 0) return alert("저장할 데이터가 없습니다."); let saved = JSON.parse(localStorage.getItem('v10.5') || '[]'); localStorage.setItem('v10.5', JSON.stringify([...sessionData, ...saved])); alert("💾 저장 완료"); }
+    function saveData() { if(sessionData.length === 0) return alert("저장할 분석 결과가 없습니다."); let saved = JSON.parse(localStorage.getItem('v10.6') || '[]'); localStorage.setItem('v10.6', JSON.stringify([...sessionData, ...saved])); alert("💾 AI 저장소에 보관되었습니다."); }
     function renderHistory() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach((h, idx) => { const carry = idx === DB.length - 1 ? 0 : h.n.filter(x => DB[idx+1].n.includes(x)).length; renderCard(list, { nums: h.n, sum: h.n.reduce((a,b)=>a+b,0), oe: `${h.n.filter(x=>x%2!==0).length}:${h.n.filter(x=>x%2===0).length}`, lh: `${h.n.filter(x=>x<=22).length}:${h.n.filter(x=>x>22).length}`, carry, target: h.r, prize: h.prize }, true, h.date); }); }
     function switchTab(tab, el) { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen'); document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history'); document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store'); if(tab === 'store') renderStore(); }
-    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v10.5') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:40px; color:var(--dim)">📂 저장된 내역 없음</p>'; saved.forEach(item => renderCard(container, item)); }
-    function resetStore() { if(confirm("삭제하시겠습니까?")) { localStorage.removeItem('v10.5'); renderStore(); } }
+    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v10.6') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:40px; color:var(--dim)">📂 저장된 내역 없음</p>'; saved.forEach(item => renderCard(container, item)); }
+    function resetStore() { if(confirm("삭제하시겠습니까?")) { localStorage.removeItem('v10.6'); renderStore(); } }
 </script>
 </body>
 </html>
