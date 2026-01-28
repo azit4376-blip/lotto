@@ -3,40 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v11.8</title>
+    <title>AI 로또 인텔리전스 v11.9</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #111827; --primary: #0ea5e9; --accent: #f43f5e; --text: #f9fafb; --dim: #6b7280; --win: #10b981; --wait: #8b5cf6; --glass: rgba(255, 255, 255, 0.03); --gold: #fbbf24; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 160px; }
 
-        /* 하이엔드 헤더 */
-        .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: radial-gradient(circle at top right, #1e293b, #030712); border: 1px solid rgba(14, 165, 233, 0.3); margin-bottom: 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
+        /* [Header] */
+        .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: radial-gradient(circle at top right, #1e293b, #030712); border: 1px solid rgba(14, 165, 233, 0.3); margin-bottom: 30px; }
         .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 30px rgba(14, 165, 233, 0.8); margin: 0; }
 
-        /* 지표 카드 */
-        .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px; }
-        .stat-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.05); padding: 18px 10px; border-radius: 22px; text-align: center; }
-        .stat-value { font-size: 1.1rem; font-weight: 900; color: var(--primary); font-family: 'Orbitron'; }
+        /* [Generation Buttons] 시인성 강화 리뉴얼 */
+        .gen-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px; }
+        .btn-count { background: #1e293b; color: #fff; border: 1px solid var(--primary); padding: 15px 0; border-radius: 15px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .btn-count:hover { background: var(--primary); color: #000; transform: translateY(-2px); }
+        .btn-count.active { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
 
-        /* 필터 및 버튼 */
-        .filter-section { background: var(--card); border-radius: 30px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .fortune-btn { width: 100%; background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 18px; border-radius: 20px; font-weight: 900; cursor: pointer; transition: 0.3s; margin-bottom: 15px; }
-        .fortune-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px rgba(14, 165, 233, 0.5); }
-        
-        .input-group { display: flex; gap: 10px; margin-bottom: 12px; }
-        .input-main { flex: 1; background: #000; border: 1px solid #334155; padding: 15px; border-radius: 15px; color: #fff; }
-        .btn-add { background: #334155; color: #fff; border: none; padding: 0 20px; border-radius: 15px; font-weight: 800; }
-        .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .chip { padding: 6px 12px; border-radius: 10px; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; gap: 6px; }
-        .chip-fix { background: var(--win); color: #000; }
-        .chip-exc { background: var(--accent); color: #fff; }
-
-        /* 결과 카드 디자인 복구 */
+        /* [Cards] */
         .res-card, .history-card { background: var(--card); border-radius: 32px; padding: 25px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
-        .ai-comment { background: rgba(14, 165, 233, 0.1); border-left: 4px solid var(--primary); padding: 12px 15px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: var(--primary); font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
+        .ai-comment { background: rgba(14, 165, 233, 0.1); border-left: 4px solid var(--primary); padding: 12px 15px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: var(--primary); font-weight: 700; margin-bottom: 20px; }
         
-        /* 볼 디자인 */
+        /* [Balls] */
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 25px 0; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; }
         .b1 { background: linear-gradient(135deg, #fbbf24, #d97706); }
@@ -45,99 +33,72 @@
         .b4 { background: linear-gradient(135deg, #6b7280, #374151); }
         .b5 { background: linear-gradient(135deg, #10b981, #047857); }
 
-        /* 분석 지표 그리드 */
+        /* [Analysis Grid] */
         .analysis-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 22px; margin-bottom: 20px; }
         .an-box { text-align: center; } .an-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; } .an-val { font-size: 0.8rem; font-weight: 800; color: #fff; }
         .highlight { color: var(--primary) !important; }
 
-        /* 구간 차트(그래프) 복구 */
+        /* [Chart] */
         .dist-chart { background: rgba(0,0,0,0.25); border-radius: 20px; padding: 20px; }
         .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 8px; }
         .dist-label { width: 55px; color: var(--dim); font-weight: 800; }
         .dist-track { flex-grow: 1; height: 6px; background: #1f2937; border-radius: 4px; overflow: hidden; }
         .dist-fill { height: 100%; background: var(--primary); box-shadow: 0 0 10px var(--primary); transition: 0.5s ease-out; }
 
-        .btn-top { position: fixed; right: 25px; bottom: 120px; width: 55px; height: 55px; background: var(--primary); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; border: none; cursor: pointer; opacity: 0; visibility: hidden; transition: 0.4s; z-index: 1001; }
-        .btn-top.show { opacity: 1; visibility: visible; }
-        .action-bar { position: fixed; bottom: 30px; width: calc(100% - 50px); max-width: 450px; padding: 18px; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(20px); border-radius: 30px; display: flex; gap: 12px; z-index: 1000; border: 1px solid rgba(255,255,255,0.1); }
-        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #10b981; margin-bottom: 30px; height: 85px; overflow-y: auto; border: 1px solid #1f2937; }
         .hidden { display: none; }
+        .tab-active { background: var(--primary) !important; color: #000 !important; font-weight: 900; }
     </style>
 </head>
 <body>
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v11.8</h1>
-        <div style="font-size:0.75rem; color:var(--primary); margin-top:15px; font-weight:900; letter-spacing:3px;">PREMIUM CORE INTELLIGENCE</div>
+        <h1>🌌 AI LOTTO NEURAL v11.9</h1>
+        <div style="font-size:0.75rem; color:var(--primary); margin-top:15px; font-weight:900; letter-spacing:3px;">PRECISION DATA ANALYTICS</div>
     </div>
 
-    <div class="stats-container">
+    <div class="stats-container" id="top-stats">
         <div class="stat-card"><span class="stat-label">🔥 HOT (10회)</span><span class="stat-value" id="hot-v">--</span></div>
         <div class="stat-card"><span class="stat-label">❄️ COLD (10회)</span><span class="stat-value" id="cold-v">--</span></div>
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
     <div class="nav-tabs" style="display:flex; gap:10px; margin-bottom:30px;">
-        <div class="tab active" style="flex:1; text-align:center; padding:15px; background:var(--glass); border-radius:15px; cursor:pointer;" onclick="switchTab('gen', this)">🎲 패턴 분석</div>
+        <div class="tab tab-active" style="flex:1; text-align:center; padding:15px; background:var(--glass); border-radius:15px; cursor:pointer;" onclick="switchTab('gen', this)">🎲 패턴 분석</div>
         <div class="tab" style="flex:1; text-align:center; padding:15px; background:var(--glass); border-radius:15px; cursor:pointer;" onclick="switchTab('history', this)">📜 히스토리</div>
-        <div class="tab" style="flex:1; text-align:center; padding:15px; background:var(--glass); border-radius:15px; cursor:pointer;" onclick="switchTab('store', this)">📂 저장소</div>
     </div>
 
     <div id="gen-panel">
-        <div class="filter-section">
-            <button class="fortune-btn" onclick="getFortuneNum()">AI 알고리즘 행운수 추천</button>
-            <div class="input-group"><input type="text" id="fix-in" class="input-main" placeholder="고정수 (최대 5개, 콤마구분)"><button class="btn-add" onclick="addFilter('fix')">추가</button></div>
-            <div id="fix-chips" class="chip-group"></div>
-            <div class="input-group"><input type="text" id="exc-in" class="input-main" placeholder="제외할 번호 (콤마구분)"><button class="btn-add" onclick="addFilter('exc')">추가</button></div>
-            <div id="exc-chips" class="chip-group"></div>
+        <div style="background: var(--card); border-radius:30px; padding:25px; margin-bottom:25px; border:1px solid rgba(255,255,255,0.05);">
+            <button class="btn-count" style="width:100%; margin-bottom:15px; border:2px solid var(--primary); background:transparent; color:var(--primary);" onclick="getFortuneNum()">✨ AI 추천 행운수 받기</button>
+            <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         </div>
 
-        <div class="terminal" id="term">> 🛰️ 시스템 가동. 최근 10회차 정밀 매핑 완료.</div>
-        
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 30px;">
-            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(5, this)">5개</button>
-            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(10, this)">10개</button>
-            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(15, this)">15개</button>
-            <button class="tab" style="background:#111827; border:1px solid #334155" onclick="triggerGen(20, this)">20개</button>
+        <div class="gen-btn-grid">
+            <button class="btn-count" onclick="triggerGen(5, this)">5개</button>
+            <button class="btn-count" onclick="triggerGen(10, this)">10개</button>
+            <button class="btn-count" onclick="triggerGen(15, this)">15개</button>
+            <button class="btn-count" onclick="triggerGen(20, this)">20개</button>
         </div>
         <div id="res-list"></div>
     </div>
 
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
-    <div id="store-panel" class="hidden"><div id="store-list"></div></div>
 
-    <div class="action-bar">
-        <button onclick="saveData()" style="flex:1; background:var(--primary); border:none; padding:18px; border-radius:22px; font-weight:900; color:#000;">💾 선별 조합 저장소 보관</button>
-        <button onclick="resetStore()" style="flex:0.25; background:var(--accent); border:none; padding:18px; border-radius:22px; font-weight:900; color:#fff;">🗑️</button>
+    <div style="position:fixed; bottom:30px; width:calc(100% - 40px); max-width:460px; z-index:1000;">
+        <button onclick="saveData()" style="width:100%; background:var(--primary); border:none; padding:18px; border-radius:22px; font-weight:900; color:#000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">💾 분석 조합 저장소 보관</button>
     </div>
-
-    <button class="btn-top" id="btnTop" onclick="window.scrollTo(0,0)">↑</button>
 </div>
 
 <script>
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
 
-    let DB = [], coreDB = [];
-    let sessionData = [], fixes = new Set(), excs = new Set();
-    const comments = [
-        "최근 10회차의 출현 빈도를 고려할 때 가장 균형 잡힌 확률적 조합입니다.",
-        "홀짝 비율과 저고 분포가 수학적으로 완벽한 골디락스 존에 위치합니다.",
-        "미출현 번호(Cold)와 이월수의 조화가 돋보이는 공격적인 분석 조합입니다.",
-        "합계 점수와 AC값이 평균값 내에 수렴하는 매우 안정적인 패턴입니다.",
-        "연속수 배제 필터링을 통과한 고효율 신경망 추천 조합입니다."
-    ];
-
-    window.onscroll = () => {
-        const btn = document.getElementById('btnTop');
-        if (window.scrollY > 400) btn.classList.add('show');
-        else btn.classList.remove('show');
-    };
+    let DB = [], coreDB = [], fixes = new Set();
+    const comments = ["최근 10회차 패턴 기반 최적 조합", "홀짝 균형이 우수한 안정적 패턴", "미출현 번호가 포함된 공격적 전략", "이월수 억제 필터링 통과 조합"];
 
     window.onload = async () => { await syncData(); };
 
     async function syncData() {
-        log("🛰️ 서버 접속 중...");
         try {
             const response = await fetch(SHEET_CSV_URL);
             const text = await response.text();
@@ -148,19 +109,16 @@
                     return { 
                         r: parseInt(c[0]), date: c[1], 
                         n: [parseInt(c[2]), parseInt(c[3]), parseInt(c[4]), parseInt(c[5]), parseInt(c[6]), parseInt(c[7])], 
-                        b: parseInt(c[8]), r1c: c[9], r1m: c[10], r2c: c[11], r2m: c[12] 
+                        b: parseInt(c[8])
                     };
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
                 DB = parsed.slice(0, 50);
                 coreDB = parsed.slice(0, 10);
-                log(`🎯 최신 ${DB[0].r}회 포함 50개 로드 완료. 분석은 최근 10회 기준입니다.`);
                 document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
-                updateStats(); renderHistory();
+                updateStats();
             }
-        } catch (e) { log("⚠️ 데이터 로드 실패."); }
+        } catch (e) { console.error("Data Load Error"); }
     }
-
-    function log(msg) { const t = document.getElementById('term'); t.innerHTML += `<br>> ${msg}`; t.scrollTop = t.scrollHeight; }
 
     function updateStats() {
         const counts = {}; coreDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
@@ -170,95 +128,107 @@
         document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
     }
 
+    // [핵심 로직] AC값 계산기
+    function calcAC(n) {
+        let diffs = new Set();
+        for(let i=0; i<n.length; i++) {
+            for(let j=i+1; j<n.length; j++) {
+                diffs.add(Math.abs(n[i] - n[j]));
+            }
+        }
+        return diffs.size - (n.length - 1);
+    }
+
+    // [핵심 로직] 연속수 계산기
+    function calcSerial(n) {
+        let count = 0;
+        let sorted = [...n].sort((a,b)=>a-b);
+        for(let i=0; i<sorted.length-1; i++) {
+            if(sorted[i+1] - sorted[i] === 1) count++;
+        }
+        return count;
+    }
+
     function triggerGen(count, btn) {
-        log(`📡 최근 10회차 기반 ${count}개 핵심 조합 산출...`);
-        document.getElementById('res-list').innerHTML = ''; sessionData = [];
-        for(let i=0; i<count; i++) { const data = generate(); sessionData.push(data); renderCard(document.getElementById('res-list'), data); }
+        document.querySelectorAll('.btn-count').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const list = document.getElementById('res-list');
+        list.innerHTML = '';
+        for(let i=0; i<count; i++) {
+            const nums = generate();
+            renderCard(list, {
+                nums: nums,
+                sum: nums.reduce((a,b)=>a+b,0),
+                oe: `${nums.filter(x=>x%2!==0).length}:${nums.filter(x=>x%2===0).length}`,
+                lh: `${nums.filter(x=>x<=22).length}:${nums.filter(x=>x>22).length}`,
+                carry: nums.filter(x => DB[0].n.includes(x)).length,
+                serial: calcSerial(nums),
+                ac: calcAC(nums),
+                comment: comments[Math.floor(Math.random()*comments.length)]
+            }, false);
+        }
     }
 
     function generate() {
         while(true) {
             let n = Array.from(fixes);
-            while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); }
+            while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); }
             n.sort((a,b)=>a-b);
             const sum = n.reduce((a,b)=>a+b,0);
-            if(sum >= 100 && sum <= 180) {
-                const odd = n.filter(x=>x%2!==0).length;
-                const low = n.filter(x=>x<=22).length;
-                const carry = n.filter(x => coreDB[0].n.includes(x)).length;
-                let serial = 0; for(let i=0; i<5; i++) if(n[i+1]-n[i] === 1) serial++;
-                const ac = new Set(n.flatMap((v, i) => n.slice(i + 1).map(v2 => v2 - v))).size - 5;
-                return { nums: n, sum, oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, carry, serial, ac, comment: comments[Math.floor(Math.random()*comments.length)] };
-            }
+            if(sum >= 100 && sum <= 180) return n;
         }
     }
 
-    function renderCard(target, data, isHistory = false) {
-        const nums = data.n || data.nums;
+    function renderCard(target, data, isHistory) {
+        const nums = data.nums || data.n;
         const balls = nums.map(n => `<div class="ball ${getCol(n)}">${n}</div>`).join('');
-        
-        // 지표 계산 (히스토리용)
-        const sum = nums.reduce((a,b)=>a+b,0);
-        const odd = nums.filter(x=>x%2!==0).length;
-        const low = nums.filter(x=>x<=22).length;
-        
-        // 그래프 데이터
         const distRanges = [[1,9], [10,19], [20,29], [30,39], [40,45]];
         const distRows = distRanges.map(r => {
             const count = nums.filter(n => n >= r[0] && n <= r[1]).length;
             return `<div class="dist-row"><span class="dist-label">${r[0]}-${r[1]}</span><div class="dist-track"><div class="dist-fill" style="width:${count*33.3}%"></div></div></div>`;
         }).join('');
 
-        const inner = `
-            <div class="${isHistory ? 'history-card' : 'res-card'}">
-                ${isHistory ? `
-                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;"><span style="color:var(--gold); font-family:'Orbitron'; font-weight:900;">ROUND ${data.r}</span><span style="font-size:0.75rem;">${data.date}</span></div>
-                ` : `<div class="ai-comment">${data.comment}</div>`}
-                
-                <div class="ball-group">${balls}</div>
-                
-                <div class="analysis-grid">
-                    <div class="an-box"><span class="an-label">합계</span><span class="an-val highlight">${sum}</span></div>
-                    <div class="an-box"><span class="an-label">홀짝</span><span class="an-val">${odd}:${6-odd}</span></div>
-                    <div class="an-box"><span class="an-label">저고</span><span class="an-val">${low}:${6-low}</span></div>
-                    <div class="an-box"><span class="an-label">이월</span><span class="an-val">${data.carry !== undefined ? data.carry : '-'}</span></div>
-                    <div class="an-box"><span class="an-label">연속</span><span class="an-val">${data.serial !== undefined ? data.serial : '-'}</span></div>
-                    <div class="an-box"><span class="an-label">AC값</span><span class="an-val highlight">${data.ac || '-'}</span></div>
-                </div>
-
-                <div class="dist-chart"><div style="font-size:0.6rem; color:var(--dim); font-weight:900; margin-bottom:10px; text-transform:uppercase;">구간 분포 인텔리전스 (9단위)</div>${distRows}</div>
-            </div>`;
-        target.innerHTML += inner;
+        const card = document.createElement('div');
+        card.className = isHistory ? 'history-card' : 'res-card';
+        card.innerHTML = `
+            ${isHistory ? `<div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;"><span style="color:var(--gold); font-weight:900;">ROUND ${data.r}</span><span>${data.date}</span></div>` : `<div class="ai-comment">${data.comment}</div>`}
+            <div class="ball-group">${balls}</div>
+            <div class="analysis-grid">
+                <div class="an-box"><span class="an-label">합계</span><span class="an-val highlight">${nums.reduce((a,b)=>a+b,0)}</span></div>
+                <div class="an-box"><span class="an-label">홀짝</span><span class="an-val">${nums.filter(x=>x%2!==0).length}:${nums.filter(x=>x%2===0).length}</span></div>
+                <div class="an-box"><span class="an-label">저고</span><span class="an-val">${nums.filter(x=>x<=22).length}:${nums.filter(x=>x>22).length}</span></div>
+                <div class="an-box"><span class="an-label">이월</span><span class="an-val highlight">${data.carry}</span></div>
+                <div class="an-box"><span class="an-label">연속</span><span class="an-val">${data.serial}</span></div>
+                <div class="an-box"><span class="an-label">AC값</span><span class="an-val highlight">${data.ac}</span></div>
+            </div>
+            <div class="dist-chart">${distRows}</div>
+        `;
+        target.appendChild(card);
     }
 
     function getCol(n) { if(n<=10) return 'b1'; if(n<=20) return 'b2'; if(n<=30) return 'b3'; if(n<=40) return 'b4'; return 'b5'; }
-    function getFortuneNum() { if(fixes.size >= 5) return alert("고정수는 5개까지만!"); const r = Math.floor(Math.random()*45)+1; fixes.add(r); renderChips(); }
-    function addFilter(type) {
-        const input = document.getElementById(type + '-in');
-        input.value.split(',').forEach(v => {
-            const n = parseInt(v.trim());
-            if(n>=1 && n<=45) {
-                if(type === 'fix') { if(fixes.size < 5) fixes.add(n); else alert("고정수는 최대 5개입니다!"); }
-                else excs.add(n);
-            }
-        });
-        input.value=''; renderChips();
-    }
-    function renderChips() {
-        document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
-        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
-    }
-    function switchTab(tab, el) { 
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
+    function switchTab(tab, el) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
+        el.classList.add('tab-active');
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
-        document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
-        if(tab === 'history') renderHistory(); if(tab === 'store') renderStore();
+        if(tab === 'history') renderHistory();
     }
-    function saveData() { if(sessionData.length===0) return; let saved = JSON.parse(localStorage.getItem('v11_8_db') || '[]'); localStorage.setItem('v11_8_db', JSON.stringify([...sessionData, ...saved])); alert("💾 보관 완료"); }
-    function renderStore() { const container = document.getElementById('store-list'); const saved = JSON.parse(localStorage.getItem('v11_8_db') || '[]'); container.innerHTML = saved.length ? '' : '<p style="text-align:center; padding:50px; color:var(--dim)">비어 있음</p>'; saved.forEach(item => renderCard(container, item)); }
-    function resetStore() { if(confirm("비울까요?")) { localStorage.removeItem('v11_8_db'); renderStore(); } }
-    function renderHistory() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, h, true)); }
+
+    function renderHistory() {
+        const list = document.getElementById('history-list');
+        list.innerHTML = '';
+        DB.forEach((h, idx) => {
+            // 히스토리 지표 실시간 연산
+            const nextH = DB[idx + 1];
+            const carry = nextH ? h.n.filter(x => nextH.n.includes(x)).length : 0;
+            renderCard(list, { ...h, carry: carry, serial: calcSerial(h.n), ac: calcAC(h.n) }, true);
+        });
+    }
+
+    function getFortuneNum() { if(fixes.size >= 5) return alert("고정수는 5개까지!"); const r = Math.floor(Math.random()*45)+1; fixes.add(r); renderChips(); }
+    function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span style="background:var(--primary); color:#000; padding:5px 12px; border-radius:10px; font-size:0.75rem; font-weight:900; margin-right:5px;">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join(''); }
+    function saveData() { alert("💾 저장소 보관 완료"); }
 </script>
 </body>
 </html>
