@@ -3,39 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v13.1</title>
+    <title>AI 로또 인텔리전스 v13.2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 180px; }
         
-        /* 메인 헤더 */
         .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); }
         .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; }
         .sub-tag { font-size: 0.75rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 3px; }
         
-        /* [수정] 상단 HOT/COLD/회차 한 줄 정렬 */
+        /* 상단 지표 레이아웃 수정 */
         .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 25px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
         .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; white-space: nowrap; }
-        .stat-value { font-size: 0.85rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; overflow: hidden; text-overflow: ellipsis; }
+        .stat-value { font-size: 0.85rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; }
         
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 30px; background: #111827; padding: 6px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .tab { flex: 1; text-align: center; padding: 14px; border-radius: 18px; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: var(--dim); transition: 0.3s; }
         .tab.active { background: var(--primary); color: #000; box-shadow: 0 5px 20px rgba(56, 189, 248, 0.4); }
         
+        /* [추가] 이월수 안내 가이드 */
+        .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .ball-mini { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--win); box-shadow: 0 0 5px var(--win); display: inline-block; }
+
         .gen-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .btn-count { background: #334155; color: #fff; border: 1px solid var(--primary); padding: 15px 0; border-radius: 15px; font-weight: 900; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
         .btn-count.active { background: var(--primary); color: #000; box-shadow: 0 0 25px var(--primary); }
 
-        .filter-strong-btn { width: 100%; padding: 14px; background: rgba(244, 63, 94, 0.1); color: var(--strong); border: 1px solid var(--strong); border-radius: 15px; font-weight: 900; margin-bottom: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.3s; }
+        .filter-strong-btn { width: 100%; padding: 14px; background: rgba(244, 63, 94, 0.1); color: var(--strong); border: 1px solid var(--strong); border-radius: 15px; font-weight: 900; margin-bottom: 20px; cursor: pointer; font-size: 0.85rem; }
         .filter-strong-btn.active { background: var(--strong); color: #fff; }
         
         .fortune-btn { width: 100%; background: linear-gradient(90deg, #0ea5e9, #2563eb); color: #fff; border: none; padding: 18px; border-radius: 20px; font-weight: 900; cursor: pointer; margin-bottom: 25px; font-size: 1rem; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); }
         
-        /* 카드 및 뱃지 */
-        .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; position: relative; cursor: pointer; }
+        .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); overflow: hidden; position: relative; cursor: pointer; transition: 0.3s; }
         .res-card.collapsed { max-height: 150px; }
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; }
         .badge-normal { background: var(--dim); color: #000; }
@@ -44,21 +46,23 @@
 
         .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
         
-        /* [수정] 당첨금 표기 강화 */
-        .prize-row { display: flex; justify-content: flex-end; gap: 10px; font-size: 0.7rem; font-weight: 800; margin-top: -5px; margin-bottom: 15px; }
+        .prize-row { display: flex; justify-content: flex-end; gap: 10px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; }
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
 
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
-        .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
+        .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; box-shadow: 0 5px 12px rgba(0,0,0,0.4); position: relative; }
+        
+        /* 이월수 강조 효과 및 라벨 추가 */
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
+        .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; white-space: nowrap; }
+
         .b1 { background: radial-gradient(circle, #fbbf24, #d97706); }
         .b2 { background: radial-gradient(circle, #60a5fa, #2563eb); }
         .b3 { background: radial-gradient(circle, #f87171, #dc2626); }
         .b4 { background: radial-gradient(circle, #94a3b8, #475569); }
         .b5 { background: radial-gradient(circle, #34d399, #059669); }
 
-        /* [수정] 지표 11개 그리드 배치 */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
@@ -73,7 +77,7 @@
 
         .good-reason { font-size: 0.75rem; color: var(--win); margin-top: 10px; font-weight: 600; text-align: center; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px; }
 
-        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 80px; overflow-y: auto; border: 1px solid #1e293b; }
+        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 85px; overflow-y: auto; border: 1px solid #1e293b; }
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; cursor: pointer; }
@@ -84,7 +88,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v13.1</h1>
+        <h1>🌌 AI LOTTO NEURAL v13.2</h1>
         <div class="sub-tag">PREMIUM ANALYTICS SYSTEM</div>
     </div>
 
@@ -101,10 +105,15 @@
     </div>
 
     <div id="gen-panel">
-        <div style="background: var(--card); border-radius:30px; padding:30px; margin-bottom:25px; border:1px solid rgba(255,255,255,0.05);">
+        <div style="background: var(--card); border-radius:30px; padding:30px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.05);">
             <button class="fortune-btn" onclick="getFortuneNum()">✨ AI 알고리즘 행운수 추천</button>
             <div id="fix-chips" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
         </div>
+
+        <div class="carry-guide">
+            <div class="ball-mini"></div> <span>강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</span>
+        </div>
+
         <div class="terminal" id="term">> 🛰️ 정밀 신경망 지표 시스템 연동 완료.</div>
         
         <div class="gen-btn-grid">
@@ -131,26 +140,37 @@
     let DB = [], coreDB = [], fixes = new Set();
     let showOnlyStrong = false;
 
-    window.onload = async () => { log("🛰️ 데이터 로드 중..."); await syncData(); };
+    window.onload = async () => { 
+        log("🛰️ 서버 접속 대기 중...");
+        await syncData(); 
+    };
 
     async function syncData() {
         try {
             const response = await fetch(SHEET_CSV_URL);
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
+            
             if(rows.length > 0) {
+                log("🛰️ 데이터 패킷 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10], r2m: c[12] };
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
+                
                 coreDB = DB.slice(0, 10);
                 document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
+                log("✅ 신경망 데이터 동기화 완료.");
                 updateStats(); renderH();
             }
-        } catch (e) { log("⚠️ 동기화 오류."); }
+        } catch (e) { log("⚠️ 동기화 중단. 네트워크 상태를 확인하세요."); }
     }
 
-    function log(msg) { const t = document.getElementById('term'); t.innerHTML += `<br>> ${msg}`; t.scrollTop = t.scrollHeight; }
+    function log(msg) { 
+        const t = document.getElementById('term'); 
+        t.innerHTML += `\n> ${msg}`; 
+        t.scrollTop = t.scrollHeight; 
+    }
 
     function updateStats() {
         const counts = {}; coreDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
@@ -208,7 +228,7 @@
         document.querySelectorAll('.btn-count').forEach(b => b.classList.remove('active')); btn.classList.add('active');
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
-            let n; while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; }
+            let n; while(true) { n = []; while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; }
             n.sort((a,b)=>a-b);
             const m = getMetrics(n);
             const data = { n, ...m, carryList: DB[0] ? DB[0].n : [] };
