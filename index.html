@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v13.6</title>
+    <title>AI 로또 인텔리전스 v13.7</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -33,7 +33,6 @@
         .chip-exc { background: var(--accent); color: #fff; }
 
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 100px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; white-space: pre-line; }
 
         .gen-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -41,14 +40,12 @@
         .btn-count.active { background: var(--primary); color: #000; }
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
-        .res-card.collapsed { max-height: 155px; } /* 코멘트와 공까지만 보이게 조정 */
+        .res-card.collapsed { max-height: 155px; }
         
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; z-index: 5; }
         .badge-normal { background: var(--dim); color: #000; }
         .badge-strong { background: var(--strong); color: #fff; }
         .badge-legend { background: var(--legend); color: #fff; }
-
-        /* [복구] 코멘트 박스 디자인 */
         .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
         
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
@@ -81,6 +78,14 @@
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; }
+        
+        /* [추가] 하단 카피라이터 및 주의사항 디자인 */
+        .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
+        .disclaimer-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; text-align: left; }
+        .disclaimer-head { font-size: 0.95rem; color: #fff; font-weight: 900; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
+        .disclaimer-body { font-size: 0.8rem; color: #94a3b8; line-height: 1.9; text-align: justify; word-break: keep-all; }
+        .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -88,7 +93,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v13.6</h1>
+        <h1>🌌 AI LOTTO NEURAL v13.7</h1>
         <div class="sub-tag">11-METRIC COMPLETE EDITION</div>
     </div>
 
@@ -137,6 +142,18 @@
         <button class="btn-save" onclick="saveData()">💾 분석 조합 저장소 보관하기</button>
         <button class="btn-reset" onclick="resetStore()">🗑️</button>
     </div>
+
+    <div class="footer">
+        <div class="disclaimer-box">
+            <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
+            <div class="disclaimer-body">
+                본 시스템은 로또의 역사적 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다. 어떠한 유료 가입이나 당첨 확언을 하지 않습니다.<br><br>
+                1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 본 도구는 참고용 통계 데이터만을 제공합니다. 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
+            </div>
+        </div>
+        <div class="copy-text">© 2026 AI-LOTTO NEURAL SYSTEM. ALL RIGHTS RESERVED.</div>
+    </div>
 </div>
 
 <script>
@@ -184,11 +201,9 @@
         const ac = d.size - 5;
         let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
         const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
-        
         let score = 70 + Math.floor(Math.random()*20);
         if(sum >= 120 && sum <= 165) score += 5;
         let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-
         return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>[2,3,5,7,11,13,17,19,23,29,31,37,41,43].includes(x)).length, score, grade };
     }
 
