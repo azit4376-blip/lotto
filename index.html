@@ -3,31 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v13.4</title>
+    <title>AI 로또 인텔리전스 v13.5</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 180px; }
         
-        /* 헤더 섹션 */
+        /* v13.2 프리미엄 헤더 */
         .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); }
         .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; }
         .sub-tag { font-size: 0.75rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 3px; }
         
-        /* 상단 HOT/COLD/회차 한 줄 정렬 */
+        /* 상단 지표 레이아웃 */
         .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 25px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
-        .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; white-space: nowrap; }
+        .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; }
         .stat-value { font-size: 0.85rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; }
         
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 30px; background: #111827; padding: 6px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .tab { flex: 1; text-align: center; padding: 14px; border-radius: 18px; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: var(--dim); transition: 0.3s; }
+        .tab { flex: 1; text-align: center; padding: 14px; border-radius: 18px; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: var(--dim); }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
         
-        /* 고정/제외 필터 박스 */
+        /* v13.3 필터 시스템 */
         .filter-section { background: var(--card); border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .filter-title { font-size: 0.8rem; font-weight: 800; color: var(--primary); margin-bottom: 15px; display: flex; justify-content: space-between; }
         .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
         .input-main { flex: 1; background: #000; border: 1px solid #334155; padding: 12px; border-radius: 12px; color: #fff; font-size: 0.8rem; }
         .btn-add { background: #334155; color: #fff; border: none; padding: 0 15px; border-radius: 12px; font-weight: 800; cursor: pointer; }
@@ -36,33 +35,36 @@
         .chip-fix { background: var(--win); color: #000; }
         .chip-exc { background: var(--accent); color: #fff; }
 
-        /* 이월수 안내 & 로그 터미널 */
-        .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
+        /* v13.2 이월수 안내 배너 */
+        .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .ball-mini { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--win); box-shadow: 0 0 5px var(--win); display: inline-block; }
+
+        /* 줄바꿈 로그 터미널 */
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 100px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; white-space: pre-line; }
 
-        /* 생성 버튼 & 필터 */
         .gen-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .btn-count { background: #334155; color: #fff; border: 1px solid var(--primary); padding: 15px 0; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .btn-count.active { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
+        .btn-count.active { background: var(--primary); color: #000; }
+
         .filter-strong-btn { width: 100%; padding: 14px; background: rgba(244, 63, 94, 0.1); color: var(--strong); border: 1px solid var(--strong); border-radius: 15px; font-weight: 900; margin-bottom: 20px; cursor: pointer; font-size: 0.85rem; }
         .filter-strong-btn.active { background: var(--strong); color: #fff; }
 
-        /* 카드 상세 및 배지 */
-        .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; overflow: hidden; }
+        /* 카드 및 뱃지 */
+        .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.3s; overflow: hidden; }
         .res-card.collapsed { max-height: 150px; }
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; }
         .badge-normal { background: var(--dim); color: #000; }
         .badge-strong { background: var(--strong); color: #fff; }
         .badge-legend { background: var(--legend); color: #fff; }
 
-        /* 당첨금 레이아웃 */
+        /* [복구] 히스토리 당첨금 표기 */
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
 
-        /* 공 디자인 */
-        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
-        .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* 볼 디자인 & 이월수 배지 */
+        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 25px 0; }
+        .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
         .b1 { background: radial-gradient(circle, #fbbf24, #d97706); }
@@ -71,14 +73,13 @@
         .b4 { background: radial-gradient(circle, #94a3b8, #475569); }
         .b5 { background: radial-gradient(circle, #34d399, #059669); }
 
-        /* [복구] 11대 지표 그리드 배치 */
+        /* [완전복구] 11대 지표 그리드 (3열 확장형) */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
-        .mt-val { font-size: 0.75rem; font-weight: 900; color: #fff; }
+        .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         .highlight { color: var(--primary) !important; }
 
-        /* 구간 차트 */
         .dist-chart { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 18px; margin-bottom: 15px; }
         .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 8px; }
         .dist-label { width: 55px; color: var(--dim); font-weight: 800; }
@@ -96,8 +97,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v13.4</h1>
-        <div class="sub-tag">ULTRA METRIC INTEGRATED</div>
+        <h1>🌌 AI LOTTO NEURAL v13.5</h1>
+        <div class="sub-tag">ULTIMATE INTEGRATED SYSTEM</div>
     </div>
 
     <div class="stats-container">
@@ -114,9 +115,8 @@
 
     <div id="gen-panel">
         <div class="filter-section">
-            <div class="filter-title">🛠️ 정밀 필터링 시스템 <span>고정 최대 5개</span></div>
             <div class="input-group">
-                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)">
+                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (최대 5개, 콤마구분)">
                 <button class="btn-add" onclick="addFilter('fix')">고정</button>
             </div>
             <div id="fix-chips" class="chip-group"></div>
@@ -127,7 +127,10 @@
             <div id="exc-chips" class="chip-group"></div>
         </div>
 
-        <div class="carry-guide">강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</div>
+        <div class="carry-guide">
+            <div class="ball-mini"></div> <span>강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</span>
+        </div>
+
         <div class="terminal" id="term">> 🛰️ 정밀 신경망 지표 시스템 연동 완료.</div>
         
         <div class="gen-btn-grid">
@@ -144,7 +147,7 @@
     <div id="store-panel" class="hidden"><div id="store-list"></div></div>
 
     <div class="action-bar">
-        <button class="btn-save" onclick="saveData()">💾 분석 조합 저장소 보관</button>
+        <button class="btn-save" onclick="saveData()">💾 분석 조합 저장소 보관하기</button>
         <button class="btn-reset" onclick="resetStore()">🗑️</button>
     </div>
 </div>
@@ -196,10 +199,17 @@
         const ac = d.size - 5;
         let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
         const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
+        const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
+        
         let score = 70 + Math.floor(Math.random()*15);
         if(sum >= 120 && sum <= 165) score += 10;
         let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-        return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>[2,3,5,7,11,13,17,19,23,29,31,37,41,43].includes(x)).length, score, grade };
+
+        return { 
+            oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, 
+            range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, 
+            dist: section.join('-'), prime: n.filter(x=>primes.includes(x)).length, score, grade 
+        };
     }
 
     function addFilter(type) {
@@ -240,7 +250,8 @@
     }
 
     function renderCard(target, data, isH) {
-        const balls = data.n.map(n => `<div class="ball ${getCol(n)} ${(data.carryList||[]).includes(n) ? 'carry' : ''}">${n}</div>`).join('');
+        const carryList = data.carryList || [];
+        const balls = data.n.map(n => `<div class="ball ${getCol(n)} ${carryList.includes(n) ? 'carry' : ''}">${n}</div>`).join('');
         const distRows = [[1,9],[10,19],[20,29],[30,39],[40,45]].map((r) => {
             const cnt = data.n.filter(num => num >= r[0] && num <= r[1]).length;
             return `<div class="dist-row"><span class="dist-label">${r[0]}-${r[1]}</span><div class="dist-track"><div class="dist-fill" style="width:${cnt*33.3}%"></div></div></div>`;
@@ -260,7 +271,12 @@
                 <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.ac}</span></div>
                 <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${data.endSum}</span></div>
                 <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.total}</span></div>
-                <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val">${data.serial}</span></div>
+                <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${data.range}</span></div>
+                <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${data.avg}</span></div>
+                <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${data.serial}</span></div>
+                <div class="mt-box"><span class="mt-label">끝수중복</span><span class="mt-val">${data.endDup}</span></div>
+                <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${data.dist}</span></div>
+                <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.prime}</span></div>
             </div>
             <div class="dist-chart">${distRows}</div>
         `;
