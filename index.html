@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.8</title>
+    <title>AI 로또 인텔리전스 v14.9</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -56,7 +56,7 @@
         .btn-clear { flex: 0.5; border: 1px solid var(--accent); color: var(--accent); }
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
-        .res-card.collapsed { max-height: 155px; }
+        .res-card.collapsed, .history-card.collapsed { max-height: 155px; }
         
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; z-index: 5; }
         .badge-normal { background: var(--dim); color: #000; }
@@ -68,7 +68,7 @@
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
 
-        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: nowrap; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
@@ -113,8 +113,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.8</h1>
-        <div class="sub-tag">STORAGE UX SYNC PATCH</div>
+        <h1>🌌 AI LOTTO NEURAL v14.9</h1>
+        <div class="sub-tag">HISTORY CARD & BONUS INTEGRATED</div>
     </div>
 
     <div id="recent-win-display" class="recent-summary">
@@ -224,7 +224,6 @@
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
             if(rows.length > 0) {
-                log("🛰️ 서버 패킷 데이터 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10] || "0원", r2m: c[12] || "0원" };
@@ -355,13 +354,6 @@
         updateBatchCopyBtn('gen');
     }
 
-    function clearList() {
-        document.getElementById('res-list').innerHTML = '';
-        window.sessionData = [];
-        updateBatchCopyBtn('gen');
-        log('🧹 생성 리스트 초기화 완료');
-    }
-
     function copyToClipboard(nums) {
         const text = formatNums(nums);
         navigator.clipboard.writeText(text).then(() => { 
@@ -378,16 +370,20 @@
         }).join('');
 
         const card = document.createElement('div');
-        // [수정] 모든 카드(분석/저장소)가 초기 상태에서 collapsed 클래스를 갖도록 함
-        card.className = isH ? 'history-card' : 'res-card collapsed';
+        card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
+        card.onclick = function(e) { if(e.target.tagName !== 'BUTTON') this.classList.toggle('collapsed'); };
         
-        card.onclick = function(e) { if(e.target.tagName !== 'BUTTON' && !isH) this.classList.toggle('collapsed'); };
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회</span><span>${data.date}</span></div>
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 당첨 결과</span><span>${data.date}</span></div>
                      <div class="prize-row"><span class="p-gold">1등: ${data.r1m}</span><span class="p-blue">2등: ${data.r2m}</span></div>` 
                  : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 11대 상세 분석 데이터 보기</div>`}
-            <div class="ball-group">${balls}</div>
+            
+            <div class="ball-group">
+                ${balls}
+                ${isH ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getCol(data.b)}">${data.b}</div>` : ''}
+            </div>
+            
             <div class="metrics-grid">
                 <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.oe}</span></div>
                 <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.lh}</span></div>
@@ -427,7 +423,6 @@
     function renderS() { 
         const list = document.getElementById('store-list'); list.innerHTML = '';
         const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
-        // [수정] 렌더링 시점에 강제로 collapsed 상태로 생성되도록 로직 유지
         saved.forEach(item => { renderCard(list, item, false); });
         updateBatchCopyBtn('store');
     }
