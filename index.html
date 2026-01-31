@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.1</title>
+    <title>AI 로또 인텔리전스 v14.2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -38,7 +38,6 @@
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
         .input-qty { background: #000; border: 2px solid #334155; border-radius: 12px; padding: 12px; color: var(--win); font-family: 'Orbitron'; font-weight: 900; font-size: 1rem; width: 80px; text-align: center; margin-right: 10px; }
-        .input-qty:focus { border-color: var(--primary); outline: none; }
         
         .gen-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .btn-gen { flex: 1; min-width: 100px; background: #334155; color: #fff; border: 1px solid var(--glass); padding: 14px 0; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
@@ -87,12 +86,11 @@
 
         .btn-copy-card { width: 100%; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
         
-        /* [신규] 전체 복사 전용 디자인 */
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
         .btn-copy-all:hover { background: var(--win); color: #000; }
 
-        .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; z-index: 1000; }
-        .btn-save { background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
+        .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; }
         
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
@@ -108,8 +106,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.1</h1>
-        <div class="sub-tag">ULTIMATE SMART COPY SYSTEM</div>
+        <h1>🌌 AI LOTTO NEURAL v14.2</h1>
+        <div class="sub-tag">PREMIUM SYNC & COPY MASTER</div>
     </div>
 
     <div class="stats-container">
@@ -156,19 +154,18 @@
         </div>
 
         <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')">📋 생성된 모든 조합 복사하기 (0건)</button>
-
         <div id="res-list"></div>
     </div>
 
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     
     <div id="store-panel" class="hidden">
+        <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')">📋 저장된 모든 조합 복사하기 (0건)</button>
         <div id="store-list"></div>
     </div>
 
     <div class="action-bar">
-        <button class="btn-save" onclick="saveData()">💾 분석 조합 보관</button>
-        <button id="batch-copy-store" class="btn-save" style="background:var(--win); color:#000;" onclick="copyBatch('store')">📋 전체 복사</button>
+        <button class="btn-save" onclick="saveData()">💾 분석 조합 저장소 보관하기</button>
         <button class="btn-reset" onclick="resetStore()">🗑️</button>
     </div>
 
@@ -188,7 +185,7 @@
 <script>
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
     let DB = [], coreDB = [], fixes = new Set(), excs = new Set();
-    window.sessionData = []; // 현재 생성된 데이터 보관용
+    window.sessionData = []; 
 
     window.onload = async () => { log("🛰️ 클라우드 동기화 시도 중..."); await syncData(); };
 
@@ -198,6 +195,7 @@
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
             if(rows.length > 0) {
+                log("🛰️ 서버 패킷 데이터 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10] || "0원", r2m: c[12] || "0원" };
@@ -251,18 +249,20 @@
         document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    // [신규] 전체 복구 및 복사 로직
+    // [수정] 0 접두사(Zero-padding) 처리 로직
+    function formatNums(nums) {
+        return nums.map(n => n.toString().padStart(2, '0')).join(', ');
+    }
+
     function copyBatch(type) {
         let dataToCopy = [];
         if(type === 'gen') {
-            dataToCopy = window.sessionData.map(item => item.n.join(', '));
+            dataToCopy = window.sessionData.map(item => formatNums(item.n));
         } else {
             const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
-            dataToCopy = saved.map(item => item.n.join(', '));
+            dataToCopy = saved.map(item => formatNums(item.n));
         }
-
         if(dataToCopy.length === 0) return alert('복사할 데이터가 없습니다.');
-        
         const finalText = dataToCopy.join('\n');
         navigator.clipboard.writeText(finalText).then(() => {
             alert(`📋 전체 조합 (${dataToCopy.length}건)이 복사되었습니다.`);
@@ -275,6 +275,11 @@
             const count = window.sessionData.length;
             btn.innerText = `📋 생성된 모든 조합 복사하기 (${count}건)`;
             btn.classList.toggle('hidden', count === 0);
+        } else {
+            const btn = document.getElementById('batch-copy-store');
+            const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
+            btn.innerText = `📋 저장된 모든 조합 복사하기 (${saved.length}건)`;
+            btn.classList.toggle('hidden', saved.length === 0);
         }
     }
 
@@ -310,7 +315,7 @@
     }
 
     function copyToClipboard(nums) {
-        const text = nums.join(', ');
+        const text = formatNums(nums);
         navigator.clipboard.writeText(text).then(() => { alert('📋 복사 완료: ' + text); });
     }
 
@@ -358,11 +363,12 @@
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
-    function saveData() { if(!window.sessionData || window.sessionData.length===0) return; let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); alert("💾 저장소 보관 완료"); }
+    function saveData() { if(!window.sessionData) return; let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); }
     function renderS() { 
         const list = document.getElementById('store-list'); list.innerHTML = '';
         const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
         saved.forEach(item => { const c = renderCard(list, item, false); c.classList.remove('collapsed'); });
+        updateBatchCopyBtn('store');
     }
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); } }
 </script>
