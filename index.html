@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.3</title>
+    <title>AI 로또 인텔리전스 v14.4</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -33,7 +33,10 @@
         .chip-exc { background: var(--accent); color: #fff; }
 
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 100px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; white-space: pre-line; }
+        
+        /* [수정] 터미널 로그 가독성 강화 */
+        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
+        .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
 
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
@@ -104,8 +107,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.3</h1>
-        <div class="sub-tag">LIVE ACTION LOG SYSTEM</div>
+        <h1>🌌 AI LOTTO NEURAL v14.4</h1>
+        <div class="sub-tag">VERTICAL LIVE LOG PATCH</div>
     </div>
 
     <div class="stats-container">
@@ -135,7 +138,7 @@
         </div>
 
         <div class="carry-guide">강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</div>
-        <div class="terminal" id="term">> 🛰️ 정밀 신경망 연산 엔진 대기 중...</div>
+        <div class="terminal" id="term"></div>
         
         <div class="custom-gen-box">
             <span class="gen-label">QUANTITY SETTING</span>
@@ -206,9 +209,13 @@
         } catch (e) { log("⚠️ 동기화 실패."); }
     }
 
+    // [수정] 로그 한 줄씩 강제 줄바꿈 로직
     function log(msg) { 
         const t = document.getElementById('term'); 
-        t.innerText += `\n> ${msg}`; 
+        const logLine = document.createElement('div');
+        logLine.className = 'log-line';
+        logLine.innerText = `> ${msg}`;
+        t.appendChild(logLine);
         t.scrollTop = t.scrollHeight; 
     }
 
@@ -259,7 +266,6 @@
         let dataToCopy = [];
         if(type === 'gen') dataToCopy = window.sessionData.map(item => formatNums(item.n));
         else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
-        
         if(dataToCopy.length === 0) return;
         navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
             log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
@@ -378,7 +384,7 @@
         if(!window.sessionData || window.sessionData.length === 0) return; 
         let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); 
         localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); 
-        log(`💾 선별된 ${window.sessionData.length}개 조합 저장소에 보관 완료`);
+        log(`💾 ${window.sessionData.length}개 조합 저장소 보관 완료`);
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); 
     }
     function renderS() { 
@@ -387,7 +393,7 @@
         saved.forEach(item => { const c = renderCard(list, item, false); c.classList.remove('collapsed'); });
         updateBatchCopyBtn('store');
     }
-    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 데이터를 삭제했습니다.'); } }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 데이터 삭제 완료'); } }
 </script>
 </body>
 </html>
