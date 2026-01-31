@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.4</title>
+    <title>AI 로또 인텔리전스 v14.5</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -33,8 +33,6 @@
         .chip-exc { background: var(--accent); color: #fff; }
 
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-        
-        /* [수정] 터미널 로그 가독성 강화 */
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
 
@@ -94,6 +92,10 @@
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; }
         
+        /* [신규] TOP 버튼 디자인 */
+        .btn-top { position: fixed; right: 20px; bottom: 120px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 1001; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
+        .btn-top:active { transform: scale(0.9); }
+
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
         .disclaimer-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; text-align: left; }
         .disclaimer-head { font-size: 0.95rem; color: #fff; font-weight: 900; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
@@ -107,8 +109,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.4</h1>
-        <div class="sub-tag">VERTICAL LIVE LOG PATCH</div>
+        <h1>🌌 AI LOTTO NEURAL v14.5</h1>
+        <div class="sub-tag">LIVE NAVIGATION PATCH</div>
     </div>
 
     <div class="stats-container">
@@ -170,6 +172,8 @@
         <button class="btn-reset" onclick="resetStore()">🗑️</button>
     </div>
 
+    <button id="btn-top" class="btn-top" onclick="window.scrollTo(0,0)">↑</button>
+
     <div class="footer">
         <div class="disclaimer-box">
             <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
@@ -190,6 +194,16 @@
 
     window.onload = async () => { log("🛰️ 클라우드 동기화 시도 중..."); await syncData(); };
 
+    // [신규] TOP 버튼 표시 제어
+    window.onscroll = function() {
+        const topBtn = document.getElementById("btn-top");
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            topBtn.style.display = "flex";
+        } else {
+            topBtn.style.display = "none";
+        }
+    };
+
     async function syncData() {
         try {
             const response = await fetch(SHEET_CSV_URL);
@@ -209,7 +223,6 @@
         } catch (e) { log("⚠️ 동기화 실패."); }
     }
 
-    // [수정] 로그 한 줄씩 강제 줄바꿈 로직
     function log(msg) { 
         const t = document.getElementById('term'); 
         const logLine = document.createElement('div');
@@ -268,7 +281,7 @@
         else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
         if(dataToCopy.length === 0) return;
         navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
-            log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
+            log(`📋 전체 조합 (${dataToCopy.length}건) 복사 완료`);
             alert('전체 복사가 완료되었습니다.');
         });
     }
@@ -397,4 +410,3 @@
 </script>
 </body>
 </html>
-
