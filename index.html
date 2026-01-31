@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v13.8</title>
+    <title>AI 로또 인텔리전스 v13.9</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -35,18 +35,20 @@
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 100px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; white-space: pre-line; }
 
-        /* 생성 버튼 디자인 리뉴얼 */
-        .gen-label { font-size: 0.75rem; color: var(--dim); font-weight: 800; margin-bottom: 10px; padding-left: 5px; }
-        .gen-btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .btn-count { background: #334155; color: #fff; border: 1px solid var(--primary); padding: 15px 0; border-radius: 15px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-        .btn-count:active { transform: scale(0.95); }
-        .btn-count.active { background: var(--primary); color: #000; }
+        /* [수정] 수량 입력 기반 생성 레이아웃 */
+        .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .input-qty { background: #000; border: 2px solid #334155; border-radius: 12px; padding: 12px; color: var(--win); font-family: 'Orbitron'; font-weight: 900; font-size: 1rem; width: 80px; text-align: center; margin-right: 10px; }
+        .input-qty:focus { border-color: var(--primary); outline: none; }
         
-        /* [추가] 등급별 생성 버튼 스타일 */
-        .btn-grade-gen { border: 1px solid var(--glass); }
+        .gen-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .btn-gen { flex: 1; min-width: 100px; background: #334155; color: #fff; border: 1px solid var(--glass); padding: 14px 0; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
+        .btn-gen:active { transform: scale(0.95); }
+        .btn-primary { background: var(--primary); color: #000; }
         .btn-normal { border-color: var(--dim); color: var(--dim); }
         .btn-strong { border-color: var(--strong); color: var(--strong); }
         .btn-legend { border-color: var(--legend); color: var(--legend); }
+        .btn-clear { flex: 0.5; border: 1px solid var(--accent); color: var(--accent); }
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; }
         .res-card.collapsed { max-height: 155px; }
@@ -101,8 +103,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v13.8</h1>
-        <div class="sub-tag">GRADE-TARGETED ANALYSIS ACTIVE</div>
+        <h1>🌌 AI LOTTO NEURAL v13.9</h1>
+        <div class="sub-tag">CUSTOM QUANTITY TARGETING</div>
     </div>
 
     <div class="stats-container">
@@ -120,7 +122,7 @@
     <div id="gen-panel">
         <div class="filter-section">
             <div class="input-group">
-                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (최대 5개, 콤마구분)">
+                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)">
                 <button class="btn-add" onclick="addFilter('fix')">고정</button>
             </div>
             <div id="fix-chips" class="chip-group"></div>
@@ -137,20 +139,18 @@
 
         <div class="terminal" id="term">> 🛰️ 정밀 신경망 연산 엔진 대기 중...</div>
         
-        <div class="gen-label">📊 일반 생성 모드 (Random Mix)</div>
-        <div class="gen-btn-grid">
-            <button class="btn-count" onclick="triggerGen(5)">5개</button>
-            <button class="btn-count" onclick="triggerGen(10)">10개</button>
-            <button class="btn-count" onclick="triggerGen(15)">15개</button>
-            <button class="btn-count" onclick="triggerGen(20)">20개</button>
-        </div>
-
-        <div class="gen-label">🎯 등급 타겟 모드 (Grade Focus)</div>
-        <div class="gen-btn-grid">
-            <button class="btn-count btn-grade-gen btn-normal" onclick="triggerGradeGen('NORMAL', 5)">N 5개</button>
-            <button class="btn-count btn-grade-gen btn-strong" onclick="triggerGradeGen('STRONG', 10)">S 10개</button>
-            <button class="btn-count btn-grade-gen btn-legend" onclick="triggerGradeGen('LEGEND', 20)">L 20개</button>
-            <button class="btn-count" style="border: 1px solid var(--accent); color: var(--accent);" onclick="document.getElementById('res-list').innerHTML = ''; log('🧹 리스트를 초기화했습니다.');">Clear</button>
+        <div class="custom-gen-box">
+            <span class="gen-label">QUANTITY SETTING</span>
+            <div style="display:flex; align-items:center;">
+                <input type="number" id="gen-qty" class="input-qty" value="5" min="1" max="100">
+                <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
+            </div>
+            <div class="gen-btn-row">
+                <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')">Normal 추출</button>
+                <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')">Strong 추출</button>
+                <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')">Legend 추출</button>
+                <button class="btn-gen btn-clear" onclick="document.getElementById('res-list').innerHTML = ''; log('🧹 리스트를 초기화했습니다.');">Clear</button>
+            </div>
         </div>
 
         <div id="res-list"></div>
@@ -170,7 +170,7 @@
             <div class="disclaimer-body">
                 본 시스템은 로또의 역사적 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다. 어떠한 유료 가입이나 당첨 확언을 하지 않습니다.<br><br>
                 1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 본 도구는 참고용 통계 데이터만을 제공합니다. 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
             </div>
         </div>
         <div class="copy-text">© 2026 AI-LOTTO NEURAL SYSTEM. ALL RIGHTS RESERVED.</div>
@@ -222,9 +222,8 @@
         const ac = d.size - 5;
         let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
         const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
-        
-        let score = 70 + Math.floor(Math.random()*15);
-        if(sum >= 120 && sum <= 165) score += 10;
+        let score = 70 + Math.floor(Math.random()*20);
+        if(sum >= 120 && sum <= 165) score += 5;
         let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
         return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>[2,3,5,7,11,13,17,19,23,29,31,37,41,43].includes(x)).length, score, grade };
     }
@@ -243,8 +242,9 @@
         document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    // [핵심] 일반 생성
-    function triggerGen(count) {
+    // [수정] 수량 기반 일반 생성
+    function triggerGen() {
+        const count = parseInt(document.getElementById('gen-qty').value) || 1;
         log(`📡 무작위 패턴 분석을 통한 ${count}개 조합 생성 중...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
@@ -256,20 +256,19 @@
         }
     }
 
-    // [핵심] 등급 타겟 생성
-    function triggerGradeGen(targetGrade, count) {
+    // [수정] 수량 기반 등급 타겟 생성
+    function triggerGradeGen(targetGrade) {
+        const count = parseInt(document.getElementById('gen-qty').value) || 1;
         log(`🎯 ${targetGrade} 등급 타겟 필터링 가동... (${count}개 추출 대기)`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
-        let found = 0;
-        let attempts = 0;
+        let found = 0, attempts = 0;
         
-        while(found < count && attempts < 5000) { // 무한 루프 방지용 5000회 제한
+        while(found < count && attempts < 10000) {
             attempts++;
             let n = Array.from(fixes);
             while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); }
             n.sort((a,b)=>a-b);
             const m = getMetrics(n);
-            
             if(m.grade === targetGrade) {
                 const data = { n, ...m, carryList: DB[0] ? DB[0].n : [] };
                 window.sessionData.push(data);
@@ -277,7 +276,7 @@
                 found++;
             }
         }
-        log(`✅ ${found}개의 ${targetGrade} 조합 도출 완료. (분석 시도: ${attempts}회)`);
+        log(`✅ ${found}개의 ${targetGrade} 조합 도출 완료.`);
     }
 
     function renderCard(target, data, isH) {
