@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.7</title>
+    <title>AI 로또 인텔리전스 v14.8</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -14,19 +14,16 @@
         .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; }
         .sub-tag { font-size: 0.75rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 3px; }
         
-        /* [재배치 1] 최근 회차 상단 고정 */
         .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
         .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
         .recent-balls { display: flex; justify-content: center; gap: 6px; }
         .ball-s { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
-        /* [재배치 2] 핫/콜드 중간 배치 */
         .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
         .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; }
         .stat-value { font-size: 0.85rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; }
 
-        /* [재배치 3] 실시간 로그 핫/콜드 아래 상시 노출 */
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
@@ -116,8 +113,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.7</h1>
-        <div class="sub-tag">DASHBOARD OPTIMIZED</div>
+        <h1>🌌 AI LOTTO NEURAL v14.8</h1>
+        <div class="sub-tag">STORAGE UX SYNC PATCH</div>
     </div>
 
     <div id="recent-win-display" class="recent-summary">
@@ -227,6 +224,7 @@
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
             if(rows.length > 0) {
+                log("🛰️ 서버 패킷 데이터 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10] || "0원", r2m: c[12] || "0원" };
@@ -305,7 +303,7 @@
         else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
         if(dataToCopy.length === 0) return;
         navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
-            log(`📋 전체 조합 (${dataToCopy.length}건) 복사 완료`);
+            log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
             alert('전체 복사가 완료되었습니다.');
         });
     }
@@ -380,7 +378,9 @@
         }).join('');
 
         const card = document.createElement('div');
+        // [수정] 모든 카드(분석/저장소)가 초기 상태에서 collapsed 클래스를 갖도록 함
         card.className = isH ? 'history-card' : 'res-card collapsed';
+        
         card.onclick = function(e) { if(e.target.tagName !== 'BUTTON' && !isH) this.classList.toggle('collapsed'); };
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
@@ -421,13 +421,14 @@
         if(!window.sessionData || window.sessionData.length === 0) return; 
         let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); 
         localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); 
-        log(`💾 ${window.sessionData.length}개 조합 저장소 보관 완료`);
+        log(`💾 선별된 ${window.sessionData.length}개 조합 저장소 보관 완료`);
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); 
     }
     function renderS() { 
         const list = document.getElementById('store-list'); list.innerHTML = '';
         const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
-        saved.forEach(item => { const c = renderCard(list, item, false); c.classList.remove('collapsed'); });
+        // [수정] 렌더링 시점에 강제로 collapsed 상태로 생성되도록 로직 유지
+        saved.forEach(item => { renderCard(list, item, false); });
         updateBatchCopyBtn('store');
     }
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 데이터 삭제 완료'); } }
