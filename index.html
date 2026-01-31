@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.6</title>
+    <title>AI 로또 인텔리전스 v14.7</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -14,16 +14,21 @@
         .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; }
         .sub-tag { font-size: 0.75rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 3px; }
         
-        .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
+        /* [재배치 1] 최근 회차 상단 고정 */
+        .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
+        .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
+        .recent-balls { display: flex; justify-content: center; gap: 6px; }
+        .ball-s { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+
+        /* [재배치 2] 핫/콜드 중간 배치 */
+        .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
         .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; }
         .stat-value { font-size: 0.85rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; }
 
-        /* [신규] 최근 회차 요약 레이아웃 */
-        .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 25px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
-        .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
-        .recent-balls { display: flex; justify-content: center; gap: 6px; }
-        .ball-s { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+        /* [재배치 3] 실시간 로그 핫/콜드 아래 상시 노출 */
+        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
+        .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 30px; background: #111827; padding: 6px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .tab { flex: 1; text-align: center; padding: 14px; border-radius: 18px; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: var(--dim); transition: 0.3s; }
@@ -39,10 +44,6 @@
         .chip-exc { background: var(--accent); color: #fff; }
 
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-
-        /* [수정] 터미널 로그창 상시 노출을 위한 스타일 */
-        .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
-        .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
 
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
@@ -115,8 +116,16 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.6</h1>
-        <div class="sub-tag">LIVE DASHBOARD MASTER</div>
+        <h1>🌌 AI LOTTO NEURAL v14.7</h1>
+        <div class="sub-tag">DASHBOARD OPTIMIZED</div>
+    </div>
+
+    <div id="recent-win-display" class="recent-summary">
+        <div class="recent-meta">
+            <span id="recent-round-label">📡 최신 데이터 동기화 중...</span>
+            <span id="recent-date-label">----.--.--</span>
+        </div>
+        <div id="recent-balls-row" class="recent-balls"></div>
     </div>
 
     <div class="stats-container">
@@ -125,13 +134,8 @@
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
-    <div id="recent-win-display" class="recent-summary">
-        <div class="recent-meta">
-            <span id="recent-round-label">📡 최신 데이터 동기화 중...</span>
-            <span id="recent-date-label">----.--.--</span>
-        </div>
-        <div id="recent-balls-row" class="recent-balls">
-            </div>
+    <div id="shared-terminal-container">
+        <div class="terminal" id="term"></div>
     </div>
 
     <div class="nav-tabs">
@@ -143,7 +147,7 @@
     <div id="gen-panel">
         <div class="filter-section">
             <div class="input-group">
-                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (최대 5개, 콤마구분)">
+                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)">
                 <button class="btn-add" onclick="addFilter('fix')">고정</button>
             </div>
             <div id="fix-chips" class="chip-group"></div>
@@ -179,10 +183,6 @@
     <div id="store-panel" class="hidden">
         <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')">📋 저장된 모든 조합 복사하기 (0건)</button>
         <div id="store-list"></div>
-    </div>
-
-    <div id="shared-terminal-container">
-        <div class="terminal" id="term"></div>
     </div>
 
     <div class="action-bar">
@@ -227,24 +227,19 @@
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
             if(rows.length > 0) {
-                log("🛰️ 서버 패킷 데이터 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10] || "0원", r2m: c[12] || "0원" };
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
                 coreDB = DB.slice(0, 10);
                 document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
-                
-                // [신규] 최근 회차 상단 표시 로직
                 updateRecentWin(DB[0]);
-                
                 log("✅ 데이터 정밀 매핑 완료.");
                 updateStats(); renderH();
             }
         } catch (e) { log("⚠️ 동기화 실패."); }
     }
 
-    // [신규] 최근 당첨번호 UI 렌더링
     function updateRecentWin(latest) {
         document.getElementById('recent-round-label').innerText = `제 ${latest.r}회 당첨 결과`;
         document.getElementById('recent-date-label').innerText = latest.date;
@@ -310,7 +305,7 @@
         else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
         if(dataToCopy.length === 0) return;
         navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
-            log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
+            log(`📋 전체 조합 (${dataToCopy.length}건) 복사 완료`);
             alert('전체 복사가 완료되었습니다.');
         });
     }
@@ -407,7 +402,7 @@
                 <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.prime}</span></div>
             </div>
             <div class="dist-chart">${distRows}</div>
-            <button class="btn-copy-card" onclick="copyToClipboard([${data.n}])">📋 조합 번호 복사하기</button>
+            ${!isH ? `<button class="btn-copy-card" onclick="copyToClipboard([${data.n}])">📋 조합 번호 복사하기</button>` : ''}
         `;
         target.appendChild(card); return card;
     }
