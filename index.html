@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.9</title>
+    <title>QUANTUM LOTTO INSIGHT v15.0</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
         
+        /* [수정] 신규 브랜딩 헤더 디자인 */
         .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); }
-        .main-header h1 { font-size: 1.8rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; }
-        .sub-tag { font-size: 0.75rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 3px; }
+        .main-header h1 { font-size: 1.7rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; font-family: 'Orbitron'; letter-spacing: -1px; }
+        .sub-tag { font-size: 0.7rem; color: #7dd3fc; margin-top: 15px; font-weight: 800; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
         
         .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
         .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
@@ -68,7 +69,7 @@
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
 
-        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: nowrap; }
+        .ball-group { display: flex; gap: 8px; justify-content: center; margin: 25px 0; flex-wrap: nowrap; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
@@ -113,13 +114,13 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.9</h1>
-        <div class="sub-tag">HISTORY CARD & BONUS INTEGRATED</div>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v15.0</h1>
+        <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
     <div id="recent-win-display" class="recent-summary">
         <div class="recent-meta">
-            <span id="recent-round-label">📡 최신 데이터 동기화 중...</span>
+            <span id="recent-round-label">📡 SYNCING CLOUD DATA...</span>
             <span id="recent-date-label">----.--.--</span>
         </div>
         <div id="recent-balls-row" class="recent-balls"></div>
@@ -198,7 +199,7 @@
                 2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
             </div>
         </div>
-        <div class="copy-text">© 2026 AI-LOTTO NEURAL SYSTEM. ALL RIGHTS RESERVED.</div>
+        <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
     </div>
 </div>
 
@@ -207,7 +208,7 @@
     let DB = [], coreDB = [], fixes = new Set(), excs = new Set();
     window.sessionData = []; 
 
-    window.onload = async () => { log("🛰️ 클라우드 동기화 시도 중..."); await syncData(); };
+    window.onload = async () => { log("🛰️ 퀀텀 데이터베이스 접속 대기 중..."); await syncData(); };
 
     window.onscroll = function() {
         const topBtn = document.getElementById("btn-top");
@@ -224,6 +225,7 @@
             const text = await response.text();
             let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
             if(rows.length > 0) {
+                log("🛰️ 퀀텀 코어 데이터 패킷 수신 중...");
                 DB = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10] || "0원", r2m: c[12] || "0원" };
@@ -231,10 +233,10 @@
                 coreDB = DB.slice(0, 10);
                 document.getElementById('target-round').innerText = (DB[0].r + 1) + "회";
                 updateRecentWin(DB[0]);
-                log("✅ 데이터 정밀 매핑 완료.");
+                log("✅ 골든-존 매핑 엔진 가동 완료.");
                 updateStats(); renderH();
             }
-        } catch (e) { log("⚠️ 동기화 실패."); }
+        } catch (e) { log("⚠️ 동기화 중단. 연결 상태 확인 요망."); }
     }
 
     function updateRecentWin(latest) {
@@ -291,7 +293,7 @@
 
     function renderChips() {
         document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});log('🗑️ 고정수 [${n}] 삭제');renderChips();" style="cursor:pointer">×</span></span>`).join('');
-        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});log('🗑️ 제외수 [${n}] 삭제');renderChips();" style="cursor:pointer">×</span></span>`).join('');
+        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
     function formatNums(nums) { return nums.map(n => n.toString().padStart(2, '0')).join(', '); }
@@ -302,7 +304,7 @@
         else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
         if(dataToCopy.length === 0) return;
         navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
-            log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
+            log(`📋 전체 조합 (${dataToCopy.length}건) 일괄 복사 완료`);
             alert('전체 복사가 완료되었습니다.');
         });
     }
@@ -322,7 +324,7 @@
 
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎲 무작위 패턴 분석: ${count}개 조합 생성 개시...`);
+        log(`🎲 퀀텀 무작위 연산: ${count}개 조합 생성 개시...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
             let n; while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; }
@@ -336,7 +338,7 @@
 
     function triggerGradeGen(targetGrade) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎯 등급 타겟팅 [${targetGrade}]: ${count}개 조합 추출 중...`);
+        log(`🎯 퀀텀 타겟팅 [${targetGrade}]: ${count}개 추출 중...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         let found = 0, attempts = 0;
         while(found < count && attempts < 10000) {
@@ -350,14 +352,21 @@
                 found++;
             }
         }
-        log(`✅ 타겟팅 완료 (분석횟수: ${attempts}회)`);
+        log(`✅ 정밀 타겟팅 완료 (연산횟수: ${attempts}회)`);
         updateBatchCopyBtn('gen');
+    }
+
+    function clearList() {
+        document.getElementById('res-list').innerHTML = '';
+        window.sessionData = [];
+        updateBatchCopyBtn('gen');
+        log('🧹 작업 리스트를 초기화했습니다.');
     }
 
     function copyToClipboard(nums) {
         const text = formatNums(nums);
         navigator.clipboard.writeText(text).then(() => { 
-            log(`📋 개별 조합 복사: ${text}`);
+            log(`📋 개별 복사 완료: ${text}`);
             alert('복사 완료!'); 
         });
     }
@@ -372,18 +381,15 @@
         const card = document.createElement('div');
         card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
         card.onclick = function(e) { if(e.target.tagName !== 'BUTTON') this.classList.toggle('collapsed'); };
-        
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
             ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 당첨 결과</span><span>${data.date}</span></div>
                      <div class="prize-row"><span class="p-gold">1등: ${data.r1m}</span><span class="p-blue">2등: ${data.r2m}</span></div>` 
                  : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 11대 상세 분석 데이터 보기</div>`}
-            
             <div class="ball-group">
                 ${balls}
                 ${isH ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getCol(data.b)}">${data.b}</div>` : ''}
             </div>
-            
             <div class="metrics-grid">
                 <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.oe}</span></div>
                 <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.lh}</span></div>
@@ -409,7 +415,7 @@
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
-        log(`📂 [${el.innerText}] 탭으로 이동`);
+        log(`📂 [${el.innerText}] 탭으로 전환`);
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
@@ -417,7 +423,7 @@
         if(!window.sessionData || window.sessionData.length === 0) return; 
         let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); 
         localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); 
-        log(`💾 선별된 ${window.sessionData.length}개 조합 저장소 보관 완료`);
+        log(`💾 선별된 ${window.sessionData.length}개 조합 저장소 동기화 완료`);
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); 
     }
     function renderS() { 
@@ -426,7 +432,7 @@
         saved.forEach(item => { renderCard(list, item, false); });
         updateBatchCopyBtn('store');
     }
-    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 데이터 삭제 완료'); } }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 로컬 데이터를 파기했습니다.'); } }
 </script>
 </body>
 </html>
