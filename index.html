@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 로또 인텔리전스 v14.2</title>
+    <title>AI 로또 인텔리전스 v14.3</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -85,9 +85,7 @@
         .dist-fill { height: 100%; background: var(--primary); }
 
         .btn-copy-card { width: 100%; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
-        .btn-copy-all:hover { background: var(--win); color: #000; }
 
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -106,8 +104,8 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 AI LOTTO NEURAL v14.2</h1>
-        <div class="sub-tag">PREMIUM SYNC & COPY MASTER</div>
+        <h1>🌌 AI LOTTO NEURAL v14.3</h1>
+        <div class="sub-tag">LIVE ACTION LOG SYSTEM</div>
     </div>
 
     <div class="stats-container">
@@ -149,7 +147,7 @@
                 <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')">Normal 추출</button>
                 <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')">Strong 추출</button>
                 <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')">Legend 추출</button>
-                <button class="btn-gen btn-clear" onclick="document.getElementById('res-list').innerHTML = ''; log('🧹 리스트를 초기화했습니다.'); updateBatchCopyBtn('gen');">Clear</button>
+                <button class="btn-gen btn-clear" onclick="clearList()">Clear</button>
             </div>
         </div>
 
@@ -208,7 +206,11 @@
         } catch (e) { log("⚠️ 동기화 실패."); }
     }
 
-    function log(msg) { const t = document.getElementById('term'); t.innerText += `\n> ${msg}`; t.scrollTop = t.scrollHeight; }
+    function log(msg) { 
+        const t = document.getElementById('term'); 
+        t.innerText += `\n> ${msg}`; 
+        t.scrollTop = t.scrollHeight; 
+    }
 
     function updateStats() {
         const counts = {}; coreDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
@@ -227,54 +229,49 @@
         let d = new Set(); for(let i=0; i<n.length; i++) for(let j=i+1; j<n.length; j++) d.add(Math.abs(n[i]-n[j]));
         const ac = d.size - 5;
         let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
-        const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
         const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
         let score = 70 + Math.floor(Math.random()*20);
         if(sum >= 120 && sum <= 165) score += 5;
         let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-        return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>primes.includes(x)).length, score, grade };
+        return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>[2,3,5,7,11,13,17,19,23,29,31,37,41,43].includes(x)).length, score, grade };
     }
 
     function addFilter(type) {
         const input = document.getElementById(type + '-in');
         input.value.split(',').forEach(v => {
             const n = parseInt(v.trim());
-            if(n>=1 && n<=45) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
+            if(n>=1 && n<=45) { 
+                if(type === 'fix' && fixes.size < 5) { fixes.add(n); log(`📌 고정수 [${n}]번 추가`); }
+                else if(type === 'exc') { excs.add(n); log(`🚫 제외수 [${n}]번 추가`); }
+            }
         });
         input.value = ''; renderChips();
     }
 
     function renderChips() {
-        document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
-        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
+        document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});log('🗑️ 고정수 [${n}] 삭제');renderChips();" style="cursor:pointer">×</span></span>`).join('');
+        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});log('🗑️ 제외수 [${n}] 삭제');renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    // [수정] 0 접두사(Zero-padding) 처리 로직
-    function formatNums(nums) {
-        return nums.map(n => n.toString().padStart(2, '0')).join(', ');
-    }
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(2, '0')).join(', '); }
 
     function copyBatch(type) {
         let dataToCopy = [];
-        if(type === 'gen') {
-            dataToCopy = window.sessionData.map(item => formatNums(item.n));
-        } else {
-            const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
-            dataToCopy = saved.map(item => formatNums(item.n));
-        }
-        if(dataToCopy.length === 0) return alert('복사할 데이터가 없습니다.');
-        const finalText = dataToCopy.join('\n');
-        navigator.clipboard.writeText(finalText).then(() => {
-            alert(`📋 전체 조합 (${dataToCopy.length}건)이 복사되었습니다.`);
+        if(type === 'gen') dataToCopy = window.sessionData.map(item => formatNums(item.n));
+        else dataToCopy = JSON.parse(localStorage.getItem('v13_db') || '[]').map(item => formatNums(item.n));
+        
+        if(dataToCopy.length === 0) return;
+        navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => {
+            log(`📋 전체 조합 (${dataToCopy.length}건) 클립보드 복사 완료`);
+            alert('전체 복사가 완료되었습니다.');
         });
     }
 
     function updateBatchCopyBtn(type) {
         if(type === 'gen') {
             const btn = document.getElementById('batch-copy-gen');
-            const count = window.sessionData.length;
-            btn.innerText = `📋 생성된 모든 조합 복사하기 (${count}건)`;
-            btn.classList.toggle('hidden', count === 0);
+            btn.innerText = `📋 생성된 모든 조합 복사하기 (${window.sessionData.length}건)`;
+            btn.classList.toggle('hidden', window.sessionData.length === 0);
         } else {
             const btn = document.getElementById('batch-copy-store');
             const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
@@ -285,6 +282,7 @@
 
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
+        log(`🎲 무작위 패턴 분석: ${count}개 조합 생성 개시...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
             let n; while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; }
@@ -298,6 +296,7 @@
 
     function triggerGradeGen(targetGrade) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
+        log(`🎯 등급 타겟팅 [${targetGrade}]: ${count}개 조합 추출 중...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         let found = 0, attempts = 0;
         while(found < count && attempts < 10000) {
@@ -311,12 +310,23 @@
                 found++;
             }
         }
+        log(`✅ 타겟팅 완료 (분석횟수: ${attempts}회)`);
         updateBatchCopyBtn('gen');
+    }
+
+    function clearList() {
+        document.getElementById('res-list').innerHTML = '';
+        window.sessionData = [];
+        updateBatchCopyBtn('gen');
+        log('🧹 생성 리스트 초기화 완료');
     }
 
     function copyToClipboard(nums) {
         const text = formatNums(nums);
-        navigator.clipboard.writeText(text).then(() => { alert('📋 복사 완료: ' + text); });
+        navigator.clipboard.writeText(text).then(() => { 
+            log(`📋 개별 조합 복사: ${text}`);
+            alert('복사 완료!'); 
+        });
     }
 
     function renderCard(target, data, isH) {
@@ -360,17 +370,24 @@
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
+        log(`📂 [${el.innerText}] 탭으로 이동`);
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB.forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
-    function saveData() { if(!window.sessionData) return; let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); }
+    function saveData() { 
+        if(!window.sessionData || window.sessionData.length === 0) return; 
+        let saved = JSON.parse(localStorage.getItem('v13_db') || '[]'); 
+        localStorage.setItem('v13_db', JSON.stringify([...window.sessionData, ...saved])); 
+        log(`💾 선별된 ${window.sessionData.length}개 조합 저장소에 보관 완료`);
+        alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); 
+    }
     function renderS() { 
         const list = document.getElementById('store-list'); list.innerHTML = '';
         const saved = JSON.parse(localStorage.getItem('v13_db') || '[]');
         saved.forEach(item => { const c = renderCard(list, item, false); c.classList.remove('collapsed'); });
         updateBatchCopyBtn('store');
     }
-    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); } }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem('v13_db'); renderS(); log('🗑️ 저장소 데이터를 삭제했습니다.'); } }
 </script>
 </body>
 </html>
