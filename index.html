@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT v16.7</title>
+    <title>QUANTUM LOTTO INSIGHT</title>
+    
+    <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg" />
+    
+    <meta name="description" content="QUANTUM LOTTO INSIGHT - AI 신경망 알고리즘 기반 로또 6/45 및 연금복권 720+ 정밀 분석 시스템. 11대 지표를 통해 최적의 골든존 조합을 도출합니다.">
+    <meta name="keywords" content="로또분석, 로또번호생성기, 연금복권720, 연금복권분석, AI로또, 퀀텀로또, 로또통계, 복권예상번호">
+    <meta name="author" content="QUANTUM LOTTO">
+    <link rel="canonical" href="https://azit4376-blip.github.io/lotto/">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="QUANTUM LOTTO INSIGHT v16.9">
+    <meta property="og:description" content="데이터 기반의 정밀 로또/연금복권 분석 솔루션. 최적의 확률 밸런스를 확인하세요.">
+    <meta property="og:url" content="https://azit4376-blip.github.io/lotto/">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -120,7 +135,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v16.7</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v16.9</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
@@ -309,17 +324,14 @@
             let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
             document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
         } else {
-            // [수정] 연금복권용 자리별 HOT/COLD 통계
             document.getElementById('hot-label').innerText = "🔥 HOT (자리별)";
             document.getElementById('cold-label').innerText = "❄️ COLD (자리별)";
-            
             let hotNums = [], coldNums = [];
             for(let i=0; i<6; i++) {
                 const posNums = currentDB.map(h => h.n[i]);
                 const counts = {}; posNums.forEach(n => counts[n] = (counts[n] || 0) + 1);
                 const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
                 hotNums.push(sorted[0] ? sorted[0][0] : "?");
-                
                 let allDigits = [0,1,2,3,4,5,6,7,8,9];
                 let unappeared = allDigits.filter(d => !posNums.includes(d));
                 coldNums.push(unappeared.length > 0 ? unappeared[0] : "?");
@@ -344,11 +356,7 @@
             let score = 70 + Math.floor(Math.random()*20);
             if(sum >= 120 && sum <= 165) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { 
-                m1: `${odd}:${6-odd}`, m2: `${low}:${6-low}`, m3: ac, m4: ends.reduce((a,b)=>a+b,0), m5: sum, 
-                m6: sorted[5]-sorted[0], m7: (sum/6).toFixed(1), m8: serial, m9: 6-new Set(ends).size, 
-                m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade 
-            };
+            return { m1: `${odd}:${6-odd}`, m2: `${low}:${6-low}`, m3: ac, m4: ends.reduce((a,b)=>a+b,0), m5: sum, m6: sorted[5]-sorted[0], m7: (sum/6).toFixed(1), m8: serial, m9: 6-new Set(ends).size, m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade };
         } else {
             const sum = n.reduce((a,b)=>a+b,0);
             const odd = n.filter(x=>x%2!==0).length;
@@ -368,11 +376,7 @@
             let score = 75 + Math.floor(Math.random()*15);
             if(sum >= 20 && sum <= 38) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { 
-                p1: `${matchCount}/6`, p2: sum, p3: `저${low}:고${6-low}`, p4: `홀${odd}:짝${6-odd}`, 
-                p5: `${serial}-Step`, p6: end3Sum, p7: avg, p8: primeCnt > 0 ? 'YES' : 'NO',
-                score, grade 
-            };
+            return { p1: `${matchCount}/6`, p2: sum, p3: `저${low}:고${6-low}`, p4: `홀${odd}:짝${6-odd}`, p5: `${serial}-Step`, p6: end3Sum, p7: avg, p8: primeCnt > 0 ? 'YES' : 'NO', score, grade };
         }
     }
 
