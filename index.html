@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT v16.2</title>
+    <title>QUANTUM LOTTO INSIGHT v16.3</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
         
-        .main-header { text-align: center; padding: 40px 20px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); }
+        .main-header { text-align: center; padding: 50px 20px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); }
         .main-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; font-family: 'Orbitron'; letter-spacing: -1px; }
         .sub-tag { font-size: 0.65rem; color: #7dd3fc; margin-top: 12px; font-weight: 800; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
 
@@ -92,12 +92,6 @@
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         .highlight { color: var(--primary) !important; }
 
-        .dist-chart { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 18px; margin-bottom: 15px; }
-        .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 8px; }
-        .dist-label { width: 55px; color: var(--dim); font-weight: 800; }
-        .dist-track { flex-grow: 1; height: 6px; background: #0f172a; border-radius: 4px; overflow: hidden; }
-        .dist-fill { height: 100%; background: var(--primary); }
-
         .btn-copy-card { width: 100%; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
 
@@ -120,7 +114,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v16.2</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v16.3</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
@@ -207,7 +201,7 @@
             <div class="disclaimer-body">
                 본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다.<br><br>
                 1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
             </div>
         </div>
         <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
@@ -261,7 +255,6 @@
         currentMode = mode;
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
-        // [수정] 모드별 기본 수량 세팅
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
         fixes.clear(); excs.clear(); renderChips();
         clearList();
@@ -315,7 +308,6 @@
 
     function getMetrics(n) {
         if(currentMode === 'lotto') {
-            // [복구] 로또 11대 지표 로직
             const sorted = [...n].sort((a,b)=>a-b);
             const odd = n.filter(x=>x%2!==0).length;
             const low = n.filter(x=>x<=22).length;
@@ -335,7 +327,6 @@
                 m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade 
             };
         } else {
-            // [확장] 연금복권 8대 지표 로직
             const sum = n.reduce((a,b)=>a+b,0);
             const odd = n.filter(x=>x%2!==0).length;
             const low = n.filter(x=>x<=4).length;
@@ -351,7 +342,6 @@
             const avg = (sum/6).toFixed(1);
             const primes = [2,3,5,7];
             let primeCnt = n.filter(x => primes.includes(x)).length;
-
             let score = 75 + Math.floor(Math.random()*15);
             if(sum >= 20 && sum <= 38) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
@@ -408,7 +398,7 @@
 
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎲 [${currentMode.toUpperCase()}] 생성 시퀀스 시작...`);
+        log(`🎲 [${currentMode.toUpperCase()}] 생성 개시...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
             let n = [];
@@ -416,7 +406,12 @@
                 while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; }
                 n.sort((a,b)=>a-b);
             } else {
-                for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10));
+                for(let j=0; j<6; j++) {
+                    let r; 
+                    if(fixes.size > 0 && j < fixes.size) r = Array.from(fixes)[j];
+                    else { do { r = Math.floor(Math.random()*10); } while(excs.has(r)); }
+                    n.push(r);
+                }
             }
             const m = getMetrics(n);
             const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
@@ -427,7 +422,7 @@
 
     function triggerGradeGen(targetGrade) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎯 [${targetGrade}] 등급 추출 대기 중...`);
+        log(`🎯 [${targetGrade}] 추출 시퀀스 가동...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         let found = 0, attempts = 0;
         while(found < count && attempts < 10000) {
@@ -446,7 +441,7 @@
                 found++;
             }
         }
-        log(`✅ 생성 완료 (총 연산: ${attempts}회)`);
+        log(`✅ 생성 완료 (연산: ${attempts}회)`);
         updateBatchCopyBtn('gen');
     }
 
@@ -465,7 +460,6 @@
         
         let metricsHTML = '';
         if(currentMode === 'lotto') {
-            // [복구] 로또 11대 지표 그리드
             metricsHTML = `
                 <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.m1}</span></div>
                 <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.m2}</span></div>
@@ -480,7 +474,6 @@
                 <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.m11}</span></div>
             `;
         } else {
-            // [확장] 연금복권 전용 지표 그리드
             metricsHTML = `
                 <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
                 <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
@@ -495,9 +488,9 @@
 
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 당첨 결과</span><span>${data.date}</span></div>
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 ${currentMode==='lotto'?'당첨':'결과'}</span><span>${data.date}</span></div>
                      <div class="prize-row"><span class="p-gold">1등: ${data.r1m}</span></div>` 
-                 : `<div class="ai-comment">통계적 분석을 거친 ${currentMode.toUpperCase()} 최적 조합입니다.</div>`}
+                 : `<div class="ai-comment">신경망 알고리즘 기반 추천 조합입니다.</div>`}
             <div class="ball-group">
                 ${data.group ? `<div class="group-tag">${data.group}</div>` : ''}
                 ${balls}
