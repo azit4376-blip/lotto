@@ -29,10 +29,10 @@
         .main-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; font-family: 'Orbitron'; letter-spacing: -1px; }
         .sub-tag { font-size: 0.65rem; color: #7dd3fc; margin-top: 12px; font-weight: 800; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
 
-        /* [신규] 방문자 카운터 스타일 */
-        .visitor-counter { display: inline-flex; gap: 10px; margin-top: 20px; background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
-        .v-stat { font-size: 0.65rem; color: var(--dim); font-weight: 700; font-family: 'Orbitron'; }
-        .v-stat span { color: var(--win); margin-left: 4px; }
+        /* [수정] 방문자 카운터 영역 (HITS API 통합) */
+        .visitor-counter { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; background: rgba(0,0,0,0.4); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        .v-stat { font-size: 0.6rem; color: var(--dim); font-weight: 700; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .hits-img { display: block; border-radius: 4px; filter: grayscale(1) brightness(1.5); }
 
         .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mode-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; background: transparent; color: var(--dim); font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
@@ -140,12 +140,14 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v17.0</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v17.1</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
-            <div class="v-stat">TODAY <span id="v-today">...</span></div>
-            <div class="v-stat">TOTAL <span id="v-total">...</span></div>
+            <div class="v-stat">SYSTEM VISITOR ANALYTICS</div>
+            <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;">
+                <img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Fazit4376-blip.github.io%2Flotto%2F?color=gray&label=HITS&size=small" alt="hits" class="hits-img" />
+            </a>
         </div>
     </div>
 
@@ -253,27 +255,8 @@
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
         await syncData('lotto', LOTTO_CSV_URL);
         await syncData('pension', PENSION_CSV_URL);
-        await fetchVisitorCount(); // 방문자 수 가져오기
         refreshUI();
     };
-
-    // [신규] 방문자 수 연동 (HITS API 활용)
-    async function fetchVisitorCount() {
-        const url = `https://api.countapi.xyz/hit/azit4376-blip.github.io/lotto_v17`;
-        try {
-            // 참고: countapi 서비스 상태에 따라 fallback 데이터 사용
-            const today = Math.floor(Math.random() * 50) + 10; // 임시 목업 (실제 연동 시 API 응답 사용)
-            const total = 1000 + Math.floor(Math.random() * 200);
-            
-            // 실제 구현 시 무료 API인 HITS(https://hits.seeyoufarm.com/) 이미지 파싱 등을 사용할 수 있으나
-            // 여기서는 시각적으로 카운트를 시뮬레이션하고 로직만 구성합니다.
-            document.getElementById('v-today').innerText = today;
-            document.getElementById('v-total').innerText = total;
-        } catch (e) {
-            document.getElementById('v-today').innerText = "--";
-            document.getElementById('v-total').innerText = "--";
-        }
-    }
 
     window.onscroll = function() {
         const topBtn = document.getElementById("btn-top");
