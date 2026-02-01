@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT v16.0</title>
+    <title>QUANTUM LOTTO INSIGHT v16.1</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -14,7 +14,6 @@
         .main-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; font-family: 'Orbitron'; letter-spacing: -1px; }
         .sub-tag { font-size: 0.65rem; color: #7dd3fc; margin-top: 12px; font-weight: 800; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
 
-        /* [신규] 모드 전환 스위치 */
         .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mode-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; background: transparent; color: var(--dim); font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
         .mode-btn.active { background: var(--primary); color: #000; box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
@@ -78,26 +77,20 @@
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
         
-        /* 연금 전용 조 배지 */
         .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
 
-        .b1 { background: radial-gradient(circle, #fbbf24, #d97706); }
-        .b2 { background: radial-gradient(circle, #60a5fa, #2563eb); }
-        .b3 { background: radial-gradient(circle, #f87171, #dc2626); }
-        .b4 { background: radial-gradient(circle, #94a3b8, #475569); }
-        .b5 { background: radial-gradient(circle, #34d399, #059669); }
+        .b1 { background: radial-gradient(circle, #f87171, #dc2626); } /* 10만:빨강 */
+        .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } /* 1만:주황 */
+        .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } /* 1천:노랑 */
+        .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } /* 1백:초록 */
+        .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } /* 10:파랑 */
+        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } /* 1:보라 */
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         .highlight { color: var(--primary) !important; }
-
-        .dist-chart { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 18px; margin-bottom: 15px; }
-        .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 8px; }
-        .dist-label { width: 55px; color: var(--dim); font-weight: 800; }
-        .dist-track { flex-grow: 1; height: 6px; background: #0f172a; border-radius: 4px; overflow: hidden; }
-        .dist-fill { height: 100%; background: var(--primary); }
 
         .btn-copy-card { width: 100%; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
@@ -121,7 +114,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v16.0</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v16.1</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
@@ -139,8 +132,8 @@
     </div>
 
     <div class="stats-container">
-        <div class="stat-card"><span class="stat-label">🔥 HOT (자리별)</span><span class="stat-value" id="hot-v">--</span></div>
-        <div class="stat-card"><span class="stat-label">❄️ COLD (자리별)</span><span class="stat-value" id="cold-v">--</span></div>
+        <div class="stat-card"><span class="stat-label">🔥 HOT (최근10회)</span><span class="stat-value" id="hot-v">--</span></div>
+        <div class="stat-card"><span class="stat-label">❄️ COLD (최근10회)</span><span class="stat-value" id="cold-v">--</span></div>
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
@@ -173,7 +166,7 @@
         <div class="custom-gen-box">
             <span class="gen-label">QUANTITY SETTING</span>
             <div style="display:flex; align-items:center;">
-                <input type="number" id="gen-qty" class="input-qty" value="5" min="1" max="100">
+                <input type="number" id="gen-qty" class="input-qty" value="1" min="1" max="100">
                 <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
             </div>
             <div class="gen-btn-row">
@@ -249,7 +242,6 @@
                     if(mode === 'lotto') {
                         return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10], r2m: c[12] };
                     } else {
-                        // 연금복권 매핑 (회차, 날짜, 조, 번호1~6)
                         return { r: parseInt(c[0]), date: c[1], group: c[2], n: [parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])], r1m: c[9] };
                     }
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
@@ -286,7 +278,7 @@
         if(currentMode === 'lotto') {
             ballsRow.innerHTML = latest.n.map(num => `<div class="ball-s ${getCol(num)}">${num}</div>`).join('') + `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span>` + `<div class="ball-s ${getCol(latest.b)}">${latest.b}</div>`;
         } else {
-            ballsRow.innerHTML = `<div class="group-tag">${latest.group}</div>` + latest.n.map((num, i) => `<div class="ball-s b${(i%5)+1}">${num}</div>`).join('');
+            ballsRow.innerHTML = `<div class="group-tag">${latest.group}</div>` + latest.n.map((num, i) => `<div class="ball-s b${i+1}">${num}</div>`).join('');
         }
     }
 
@@ -308,7 +300,6 @@
             let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
             document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
         } else {
-            // 연금은 자리별 출현 빈도 (단순화)
             document.getElementById('hot-v').innerText = "패턴분석중";
             document.getElementById('cold-v').innerText = "데이터수집중";
         }
@@ -328,12 +319,36 @@
             let score = 70 + Math.floor(Math.random()*20);
             if(sum >= 120 && sum <= 165) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { oe: `${odd}:${6-odd}`, lh: `${low}:${6-low}`, ac, endSum: ends.reduce((a,b)=>a+b,0), total: sum, range: sorted[5]-sorted[0], avg: (sum/6).toFixed(1), serial, endDup: 6-new Set(ends).size, dist: section.join('-'), prime: n.filter(x=>[2,3,5,7,11,13,17,19,23,29,31,37,41,43].includes(x)).length, score, grade };
+            return { l1: `${odd}:${6-odd}`, l2: `${low}:${6-low}`, l3: ac, l4: sum, l5: serial, score, grade };
         } else {
-            // 연금복권 지표 (자리별 중복, 연속성 등)
-            let score = 80 + Math.floor(Math.random()*15);
+            // [수정] 연금복권 전용 5대 지표 로직
+            const sum = n.reduce((a,b)=>a+b,0);
+            const odd = n.filter(x=>x%2!==0).length;
+            const low = n.filter(x=>x<=4).length;
+            let serial = 0; for(let i=0; i<n.length-1; i++) if(Math.abs(n[i+1]-n[i])===1) serial++;
+            
+            // 자리별 매칭 (최근 10회차 빈출 숫자와 대조)
+            let matchCount = 0;
+            if(coreDB.pension.length > 0) {
+                for(let i=0; i<6; i++) {
+                    const posNums = coreDB.pension.map(h => h.n[i]);
+                    if(posNums.includes(n[i])) matchCount++;
+                }
+            }
+
+            let score = 75 + Math.floor(Math.random()*15);
+            if(sum >= 20 && sum <= 38) score += 5;
+            if(matchCount >= 3) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { oe: "N/A", lh: "N/A", ac: "N/A", endSum: "N/A", total: n.reduce((a,b)=>a+b,0), range: "N/A", avg: "N/A", serial: "N/A", endDup: "N/A", dist: "자리분석완료", prime: "N/A", score, grade };
+
+            return { 
+                p1: `${matchCount}/6`, // 자리 매칭
+                p2: sum, // 디지트 합
+                p3: `저${low}:고${6-low}`, // 저고 비율
+                p4: `홀${odd}:짝${6-odd}`, // 홀짝 비율
+                p5: `${serial}-Step`, // 연속성
+                score, grade 
+            };
         }
     }
 
@@ -363,7 +378,7 @@
         if(type === 'gen') dataToCopy = window.sessionData.map(item => (item.group ? item.group + " " : "") + formatNums(item.n));
         else dataToCopy = JSON.parse(localStorage.getItem(storageKey) || '[]').map(item => (item.group ? item.group + " " : "") + formatNums(item.n));
         if(dataToCopy.length === 0) return;
-        navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => { alert('📋 전체 복사 완료'); });
+        navigator.clipboard.writeText(dataToCopy.join('\n')).then(() => { log("📋 전체 조합 일괄 복사 완료"); alert('복사가 완료되었습니다.'); });
     }
 
     function updateBatchCopyBtn(type) {
@@ -382,7 +397,7 @@
 
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎲 [${currentMode}] 생성 개시...`);
+        log(`🎲 [${currentMode.toUpperCase()}] 생성 시퀀스 시작...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         for(let i=0; i<count; i++) {
             let n = [];
@@ -401,7 +416,7 @@
 
     function triggerGradeGen(targetGrade) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        log(`🎯 [${targetGrade}] 추출 시퀀스 가동...`);
+        log(`🎯 [${targetGrade}] 등급 추출 대기 중...`);
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
         let found = 0, attempts = 0;
         while(found < count && attempts < 10000) {
@@ -420,6 +435,7 @@
                 found++;
             }
         }
+        log(`✅ 생성 완료 (총 연산: ${attempts}회)`);
         updateBatchCopyBtn('gen');
     }
 
@@ -427,30 +443,46 @@
 
     function copyToClipboard(nums, group) {
         const text = (group ? group + " " : "") + formatNums(nums);
-        navigator.clipboard.writeText(text).then(() => { alert('📋 복사 완료'); });
+        navigator.clipboard.writeText(text).then(() => { log(`📋 개별 복사: ${text}`); alert('복사 완료'); });
     }
 
     function renderCard(target, data, isH) {
-        const balls = data.n.map((n, i) => `<div class="ball ${currentMode==='lotto'?getCol(n):'b'+(i%5+1)} ${(data.carryList||[]).includes(n) ? 'carry' : ''}">${n}</div>`).join('');
+        const balls = data.n.map((n, i) => `<div class="ball ${currentMode==='lotto'?getCol(n):'b'+(i+1)} ${(data.carryList||[]).includes(n) ? 'carry' : ''}">${n}</div>`).join('');
         const card = document.createElement('div');
         card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
         card.onclick = function(e) { if(e.target.tagName !== 'BUTTON') this.classList.toggle('collapsed'); };
+        
+        let metricsHTML = '';
+        if(currentMode === 'lotto') {
+            metricsHTML = `
+                <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.l1}</span></div>
+                <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.l2}</span></div>
+                <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.l3}</span></div>
+                <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.l4}</span></div>
+                <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val">${data.l5}</span></div>
+            `;
+        } else {
+            metricsHTML = `
+                <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
+                <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
+                <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${data.p3}</span></div>
+                <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${data.p4}</span></div>
+                <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val">${data.p5}</span></div>
+            `;
+        }
+
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 결과</span><span>${data.date}</span></div>
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 당첨 결과</span><span>${data.date}</span></div>
                      <div class="prize-row"><span class="p-gold">1등: ${data.r1m}</span></div>` 
-                 : `<div class="ai-comment">최적의 밸런스 점수 도출. 지표 분석 완료.</div>`}
+                 : `<div class="ai-comment">통계적 분석을 거친 ${currentMode.toUpperCase()} 최적 조합입니다.</div>`}
             <div class="ball-group">
                 ${data.group ? `<div class="group-tag">${data.group}</div>` : ''}
                 ${balls}
                 ${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getCol(data.b)}">${data.b}</div>` : ''}
             </div>
-            <div class="metrics-grid">
-                <div class="mt-box"><span class="mt-label">${currentMode==='lotto'?'홀짝':'자리수'}</span><span class="mt-val">${data.oe}</span></div>
-                <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.total}</span></div>
-                <div class="mt-box"><span class="mt-label">패턴</span><span class="mt-val">${data.dist}</span></div>
-            </div>
-            <button class="btn-copy-card" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 번호 복사</button>
+            <div class="metrics-grid">${metricsHTML}</div>
+            ${!isH ? `<button class="btn-copy-card" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 조합 번호 복사하기</button>` : ''}
         `;
         target.appendChild(card); return card;
     }
@@ -461,6 +493,7 @@
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
+        log(`📂 [${el.innerText}] 탭 이동`);
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
@@ -469,6 +502,7 @@
         if(!window.sessionData || window.sessionData.length === 0) return; 
         let saved = JSON.parse(localStorage.getItem(storageKey) || '[]'); 
         localStorage.setItem(storageKey, JSON.stringify([...window.sessionData, ...saved])); 
+        log(`💾 ${window.sessionData.length}건 저장소 보관 완료`);
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); 
     }
     function renderS() { 
@@ -480,7 +514,7 @@
     }
     function resetStore() { 
         const storageKey = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
-        if(confirm("비우시겠습니까?")) { localStorage.removeItem(storageKey); renderS(); } 
+        if(confirm("비우시겠습니까?")) { localStorage.removeItem(storageKey); renderS(); log("🗑️ 저장소 초기화 완료"); } 
     }
 </script>
 </body>
