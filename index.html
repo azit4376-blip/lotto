@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT v16.4</title>
+    <title>QUANTUM LOTTO INSIGHT v16.5</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -79,19 +79,20 @@
         
         .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
 
-        .b1 { background: radial-gradient(circle, #f87171, #dc2626); } 
-        .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } 
-        .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } 
-        .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } 
-        .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
-        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
-
         /* 로또용 색상 (지표 복구용) */
         .l1 { background: radial-gradient(circle, #fbbf24, #d97706); }
         .l2 { background: radial-gradient(circle, #60a5fa, #2563eb); }
         .l3 { background: radial-gradient(circle, #f87171, #dc2626); }
         .l4 { background: radial-gradient(circle, #94a3b8, #475569); }
         .l5 { background: radial-gradient(circle, #34d399, #059669); }
+
+        /* 연금용 색상 */
+        .b1 { background: radial-gradient(circle, #f87171, #dc2626); } 
+        .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } 
+        .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } 
+        .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } 
+        .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
+        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mt-box { text-align: center; }
@@ -121,7 +122,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v16.4</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v16.5</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
@@ -208,7 +209,7 @@
             <div class="disclaimer-body">
                 본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다.<br><br>
                 1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
             </div>
         </div>
         <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
@@ -498,7 +499,10 @@
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
             ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 ${currentMode==='lotto'?'당첨':'결과'}</span><span>${data.date}</span></div>
-                     <div class="prize-row"><span class="p-gold">1등: ${data.r1m}</span>${currentMode==='lotto' ? `<span class="p-blue">2등: ${data.r2m}</span>`: `<span class="p-blue">2등: 100만원</span>`}</div>` 
+                     <div class="prize-row">
+                        <span class="p-gold">1등: ${currentMode==='lotto' ? data.r1m : '월 700만원 (20년)'}</span>
+                        <span class="p-blue">2등: ${currentMode==='lotto' ? data.r2m : '월 100만원 (10년)'}</span>
+                     </div>` 
                  : `<div class="ai-comment">신경망 알고리즘 기반 추천 조합입니다.</div>`}
             <div class="ball-group">
                 ${data.group ? `<div class="group-tag">${data.group}</div>` : ''}
