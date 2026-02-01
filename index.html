@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT v16.1</title>
+    <title>QUANTUM LOTTO INSIGHT v16.2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
@@ -79,18 +79,24 @@
         
         .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
 
-        .b1 { background: radial-gradient(circle, #f87171, #dc2626); } /* 10만:빨강 */
-        .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } /* 1만:주황 */
-        .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } /* 1천:노랑 */
-        .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } /* 1백:초록 */
-        .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } /* 10:파랑 */
-        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } /* 1:보라 */
+        .b1 { background: radial-gradient(circle, #f87171, #dc2626); } 
+        .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } 
+        .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } 
+        .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } 
+        .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
+        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         .highlight { color: var(--primary) !important; }
+
+        .dist-chart { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 18px; margin-bottom: 15px; }
+        .dist-row { display: flex; align-items: center; font-size: 0.7rem; margin-bottom: 8px; }
+        .dist-label { width: 55px; color: var(--dim); font-weight: 800; }
+        .dist-track { flex-grow: 1; height: 6px; background: #0f172a; border-radius: 4px; overflow: hidden; }
+        .dist-fill { height: 100%; background: var(--primary); }
 
         .btn-copy-card { width: 100%; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; margin-top: 10px; }
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
@@ -114,7 +120,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v16.1</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v16.2</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
     </div>
 
@@ -166,7 +172,7 @@
         <div class="custom-gen-box">
             <span class="gen-label">QUANTITY SETTING</span>
             <div style="display:flex; align-items:center;">
-                <input type="number" id="gen-qty" class="input-qty" value="1" min="1" max="100">
+                <input type="number" id="gen-qty" class="input-qty" value="5" min="1" max="100">
                 <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
             </div>
             <div class="gen-btn-row">
@@ -201,7 +207,7 @@
             <div class="disclaimer-body">
                 본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다.<br><br>
                 1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 실제 당첨 여부는 무작위 추첨 결과에 따릅니다.
             </div>
         </div>
         <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
@@ -255,6 +261,8 @@
         currentMode = mode;
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
+        // [수정] 모드별 기본 수량 세팅
+        document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
         fixes.clear(); excs.clear(); renderChips();
         clearList();
         refreshUI();
@@ -307,6 +315,7 @@
 
     function getMetrics(n) {
         if(currentMode === 'lotto') {
+            // [복구] 로또 11대 지표 로직
             const sorted = [...n].sort((a,b)=>a-b);
             const odd = n.filter(x=>x%2!==0).length;
             const low = n.filter(x=>x<=22).length;
@@ -316,18 +325,21 @@
             const ac = d.size - 5;
             let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
             const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
+            const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
             let score = 70 + Math.floor(Math.random()*20);
             if(sum >= 120 && sum <= 165) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { l1: `${odd}:${6-odd}`, l2: `${low}:${6-low}`, l3: ac, l4: sum, l5: serial, score, grade };
+            return { 
+                m1: `${odd}:${6-odd}`, m2: `${low}:${6-low}`, m3: ac, m4: ends.reduce((a,b)=>a+b,0), m5: sum, 
+                m6: sorted[5]-sorted[0], m7: (sum/6).toFixed(1), m8: serial, m9: 6-new Set(ends).size, 
+                m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade 
+            };
         } else {
-            // [수정] 연금복권 전용 5대 지표 로직
+            // [확장] 연금복권 8대 지표 로직
             const sum = n.reduce((a,b)=>a+b,0);
             const odd = n.filter(x=>x%2!==0).length;
             const low = n.filter(x=>x<=4).length;
             let serial = 0; for(let i=0; i<n.length-1; i++) if(Math.abs(n[i+1]-n[i])===1) serial++;
-            
-            // 자리별 매칭 (최근 10회차 빈출 숫자와 대조)
             let matchCount = 0;
             if(coreDB.pension.length > 0) {
                 for(let i=0; i<6; i++) {
@@ -335,18 +347,17 @@
                     if(posNums.includes(n[i])) matchCount++;
                 }
             }
+            const end3Sum = n[3]+n[4]+n[5];
+            const avg = (sum/6).toFixed(1);
+            const primes = [2,3,5,7];
+            let primeCnt = n.filter(x => primes.includes(x)).length;
 
             let score = 75 + Math.floor(Math.random()*15);
             if(sum >= 20 && sum <= 38) score += 5;
-            if(matchCount >= 3) score += 5;
             let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-
             return { 
-                p1: `${matchCount}/6`, // 자리 매칭
-                p2: sum, // 디지트 합
-                p3: `저${low}:고${6-low}`, // 저고 비율
-                p4: `홀${odd}:짝${6-odd}`, // 홀짝 비율
-                p5: `${serial}-Step`, // 연속성
+                p1: `${matchCount}/6`, p2: sum, p3: `저${low}:고${6-low}`, p4: `홀${odd}:짝${6-odd}`, 
+                p5: `${serial}-Step`, p6: end3Sum, p7: avg, p8: primeCnt > 0 ? 'YES' : 'NO',
                 score, grade 
             };
         }
@@ -454,20 +465,31 @@
         
         let metricsHTML = '';
         if(currentMode === 'lotto') {
+            // [복구] 로또 11대 지표 그리드
             metricsHTML = `
-                <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.l1}</span></div>
-                <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.l2}</span></div>
-                <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.l3}</span></div>
-                <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.l4}</span></div>
-                <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val">${data.l5}</span></div>
+                <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.m1}</span></div>
+                <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.m2}</span></div>
+                <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.m3}</span></div>
+                <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${data.m4}</span></div>
+                <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.m5}</span></div>
+                <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${data.m6}</span></div>
+                <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${data.m7}</span></div>
+                <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${data.m8}</span></div>
+                <div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${data.m9}</span></div>
+                <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${data.m10}</span></div>
+                <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.m11}</span></div>
             `;
         } else {
+            // [확장] 연금복권 전용 지표 그리드
             metricsHTML = `
                 <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
                 <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
                 <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${data.p3}</span></div>
                 <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${data.p4}</span></div>
-                <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val">${data.p5}</span></div>
+                <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${data.p5}</span></div>
+                <div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${data.p6}</span></div>
+                <div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${data.p7}</span></div>
+                <div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${data.p8}</span></div>
             `;
         }
 
