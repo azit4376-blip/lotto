@@ -30,7 +30,6 @@
             --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; 
         }
         
-        /* [수정] 라이트 모드 시인성 강화 색상값 */
         [data-theme='light'] { 
             --bg: #f8fafc; 
             --card: #ffffff; 
@@ -47,7 +46,6 @@
 
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
         
-        /* [추가] 헤더 라이트모드 대응 */
         [data-theme='light'] .main-header { background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(2, 132, 199, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
         [data-theme='light'] .main-header h1 { color: #0369a1; text-shadow: none; }
         [data-theme='light'] .sub-tag { color: #0ea5e9; }
@@ -83,7 +81,7 @@
         [data-theme='light'] .stat-value { color: #0284c7; }
 
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
-        [data-theme='light'] .terminal { background: #1e293b; border: 1px solid #cbd5e1; } /* 라이트 모드에서도 터미널은 다크 배경 유지하여 시인성 확보 */
+        [data-theme='light'] .terminal { background: #1e293b; border: 1px solid #cbd5e1; }
 
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
@@ -188,6 +186,15 @@
         .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
 
         .hidden { display: none; }
+
+        /* [추가] 슬립 이미지 저장 전용 렌더링 스타일 */
+        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 380px; background: #fff; color: #000; padding: 40px 20px; font-family: 'Pretendard', sans-serif; }
+        .slip-title { text-align: center; font-size: 1.6rem; font-weight: 900; border-bottom: 2px dashed #000; padding-bottom: 15px; margin-bottom: 15px; }
+        .slip-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 20px; font-weight: 700; color: #444; }
+        .slip-row { display: flex; align-items: center; margin-bottom: 10px; font-weight: 900; font-size: 1.1rem; border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
+        .slip-idx { width: 55px; color: #888; font-size: 0.85rem; }
+        .slip-nums { flex: 1; letter-spacing: 2px; }
+        .slip-total { border-top: 2px dashed #000; margin-top: 20px; padding-top: 15px; text-align: right; font-size: 1.2rem; font-weight: 900; }
     </style>
 </head>
 <body>
@@ -260,13 +267,19 @@
             </div>
         </div>
 
-        <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')">📋 생성된 모든 조합 복사하기 (0건)</button>
+        <div style="display:flex; gap:8px;">
+            <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1;">📋 전체 복사 (0건)</button>
+            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
+        </div>
         <div id="res-list"></div>
     </div>
 
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     <div id="store-panel" class="hidden">
-        <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')">📋 저장된 모든 조합 복사하기 (0건)</button>
+        <div style="display:flex; gap:8px;">
+            <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1;">📋 전체 복사 (0건)</button>
+            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
+        </div>
         <div id="store-list"></div>
     </div>
 
@@ -290,6 +303,16 @@
         </div>
         <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
     </div>
+</div>
+
+<div id="slip-render-zone">
+    <div class="slip-title">QUANTUM SLIP</div>
+    <div class="slip-info">
+        <span id="slip-round">제 ----회</span>
+        <span id="slip-time">2026.01.01 00:00</span>
+    </div>
+    <div id="slip-list"></div>
+    <div class="slip-total" id="slip-price">금액 ₩ 0,000</div>
 </div>
 
 <script>
@@ -364,6 +387,41 @@
             }
         } catch (e) { log("⚠️ 생성 실패"); }
         if(wasCollapsed) card.classList.add('collapsed');
+    }
+
+    /* [추가] 전체 슬립 이미지 저장 함수 */
+    async function captureSlip(type) {
+        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+        if(!data.length) return;
+
+        log("📸 슬립 용지 생성 중...");
+        const zone = document.getElementById('slip-render-zone');
+        const list = document.getElementById('slip-list');
+        const latest = DB[currentMode][0];
+        
+        document.getElementById('slip-round').innerText = `제 ${latest ? latest.r+1 : '--'}회 분석조합`;
+        document.getElementById('slip-time').innerText = new Date().toLocaleString();
+        document.getElementById('slip-price').innerText = `금액 ₩ ${(data.length * 1000).toLocaleString()}`;
+        
+        list.innerHTML = data.map((item, i) => `
+            <div class="slip-row">
+                <span class="slip-idx">${i+1}조합</span>
+                <span class="slip-nums">${item.group ? item.group + ' ' : ''}${formatNums(item.n)}</span>
+            </div>
+        `).join('');
+
+        try {
+            const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
+            const img = canvas.toDataURL("image/png");
+            const newWin = window.open("", "_blank");
+            if (newWin) {
+                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;"><img src="${img}" style="max-width:90%; border-radius:5px;" /><button onclick="window.close()" style="margin-top:20px; padding:10px 20px;">닫기</button></body>`);
+            } else {
+                const link = document.createElement('a'); link.href = img; link.download = `Slip_${Date.now()}.png`; link.click();
+            }
+            log("✅ 슬립 저장 완료");
+        } catch(e) { log("⚠️ 슬립 생성 실패"); }
     }
 
     async function syncData(mode, url) {
@@ -472,21 +530,24 @@
         document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(currentMode==='lotto'?', ':''); }
+    /* [수정] 콤마 제거: 띄어쓰기로 포맷 변경 */
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(' '); }
 
     function copyBatch(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
         navigator.clipboard.writeText(data.map(i => (i.group ? i.group + " " : "") + formatNums(i.n)).join('\n'));
-        alert('📋 복사 완료');
+        alert('📋 복사 완료 (띄어쓰기 포맷)');
     }
 
     function updateBatchCopyBtn(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
-        const btn = document.getElementById(`batch-copy-${type}`);
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
-        if(btn) { btn.innerText = `📋 모든 조합 복사하기 (${data.length}건)`; btn.classList.toggle('hidden', !data.length); }
+        const btn = document.getElementById(`batch-copy-${type}`);
+        const slipBtn = document.getElementById(`batch-slip-${type}`);
+        if(btn) { btn.innerText = `📋 전체 복사 (${data.length}건)`; btn.classList.toggle('hidden', !data.length); }
+        if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
     }
 
     function triggerGen() {
@@ -530,7 +591,7 @@
         log('🧹 리스트 초기화 완료.');
     }
 
-    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료'); }
+    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료 (띄어쓰기 포맷)'); }
     function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
 
     function renderCard(target, data, isH) {
