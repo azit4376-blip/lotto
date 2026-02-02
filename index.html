@@ -42,7 +42,8 @@
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; transition: background 0.3s; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
         
-        .dday-ticker { text-align: center; margin-bottom: 15px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
+        /* [수정] D-Day 위치 이동을 위한 여백 조정 */
+        .dday-ticker { text-align: center; margin: 15px 0 25px; font-family: 'Orbitron', 'Pretendard'; font-size: 0.75rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; background: rgba(56, 189, 248, 0.05); padding: 10px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.1); }
 
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
         
@@ -57,7 +58,7 @@
         .v-stat { font-size: 0.6rem; color: var(--dim); font-weight: 700; font-family: 'Orbitron'; letter-spacing: 1px; }
         .hits-img { display: block; border-radius: 4px; filter: grayscale(1) brightness(1.5); }
 
-        .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .mode-switch { display: flex; gap: 10px; margin-bottom: 10px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .mode-switch { background: #e2e8f0; border: 1px solid #cbd5e1; }
         
         .mode-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; background: transparent; color: var(--dim); font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
@@ -187,22 +188,16 @@
 
         .hidden { display: none; }
 
-        /* [수정] 슬립 이미지 저장 전용 디자인 보강 (여백 보정) */
+        /* 슬립 이미지 저장 전용 렌더링 스타일 */
         #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 440px; background: #fff; color: #000; padding: 50px 40px; border: 1px solid #ddd; }
         .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
         .slip-main-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
-        
-        /* 겹침 방지를 위해 letter-spacing과 white-space 조절 */
-        .slip-sub-title { font-size: 0.9rem; margin-top: 8px; font-weight: 800; color: #444; letter-spacing: 3px; display: block; }
-        
+        .slip-sub-title { font-size: 0.9rem; margin-top: 8px; font-weight: 800; color: #444; letter-spacing: 4px; display: block; white-space: nowrap; }
         .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 25px; border-bottom: 1px dashed #000; padding-bottom: 12px; font-weight: 700; }
-        
-        /* 등간격 정렬을 위한 스타일 */
         .slip-row { display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
-        .slip-tag { width: 60px; font-size: 0.95rem; font-weight: 900; color: #666; font-family: 'Pretendard'; }
+        .slip-tag { width: 65px; font-size: 0.95rem; font-weight: 900; color: #666; font-family: 'Pretendard'; }
         .slip-numbers-box { flex: 1; display: flex; justify-content: space-between; padding-left: 10px; }
         .slip-num-unit { width: 45px; text-align: center; font-size: 1.5rem; font-weight: 900; font-family: 'Roboto Mono', monospace; color: #000; }
-        
         .slip-footer-wrap { border-top: 3px double #000; margin-top: 30px; padding-top: 20px; }
         .slip-price-tag { text-align: right; font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; }
         .slip-verify { text-align: center; font-size: 0.7rem; color: #aaa; margin-top: 30px; letter-spacing: 2px; font-weight: 700; }
@@ -211,8 +206,6 @@
 <body>
 
 <div class="dashboard">
-    <div class="dday-ticker" id="dday-display">LOADING QUANTUM TIMER...</div>
-
     <div class="main-header">
         <h1>🌌 QUANTUM LOTTO INSIGHT v18.9.8</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
@@ -229,6 +222,8 @@
         <button id="mode-lotto" class="mode-btn active" onclick="switchMode('lotto')">🎰 로또 6/45</button>
         <button id="mode-pension" class="mode-btn" onclick="switchMode('pension')">🎫 연금 720+</button>
     </div>
+
+    <div class="dday-ticker" id="dday-display">추첨 데이터 동기화 중...</div>
 
     <div id="recent-win-display" class="recent-summary">
         <div class="recent-meta">
@@ -300,7 +295,6 @@
     </div>
 
     <button id="btn-top" class="btn-top" onclick="window.scrollTo(0,0)">↑</button>
-
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
@@ -359,10 +353,12 @@
         t.scrollTop = t.scrollHeight; 
     }
 
+    /* [수정] 카운트다운 한글화 */
     function updateDDay() {
         const now = new Date();
         const targetDay = currentMode === 'lotto' ? 6 : 4; 
         const targetHour = currentMode === 'lotto' ? 20 : 19;
+        const modeLabel = currentMode === 'lotto' ? '로또 추첨까지' : '연금복권 추첨까지';
         let targetDate = new Date();
         targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
         targetDate.setHours(targetHour, 0, 0, 0);
@@ -372,7 +368,7 @@
         const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const m = Math.floor((diff / (1000 * 60)) % 60);
         const s = Math.floor((diff / 1000) % 60);
-        document.getElementById('dday-display').innerText = `${currentMode.toUpperCase()} DRAW: ${d}D ${h}H ${m}M ${s}S`;
+        document.getElementById('dday-display').innerText = `${modeLabel}: ${d}일 ${h}시간 ${m}분 ${s}초`;
     }
 
     function toggleTheme() {
@@ -380,7 +376,6 @@
         const current = body.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         body.setAttribute('data-theme', next);
-        log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
     async function captureCard(id) {
@@ -405,18 +400,17 @@
         if(wasCollapsed) card.classList.add('collapsed');
     }
 
-    /* [업데이트] 슬립 디자인 정렬 및 여백 보정 함수 */
     async function captureSlip(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
 
-        log("📸 고품질 슬립 이미지 생성 중...");
+        log("📸 슬립 이미지 렌더링 중...");
         const zone = document.getElementById('slip-render-zone');
         const listTarget = document.getElementById('slip-list-target');
         const latest = DB[currentMode][0];
         
-        // 회차 및 시간 표시 형식에 여백 강제 삽입
+        /* [수정] 슬립 상단 텍스트 여백 보정 */
         document.getElementById('slip-round').innerHTML = `제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
         document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
         document.getElementById('slip-price').innerText = `금액 ₩ ${(data.length * 1000).toLocaleString()}`;
@@ -424,6 +418,7 @@
         listTarget.innerHTML = data.map((item, i) => {
             const charIdx = String.fromCharCode(65 + (i % 26));
             const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+            /* [수정] 조합 표기 반영 */
             return `
             <div class="slip-row">
                 <span class="slip-tag">${charIdx} 조합</span>
@@ -559,7 +554,7 @@
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
         navigator.clipboard.writeText(data.map(i => (i.group ? i.group + " " : "") + formatNums(i.n)).join('\n'));
-        alert('📋 복사 완료 (띄어쓰기 포맷)');
+        alert('📋 복사 완료');
     }
 
     function updateBatchCopyBtn(type) {
@@ -605,14 +600,8 @@
         log(`✅ ${tg} 등급 추출 완료 (연산: ${a}회)`);
     }
 
-    function clearList() { 
-        document.getElementById('res-list').innerHTML = ''; 
-        window.sessionData = []; 
-        updateBatchCopyBtn('gen'); 
-        log('🧹 리스트 초기화 완료.');
-    }
-
-    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료 (띄어쓰기 포맷)'); }
+    function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 리스트 초기화 완료.'); }
+    function copyToClipboard(nums, group) { navigator.clipboard.writeText((group ? group + " " : "") + formatNums(nums)); alert('복사 완료'); }
     function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
 
     function renderCard(target, data, isH) {
@@ -621,36 +610,18 @@
         const card = document.createElement('div');
         card.id = uid; card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
         card.onclick = (e) => { if(!e.target.closest('button')) card.classList.toggle('collapsed'); };
-        
         let mHTML = currentMode === 'lotto' ? `
-            <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.m1}</span></div>
-            <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.m2}</span></div>
             <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.m3}</span></div>
-            <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${data.m4}</span></div>
             <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.m5}</span></div>
-            <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${data.m6}</span></div>
-            <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${data.m7}</span></div>
             <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${data.m8}</span></div>
-            <div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${data.m9}</span></div>
-            <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${data.m10}</span></div>
-            <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.m11}</span></div>
         ` : `
             <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
             <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
-            <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${data.p3}</span></div>
-            <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${data.p4}</span></div>
             <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${data.p5}</span></div>
-            <div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${data.p6}</span></div>
-            <div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${data.p7}</span></div>
-            <div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${data.p8}</span></div>
         `;
-
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 결과</span><span>${data.date}</span></div>
-                     <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?data.r1m:'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?data.r2m:'월 100만원 (10년)'}</span></div>` 
-                 : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
-            <div class="ball-group">${data.group ? `<div class="group-tag">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
+            <div class="ball-group">${data.group ? `<div class="group-tag">${data.group}</div>`:''}${balls}</div>
             <div class="metrics-grid">${mHTML}</div>
             ${!isH ? `<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
         `;
@@ -663,25 +634,21 @@
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
-        log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
     function saveData() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
         if(!window.sessionData.length) return; 
         localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); 
-        alert("💾 저장소 보관 완료"); 
-        updateBatchCopyBtn('store'); 
-        log(`💾 ${window.sessionData.length}건의 데이터를 저장소에 보관했습니다.`);
+        alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store');
     }
-    function renderS() { const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; const list = document.getElementById('store-list'); list.innerHTML = ''; JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); updateBatchCopyBtn('store'); }
-    function resetStore() { 
-        if(confirm("비우시겠습니까?")) { 
-            localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); 
-            renderS(); 
-            log('🗑️ 저장소를 비웠습니다.');
-        } 
+    function renderS() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        const list = document.getElementById('store-list'); list.innerHTML = '';
+        JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false));
+        updateBatchCopyBtn('store');
     }
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
 </script>
 </body>
