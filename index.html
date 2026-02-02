@@ -655,7 +655,7 @@
             const chunk = data.slice(p * 5, (p + 1) * 5);
             
             // 상단 정보 업데이트 (페이지 번호 포함)
-            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[${p+1}/${totalPages}]</span> &nbsp; 제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
+            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
             document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
             document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
             
