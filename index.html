@@ -187,14 +187,18 @@
 
         .hidden { display: none; }
 
-        /* [추가] 슬립 이미지 저장 전용 렌더링 스타일 */
-        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 380px; background: #fff; color: #000; padding: 40px 20px; font-family: 'Pretendard', sans-serif; }
-        .slip-title { text-align: center; font-size: 1.6rem; font-weight: 900; border-bottom: 2px dashed #000; padding-bottom: 15px; margin-bottom: 15px; }
-        .slip-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 20px; font-weight: 700; color: #444; }
-        .slip-row { display: flex; align-items: center; margin-bottom: 10px; font-weight: 900; font-size: 1.1rem; border-bottom: 1px dotted #ccc; padding-bottom: 5px; }
-        .slip-idx { width: 55px; color: #888; font-size: 0.85rem; }
-        .slip-nums { flex: 1; letter-spacing: 2px; }
-        .slip-total { border-top: 2px dashed #000; margin-top: 20px; padding-top: 15px; text-align: right; font-size: 1.2rem; font-weight: 900; }
+        /* [추가] 슬립 이미지 저장 전용 디자인 보강 스타일 */
+        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 420px; background: #fff; color: #000; padding: 45px 35px; border: 1px solid #eee; }
+        .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+        .slip-main-title { font-size: 2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
+        .slip-sub-title { font-size: 0.85rem; margin-top: 5px; font-weight: 800; color: #555; }
+        .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 25px; border-bottom: 1px dashed #000; padding-bottom: 10px; font-weight: 700; }
+        .slip-row { display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+        .slip-tag { width: 65px; font-size: 0.9rem; font-weight: 900; color: #777; }
+        .slip-numbers { flex: 1; font-size: 1.45rem; font-weight: 900; letter-spacing: 6px; font-family: 'Courier New', Courier, monospace; color: #000; }
+        .slip-footer-wrap { border-top: 3px double #000; margin-top: 25px; padding-top: 15px; }
+        .slip-price-tag { text-align: right; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
+        .slip-verify { text-align: center; font-size: 0.65rem; color: #aaa; margin-top: 25px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -268,8 +272,8 @@
         </div>
 
         <div style="display:flex; gap:8px;">
-            <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1;">📋 전체 복사 (0건)</button>
-            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
+            <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1;">📋 전체 복사</button>
+            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 이미지 저장</button>
         </div>
         <div id="res-list"></div>
     </div>
@@ -277,8 +281,8 @@
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     <div id="store-panel" class="hidden">
         <div style="display:flex; gap:8px;">
-            <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1;">📋 전체 복사 (0건)</button>
-            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
+            <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1;">📋 전체 복사</button>
+            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 이미지 저장</button>
         </div>
         <div id="store-list"></div>
     </div>
@@ -306,13 +310,19 @@
 </div>
 
 <div id="slip-render-zone">
-    <div class="slip-title">QUANTUM SLIP</div>
-    <div class="slip-info">
+    <div class="slip-header-wrap">
+        <h2 class="slip-main-title">QUANTUM LOTTO</h2>
+        <div class="slip-sub-title">QUANTUM ANALYSIS SYSTEM</div>
+    </div>
+    <div class="slip-meta-info">
         <span id="slip-round">제 ----회</span>
-        <span id="slip-time">2026.01.01 00:00</span>
+        <span id="slip-time">2026.01.01 00:00:00</span>
     </div>
     <div id="slip-list"></div>
-    <div class="slip-total" id="slip-price">금액 ₩ 0,000</div>
+    <div class="slip-footer-wrap">
+        <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
+        <div class="slip-verify">VALIDATED BY QUANTUM INSIGHT ENGINE</div>
+    </div>
 </div>
 
 <script>
@@ -389,13 +399,13 @@
         if(wasCollapsed) card.classList.add('collapsed');
     }
 
-    /* [추가] 전체 슬립 이미지 저장 함수 */
+    /* [업데이트] 슬립 디자인 고도화 함수 */
     async function captureSlip(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
 
-        log("📸 슬립 용지 생성 중...");
+        log("📸 고품질 슬립 이미지 생성 중...");
         const zone = document.getElementById('slip-render-zone');
         const list = document.getElementById('slip-list');
         const latest = DB[currentMode][0];
@@ -404,19 +414,22 @@
         document.getElementById('slip-time').innerText = new Date().toLocaleString();
         document.getElementById('slip-price').innerText = `금액 ₩ ${(data.length * 1000).toLocaleString()}`;
         
-        list.innerHTML = data.map((item, i) => `
+        list.innerHTML = data.map((item, i) => {
+            const charIdx = String.fromCharCode(65 + (i % 26)); // A, B, C...
+            return `
             <div class="slip-row">
-                <span class="slip-idx">${i+1}조합</span>
-                <span class="slip-nums">${item.group ? item.group + ' ' : ''}${formatNums(item.n)}</span>
+                <span class="slip-tag">${charIdx} 자동</span>
+                <span class="slip-numbers">${item.group ? item.group + ' ' : ''}${formatNums(item.n)}</span>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
         try {
             const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
             const img = canvas.toDataURL("image/png");
             const newWin = window.open("", "_blank");
             if (newWin) {
-                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;"><img src="${img}" style="max-width:90%; border-radius:5px;" /><button onclick="window.close()" style="margin-top:20px; padding:10px 20px;">닫기</button></body>`);
+                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;"><img src="${img}" style="max-width:90%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" /><button onclick="window.close()" style="position:fixed; bottom:30px; padding:15px 30px; background:#fff; color:#000; font-weight:900; border-radius:10px; border:none; cursor:pointer;">닫기</button></body>`);
             } else {
                 const link = document.createElement('a'); link.href = img; link.download = `Slip_${Date.now()}.png`; link.click();
             }
@@ -520,7 +533,7 @@
         input.value.split(',').forEach(v => {
             const n = parseInt(v.trim());
             const maxVal = currentMode === 'lotto' ? 45 : 9;
-            if(n>=0 && n<=maxVal) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
+            if(!isNaN(n) && n>=0 && n<=maxVal) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
         });
         input.value = ''; renderChips();
     }
