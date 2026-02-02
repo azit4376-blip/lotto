@@ -151,7 +151,7 @@
     <div class="dday-ticker" id="dday-display">LOADING QUANTUM TIMER...</div>
 
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v18.7</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v18.9</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -168,7 +168,10 @@
     </div>
 
     <div id="recent-win-display" class="recent-summary">
-        <div class="recent-meta"><span id="recent-round-label">📡 SYNCING CLOUD DATA...</span><span id="recent-date-label">----.--.--</span></div>
+        <div class="recent-meta">
+            <span id="recent-round-label">📡 SYNCING CLOUD DATA...</span>
+            <span id="recent-date-label">----.--.--</span>
+        </div>
         <div id="recent-balls-row" class="recent-balls"></div>
     </div>
 
@@ -235,7 +238,7 @@
         <div class="disclaimer-box">
             <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
             <div class="disclaimer-body">
-                본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다.<br><br>
+                본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 100% 무료 인텔리전스 도구입니다.<br><br>
                 1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
                 2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
             </div>
@@ -262,6 +265,16 @@
         refreshUI();
     };
 
+    /* [복구] 실시간 로그 함수 */
+    function log(msg) { 
+        const t = document.getElementById('term'); 
+        const logLine = document.createElement('div');
+        logLine.className = 'log-line';
+        logLine.innerText = `> ${msg}`;
+        t.appendChild(logLine);
+        t.scrollTop = t.scrollHeight; 
+    }
+
     function updateDDay() {
         const now = new Date();
         const targetDay = currentMode === 'lotto' ? 6 : 4; 
@@ -286,49 +299,28 @@
         log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
-    /* [추가] 아이폰 사진첩 저장 대응 팝업 캡처 로직 */
     async function captureCard(id) {
         const card = document.getElementById(id);
         const wasCollapsed = card.classList.contains('collapsed');
         card.classList.remove('collapsed'); 
         log("📸 분석 이미지 생성 중...");
-        
         try {
             const canvas = await html2canvas(card, { 
                 backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg'), 
                 scale: 3,
                 useCORS: true
             });
-            
             const imageData = canvas.toDataURL("image/png");
-            
             const newWin = window.open("", "_blank");
             if (newWin) {
-                newWin.document.write(`
-                    <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;">
-                        <p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p>
-                        <img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" />
-                        <button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button>
-                    </body>
-                `);
-                log("✅ 생성 완료! 새 창에서 길게 눌러 저장하세요.");
+                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;"><p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p><img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" /><button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button></body>`);
+                log("✅ 생성 완료! 새 창에서 저장하세요.");
             } else {
-                const link = document.createElement('a');
-                link.href = imageData;
-                link.download = `Quantum_${currentMode}_${Date.now()}.png`;
-                link.click();
-                alert("팝업이 차단되었습니다. 사파리 설정에서 팝업을 허용해주세요.");
+                const link = document.createElement('a'); link.href = imageData; link.download = `Quantum_${Date.now()}.png`; link.click();
             }
-        } catch (e) { log("⚠️ 이미지 생성 실패"); }
-        
+        } catch (e) { log("⚠️ 생성 실패"); }
         if(wasCollapsed) card.classList.add('collapsed');
     }
-
-    window.onscroll = function() {
-        const topBtn = document.getElementById("btn-top");
-        if (document.documentElement.scrollTop > 300) topBtn.style.display = "flex";
-        else topBtn.style.display = "none";
-    };
 
     async function syncData(mode, url) {
         try {
@@ -352,8 +344,7 @@
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
-        fixes.clear(); excs.clear(); renderChips();
-        clearList(); refreshUI();
+        fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
         log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
     }
 
@@ -369,15 +360,6 @@
         const ballsRow = document.getElementById('recent-balls-row');
         if(currentMode === 'lotto') ballsRow.innerHTML = latest.n.map(num => `<div class="ball-s ${getLottoCol(num)}">${num}</div>`).join('') + `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span>` + `<div class="ball-s ${getLottoCol(latest.b)}">${latest.b}</div>`;
         else ballsRow.innerHTML = `<div class="group-tag">${latest.group}</div>` + latest.n.map((num, i) => `<div class="ball-s b${i+1}">${num}</div>`).join('');
-    }
-
-    function log(msg) { 
-        const t = document.getElementById('term'); 
-        const logLine = document.createElement('div');
-        logLine.className = 'log-line';
-        logLine.innerText = `> ${msg}`;
-        t.appendChild(logLine);
-        t.scrollTop = t.scrollHeight; 
     }
 
     function updateStats() {
@@ -436,10 +418,7 @@
         input.value.split(',').forEach(v => {
             const n = parseInt(v.trim());
             const maxVal = currentMode === 'lotto' ? 45 : 9;
-            if(n>=0 && n<=maxVal) { 
-                if(type === 'fix' && fixes.size < 5) { fixes.add(n); log(`📌 고정 [${n}] 추가`); }
-                else if(type === 'exc') { excs.add(n); log(`🚫 제외 [${n}] 추가`); }
-            }
+            if(n>=0 && n<=maxVal) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
         });
         input.value = ''; renderChips();
     }
@@ -469,6 +448,7 @@
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        log(`🎲 [${currentMode.toUpperCase()}] 분석 엔진 가동...`);
         for(let i=0; i<count; i++) {
             let n = [];
             if(currentMode === 'lotto') { while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; } n.sort((a,b)=>a-b); }
@@ -477,11 +457,13 @@
             window.sessionData.push(data); renderCard(list, data, false);
         }
         updateBatchCopyBtn('gen');
+        log(`✅ ${count}건의 분석 조합 도출 완료.`);
     }
 
     function triggerGradeGen(tg) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        log(`🎯 [${tg}] 등급 필터링 시퀀스 개시...`);
         let f = 0, a = 0;
         while(f < count && a < 10000) {
             a++; let n = [];
@@ -494,9 +476,16 @@
             }
         }
         updateBatchCopyBtn('gen');
+        log(`✅ ${tg} 등급 추출 완료 (연산: ${a}회)`);
     }
 
-    function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); }
+    function clearList() { 
+        document.getElementById('res-list').innerHTML = ''; 
+        window.sessionData = []; 
+        updateBatchCopyBtn('gen'); 
+        log('🧹 리스트 초기화 완료.');
+    }
+
     function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료'); }
     function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
 
@@ -548,11 +537,25 @@
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
         if(tab === 'history') renderH(); if(tab === 'store') renderS();
+        log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
     }
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
-    function saveData() { const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; if(!window.sessionData.length) return; localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store'); }
+    function saveData() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        if(!window.sessionData.length) return; 
+        localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); 
+        alert("💾 저장소 보관 완료"); 
+        updateBatchCopyBtn('store'); 
+        log(`💾 ${window.sessionData.length}건의 데이터를 저장소에 보관했습니다.`);
+    }
     function renderS() { const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; const list = document.getElementById('store-list'); list.innerHTML = ''; JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); updateBatchCopyBtn('store'); }
-    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); } }
+    function resetStore() { 
+        if(confirm("비우시겠습니까?")) { 
+            localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); 
+            renderS(); 
+            log('🗑️ 저장소를 비웠습니다.');
+        } 
+    }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
 </script>
 </body>
