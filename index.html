@@ -626,11 +626,11 @@
         document.getElementById('slip-price').innerText = `금액 ₩ ${totalPrice}`;
         
         listTarget.innerHTML = data.map((item, i) => {
-            const charIdx = String.fromCharCode(65 + (i % 26));
-            const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-            return `<div class="slip-row"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div class="slip-numbers-box">${numsHTML}</div></div>`;
-        }).join('');
-
+            const numIdx = i + 1; 
+                    const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+                    return `<div class="slip-row"><span class="slip-tag">${numIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div class="slip-numbers-box">${numsHTML}</div></div>`;
+                }).join('');
+        
         try {
             const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
             const img = canvas.toDataURL("image/png");
