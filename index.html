@@ -25,13 +25,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
         
-        /* [추가] 라이트 모드 컬러셋 (v17.1 디자인 기반) */
         [data-theme='light'] { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --dim: #64748b; --glass: rgba(0,0,0,0.05); }
 
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; transition: background 0.3s; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
         
-        /* [추가] D-Day 스타일 */
         .dday-ticker { text-align: center; margin-bottom: 15px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
 
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
@@ -125,7 +123,6 @@
         [data-theme='light'] .mt-val { color: #334155; }
         .highlight { color: var(--primary) !important; }
 
-        /* [추가] 카드 하단 액션 버튼 그룹 */
         .card-btn-group { display: flex; gap: 8px; margin-top: 10px; }
         .btn-card-action { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
 
@@ -137,7 +134,6 @@
         
         .btn-top { position: fixed; right: 20px; bottom: 120px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 1001; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
 
-        /* [추가] 테마 토글 버튼 스타일 */
         .theme-toggle { position: fixed; right: 20px; bottom: 180px; width: 50px; height: 50px; background: var(--card); color: var(--primary); border-radius: 50%; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; z-index: 1002; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); font-size: 1.2rem; }
 
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
@@ -155,7 +151,7 @@
     <div class="dday-ticker" id="dday-display">LOADING QUANTUM TIMER...</div>
 
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v18.0</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v18.6</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -271,14 +267,13 @@
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
         await syncData('lotto', LOTTO_CSV_URL);
         await syncData('pension', PENSION_CSV_URL);
-        updateDDay(); setInterval(updateDDay, 1000); // [추가] 시계 작동
+        updateDDay(); setInterval(updateDDay, 1000); 
         refreshUI();
     };
 
-    /* [추가] D-Day 연산 로직 */
     function updateDDay() {
         const now = new Date();
-        const targetDay = currentMode === 'lotto' ? 6 : 4; // 토요일, 목요일
+        const targetDay = currentMode === 'lotto' ? 6 : 4; 
         const targetHour = currentMode === 'lotto' ? 20 : 19;
         let targetDate = new Date();
         targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
@@ -292,7 +287,6 @@
         document.getElementById('dday-display').innerText = `${currentMode.toUpperCase()} DRAW: ${d}D ${h}H ${m}M ${s}S`;
     }
 
-    /* [추가] 테마 토글 로직 */
     function toggleTheme() {
         const body = document.body;
         const current = body.getAttribute('data-theme') || 'dark';
@@ -301,23 +295,43 @@
         log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
-    /* [추가] 이미지 캡처 로직 */
+    /* [수정] 모바일 사진 저장 최적화 캡처 함수 */
     async function captureCard(id) {
         const card = document.getElementById(id);
         const wasCollapsed = card.classList.contains('collapsed');
-        card.classList.remove('collapsed'); // 캡처 위해 펼침
+        card.classList.remove('collapsed'); 
         log("📸 이미지 생성 중...");
+        
         try {
             const canvas = await html2canvas(card, { 
                 backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg'), 
-                scale: 2 
+                scale: 2,
+                useCORS: true,
+                logging: false
             });
-            const link = document.createElement('a');
-            link.download = `Quantum_${currentMode}_${Date.now()}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-            log("✅ 이미지 저장 완료");
-        } catch (e) { log("⚠️ 이미지 저장 실패"); }
+            
+            // Blob 방식으로 전환 (모바일 앨범 저장 호환성 최상)
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `Quantum_${currentMode}_${Date.now()}.png`;
+                
+                // 모바일 대응: 클릭 이벤트 트리거 및 새 탭 열기 방지
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // 메모리 해제
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                log("✅ 이미지 저장 시도 완료 (갤러리를 확인하세요)");
+            }, 'image/png');
+
+        } catch (e) { 
+            log("⚠️ 이미지 생성 실패"); 
+            console.error(e);
+        }
+        
         if(wasCollapsed) card.classList.add('collapsed');
     }
 
@@ -327,7 +341,6 @@
         else topBtn.style.display = "none";
     };
 
-    // --- 기존 v17.1 로직 완벽 보존 ---
     async function syncData(mode, url) {
         try {
             const response = await fetch(url);
@@ -559,4 +572,3 @@
 </script>
 </body>
 </html>
-
