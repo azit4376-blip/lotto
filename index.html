@@ -198,7 +198,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v18.9</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v19.1</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -631,13 +631,29 @@
                     return `<div class="slip-row"><span class="slip-tag">${numIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div class="slip-numbers-box">${numsHTML}</div></div>`;
                 }).join('');
         
-        try {
-            const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
-            const img = canvas.toDataURL("image/png");
-            const newWin = window.open("", "_blank");
-            newWin.document.write(`<body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; min-height:100vh;"><img src="${img}" style="max-width:90%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" /><button onclick="window.close()" style="position:fixed; bottom:30px; padding:15px 30px; background:#fff; color:#000; font-weight:900; border-radius:10px; border:none; cursor:pointer;">닫기</button></body>`);
-            log("✅ 슬립 저장 완료");
-        } catch(e) { log("⚠️ 슬립 생성 실패"); }
+            try {
+                    const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
+                    const img = canvas.toDataURL("image/png");
+                    const newWin = window.open("", "_blank");
+                    if (newWin) {
+                        // [수정] 팝업창 상단에 안내 문구 및 스타일 추가
+                        newWin.document.write(`
+                            <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;">
+                                <p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p>
+                                <img src="${img}" style="max-width:90%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+                                <button onclick="window.close()" style="margin-top:30px; padding:15px 30px; background:#fff; color:#000; font-weight:900; border-radius:10px; border:none; cursor:pointer;">닫기</button>
+                            </body>
+                        `);
+                    } else {
+                        const link = document.createElement('a'); 
+                        link.href = img; 
+                        link.download = `Slip_${Date.now()}.png`; 
+                        link.click();
+                    }
+                    log("✅ 슬립 저장 완료");
+                } catch(e) { 
+                    log("⚠️ 슬립 생성 실패"); 
+                }
     }
 </script>
 </body>
