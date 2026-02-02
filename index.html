@@ -107,7 +107,20 @@
 
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
-        .input-qty { background: #000; border: 2px solid #334155; border-radius: 12px; padding: 12px; color: var(--win); font-family: 'Orbitron'; font-weight: 900; font-size: 1rem; width: 80px; text-align: center; margin-right: 10px; }
+        .input-qty { 
+            background: #000; 
+            border: 2px solid #334155; 
+            border-radius: 12px; 
+            padding: 10px; 
+            color: var(--win); 
+            font-family: 'Orbitron'; 
+            font-weight: 900; 
+            font-size: 1rem; 
+            width: 100px; /* 화살표 공간을 위해 조금 넓힘 */
+            text-align: center; 
+            margin-right: 10px;
+            outline: none;
+        }
         [data-theme='light'] .input-qty { background: #fff; border: 2px solid #cbd5e1; color: #16a34a; }
 
         .gen-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
@@ -248,7 +261,7 @@
         <div class="custom-gen-box">
             <span class="gen-label">QUANTITY SETTING</span>
             <div style="display:flex; align-items:center;">
-                <input type="number" id="gen-qty" class="input-qty" value="5" min="1" max="100">
+                <select id="gen-qty" class="input-qty" style="appearance: none; -webkit-appearance: none; cursor: pointer;"></select>
                 <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
             </div>
             <div class="gen-btn-row">
@@ -325,6 +338,17 @@
 
     window.onload = async () => { 
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
+        
+        // 수량 선택 셀렉트 박스에 1~100까지 옵션 생성
+        const qtySelect = document.getElementById('gen-qty');
+        for (let i = 1; i <= 100; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.innerText = i + " 게임";
+            qtySelect.appendChild(opt);
+        }
+        qtySelect.value = 5; // 초기 로또 기본값 5세팅
+
         await syncData('lotto', LOTTO_CSV_URL);
         await syncData('pension', PENSION_CSV_URL);
         updateDDay(); setInterval(updateDDay, 1000); 
@@ -404,7 +428,10 @@
         currentMode = mode;
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
+        
+        // 모드 변경 시 기본 선택값 변경
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
+        
         fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
         log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
     }
@@ -630,7 +657,7 @@
                     const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
                     return `<div class="slip-row"><span class="slip-tag">${numIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div class="slip-numbers-box">${numsHTML}</div></div>`;
                 }).join('');
-        
+
             try {
                     const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
                     const img = canvas.toDataURL("image/png");
