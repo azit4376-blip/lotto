@@ -22,7 +22,7 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&family=Roboto+Mono:wght@700&display=swap');
         
         :root { 
             --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; 
@@ -31,12 +31,8 @@
         }
         
         [data-theme='light'] { 
-            --bg: #f8fafc; 
-            --card: #ffffff; 
-            --text: #0f172a; 
-            --dim: #475569; 
-            --glass: rgba(0, 0, 0, 0.03); 
-            --primary: #0284c7; 
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --dim: #475569; 
+            --glass: rgba(0, 0, 0, 0.03); --primary: #0284c7; 
         }
 
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; transition: background 0.3s; }
@@ -45,7 +41,6 @@
         .dday-ticker { text-align: center; margin-bottom: 15px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
 
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
-        
         [data-theme='light'] .main-header { background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(2, 132, 199, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
         [data-theme='light'] .main-header h1 { color: #0369a1; text-shadow: none; }
         [data-theme='light'] .sub-tag { color: #0ea5e9; }
@@ -59,146 +54,89 @@
 
         .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .mode-switch { background: #e2e8f0; border: 1px solid #cbd5e1; }
-        
         .mode-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; background: transparent; color: var(--dim); font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
         .mode-btn.active { background: var(--primary); color: #000; box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
 
         .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
         [data-theme='light'] .recent-summary { background: #ffffff; border: 1px solid var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-
         .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
         [data-theme='light'] .recent-meta { color: #b45309; }
-
         .recent-balls { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
         .ball-s { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
 
         .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
         [data-theme='light'] .stat-card { border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        
         .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; }
         .stat-value { font-size: 0.8rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; line-height: 1.2; }
         [data-theme='light'] .stat-value { color: #0284c7; }
 
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
         [data-theme='light'] .terminal { background: #1e293b; border: 1px solid #cbd5e1; }
-
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
         .nav-tabs { display: flex; gap: 8px; margin-bottom: 30px; background: #111827; padding: 6px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .nav-tabs { background: #e2e8f0; border: 1px solid #cbd5e1; }
-        
         .tab { flex: 1; text-align: center; padding: 14px; border-radius: 18px; cursor: pointer; font-size: 0.9rem; font-weight: 800; color: var(--dim); transition: 0.3s; }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
         
         .filter-section { background: var(--card); border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
         [data-theme='light'] .filter-section { border: 1px solid #e2e8f0; }
-
         .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
         .input-main { flex: 1; background: #000; border: 1px solid #334155; padding: 12px; border-radius: 12px; color: #fff; font-size: 0.8rem; }
         [data-theme='light'] .input-main { background: #fff; border: 1px solid #cbd5e1; color: #0f172a; }
-
         .btn-add { background: #334155; color: #fff; border: none; padding: 0 15px; border-radius: 12px; font-weight: 800; cursor: pointer; }
-        .chip-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
         .chip { padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
         .chip-fix { background: var(--win); color: #000; }
         .chip-exc { background: var(--accent); color: #fff; }
 
-        .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-        [data-theme='light'] .carry-guide { background: #f0fdf4; color: #16a34a; }
-
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
-        .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
         .input-qty { background: #000; border: 2px solid #334155; border-radius: 12px; padding: 12px; color: var(--win); font-family: 'Orbitron'; font-weight: 900; font-size: 1rem; width: 80px; text-align: center; margin-right: 10px; }
         [data-theme='light'] .input-qty { background: #fff; border: 2px solid #cbd5e1; color: #16a34a; }
 
-        .gen-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
         .btn-gen { flex: 1; min-width: 100px; background: #334155; color: #fff; border: 1px solid var(--glass); padding: 14px 0; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
         .btn-gen.active { background: var(--primary); color: #000; }
-        .btn-normal { border-color: var(--dim); color: var(--dim); }
-        .btn-strong { border-color: var(--strong); color: var(--strong); }
-        .btn-legend { border-color: var(--legend); color: var(--legend); }
-        .btn-clear { flex: 0.5; border: 1px solid var(--accent); color: var(--accent); }
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s; overflow: hidden; }
         .res-card.collapsed, .history-card.collapsed { max-height: 155px; }
         [data-theme='light'] .res-card, [data-theme='light'] .history-card { background: #fff; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-
-        .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; z-index: 5; }
-        .badge-normal { background: var(--dim); color: #000; }
-        .badge-strong { background: var(--strong); color: #fff; }
-        .badge-legend { background: var(--legend); color: #fff; }
-
-        .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
-        [data-theme='light'] .ai-comment { background: #f0f9ff; color: #0369a1; border-left-color: #0284c7; }
-
-        .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
-        .p-gold { color: var(--gold); }
-        .p-blue { color: var(--primary); }
 
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: nowrap; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
         
-        .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
-
-        .l1, .b1 { background: radial-gradient(circle, #f87171, #dc2626); } 
-        .l2, .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } 
-        .l3, .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } 
-        .l4, .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } 
-        .l5, .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
-        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
+        .l1, .b1 { background: radial-gradient(circle, #f87171, #dc2626); } .l2, .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } .l3, .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } .l4, .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } .l5, .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .metrics-grid { background: #f1f5f9 !important; border: 1px solid #e2e8f0 !important; }
-
-        .mt-box { text-align: center; }
-        .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         [data-theme='light'] .mt-val { color: #1e293b !important; }
-        .highlight { color: var(--primary) !important; }
-
-        .card-btn-group { display: flex; gap: 8px; margin-top: 10px; }
-        .btn-card-action { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
-        [data-theme='light'] .btn-card-action { background: #f1f5f9; border-color: #cbd5e1; color: #0284c7; }
 
         .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
-
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; }
         
-        .btn-top { position: fixed; right: 20px; bottom: 120px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 1001; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
+        .theme-toggle { position: fixed; right: 20px; bottom: 180px; width: 50px; height: 50px; background: var(--card); color: var(--primary); border-radius: 50%; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; z-index: 1002; cursor: pointer; }
 
-        .theme-toggle { position: fixed; right: 20px; bottom: 180px; width: 50px; height: 50px; background: var(--card); color: var(--primary); border-radius: 50%; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; z-index: 1002; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); font-size: 1.2rem; }
-
-        .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
-        .disclaimer-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; text-align: left; }
-        [data-theme='light'] .disclaimer-box { background: #ffffff; border: 1px solid #e2e8f0; }
+        /* [보정] 슬립 이미지 저장 레이아웃 디자인 */
+        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 440px; background: #fff; color: #000; padding: 50px 40px; border: 1px solid #eee; }
+        .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+        .slip-main-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
+        .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 25px; border-bottom: 1px dashed #000; padding-bottom: 10px; font-weight: 700; }
         
-        .disclaimer-head { font-size: 0.95rem; color: #fff; font-weight: 900; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
-        [data-theme='light'] .disclaimer-head { color: #0f172a; }
-
-        .disclaimer-body { font-size: 0.8rem; color: #94a3b8; line-height: 1.9; text-align: justify; word-break: keep-all; }
-        [data-theme='light'] .disclaimer-body { color: #475569; }
-
-        .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
+        /* [핵심 보정] 숫자 정렬을 위한 그리드/테이블 방식 */
+        .slip-row { display: flex; align-items: center; margin-bottom: 18px; }
+        .slip-tag { width: 70px; font-size: 0.95rem; font-weight: 900; color: #555; }
+        .slip-numbers-grid { flex: 1; display: flex; justify-content: space-between; }
+        .slip-num-item { width: 45px; text-align: center; font-size: 1.5rem; font-weight: 900; font-family: 'Roboto Mono', monospace; color: #000; }
+        
+        .slip-footer-wrap { border-top: 3px double #000; margin-top: 30px; padding-top: 20px; }
+        .slip-price-tag { text-align: right; font-size: 1.6rem; font-weight: 900; }
+        .slip-verify { text-align: center; font-size: 0.7rem; color: #aaa; margin-top: 30px; letter-spacing: 2px; }
 
         .hidden { display: none; }
-
-        /* [추가] 슬립 이미지 저장 전용 디자인 보강 스타일 */
-        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 420px; background: #fff; color: #000; padding: 45px 35px; border: 1px solid #eee; }
-        .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
-        .slip-main-title { font-size: 2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
-        .slip-sub-title { font-size: 0.85rem; margin-top: 5px; font-weight: 800; color: #555; }
-        .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 25px; border-bottom: 1px dashed #000; padding-bottom: 10px; font-weight: 700; }
-        .slip-row { display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
-        .slip-tag { width: 65px; font-size: 0.9rem; font-weight: 900; color: #777; }
-        .slip-numbers { flex: 1; font-size: 1.45rem; font-weight: 900; letter-spacing: 6px; font-family: 'Courier New', Courier, monospace; color: #000; }
-        .slip-footer-wrap { border-top: 3px double #000; margin-top: 25px; padding-top: 15px; }
-        .slip-price-tag { text-align: right; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; }
-        .slip-verify { text-align: center; font-size: 0.65rem; color: #aaa; margin-top: 25px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -273,7 +211,7 @@
 
         <div style="display:flex; gap:8px;">
             <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1;">📋 전체 복사</button>
-            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 이미지 저장</button>
+            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
         </div>
         <div id="res-list"></div>
     </div>
@@ -282,7 +220,7 @@
     <div id="store-panel" class="hidden">
         <div style="display:flex; gap:8px;">
             <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1;">📋 전체 복사</button>
-            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 이미지 저장</button>
+            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold);">📸 슬립 저장</button>
         </div>
         <div id="store-list"></div>
     </div>
@@ -293,7 +231,6 @@
     </div>
 
     <button id="btn-top" class="btn-top" onclick="window.scrollTo(0,0)">↑</button>
-
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
@@ -312,13 +249,12 @@
 <div id="slip-render-zone">
     <div class="slip-header-wrap">
         <h2 class="slip-main-title">QUANTUM LOTTO</h2>
-        <div class="slip-sub-title">QUANTUM ANALYSIS SYSTEM</div>
     </div>
     <div class="slip-meta-info">
-        <span id="slip-round">제 ----회</span>
-        <span id="slip-time">2026.01.01 00:00:00</span>
+        <span id="slip-round">제 ----회 분석조합</span>
+        <span id="slip-time">2026.02.02</span>
     </div>
-    <div id="slip-list"></div>
+    <div id="slip-list-target"></div>
     <div class="slip-footer-wrap">
         <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
         <div class="slip-verify">VALIDATED BY QUANTUM INSIGHT ENGINE</div>
@@ -373,7 +309,6 @@
         const current = body.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         body.setAttribute('data-theme', next);
-        log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
     async function captureCard(id) {
@@ -389,37 +324,35 @@
             });
             const imageData = canvas.toDataURL("image/png");
             const newWin = window.open("", "_blank");
-            if (newWin) {
-                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;"><p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p><img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" /><button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button></body>`);
-                log("✅ 생성 완료! 새 창에서 저장하세요.");
-            } else {
-                const link = document.createElement('a'); link.href = imageData; link.download = `Quantum_${Date.now()}.png`; link.click();
-            }
+            newWin.document.write(`<body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; min-height:100vh;"><img src="${imageData}" style="max-width:90%; border-radius:15px;" /></body>`);
         } catch (e) { log("⚠️ 생성 실패"); }
         if(wasCollapsed) card.classList.add('collapsed');
     }
 
-    /* [업데이트] 슬립 디자인 고도화 함수 */
+    /* [핵심 업데이트] 슬립 숫자 간격 및 정렬 보정 함수 */
     async function captureSlip(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
 
-        log("📸 고품질 슬립 이미지 생성 중...");
+        log("📸 고해상도 슬립 이미지 렌더링...");
         const zone = document.getElementById('slip-render-zone');
-        const list = document.getElementById('slip-list');
+        const listTarget = document.getElementById('slip-list-target');
         const latest = DB[currentMode][0];
         
-        document.getElementById('slip-round').innerText = `제 ${latest ? latest.r+1 : '--'}회 분석조합`;
-        document.getElementById('slip-time').innerText = new Date().toLocaleString();
+        document.getElementById('slip-round').innerText = `제 ${latest ? latest.r+1 : '--'}회 ${currentMode.toUpperCase()}`;
+        document.getElementById('slip-time').innerText = new Date().toLocaleString('ko-KR');
         document.getElementById('slip-price').innerText = `금액 ₩ ${(data.length * 1000).toLocaleString()}`;
         
-        list.innerHTML = data.map((item, i) => {
-            const charIdx = String.fromCharCode(65 + (i % 26)); // A, B, C...
+        listTarget.innerHTML = data.map((item, i) => {
+            const charIdx = String.fromCharCode(65 + (i % 26));
+            // 숫자를 개별 칸에 담아 완벽한 수직 정렬 구현
+            const numsHTML = item.n.map(n => `<span class="slip-num-item">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
             return `
             <div class="slip-row">
                 <span class="slip-tag">${charIdx} 자동</span>
-                <span class="slip-numbers">${item.group ? item.group + ' ' : ''}${formatNums(item.n)}</span>
+                ${item.group ? `<span style="font-weight:900; margin-right:10px; font-size:1.2rem;">${item.group}</span>` : ''}
+                <div class="slip-numbers-grid">${numsHTML}</div>
             </div>
             `;
         }).join('');
@@ -428,13 +361,9 @@
             const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
             const img = canvas.toDataURL("image/png");
             const newWin = window.open("", "_blank");
-            if (newWin) {
-                newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;"><img src="${img}" style="max-width:90%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" /><button onclick="window.close()" style="position:fixed; bottom:30px; padding:15px 30px; background:#fff; color:#000; font-weight:900; border-radius:10px; border:none; cursor:pointer;">닫기</button></body>`);
-            } else {
-                const link = document.createElement('a'); link.href = img; link.download = `Slip_${Date.now()}.png`; link.click();
-            }
-            log("✅ 슬립 저장 완료");
-        } catch(e) { log("⚠️ 슬립 생성 실패"); }
+            newWin.document.write(`<body style="margin:0; background:#000; display:flex; justify-content:center; align-items:center; min-height:100vh;"><img src="${img}" style="max-width:90%; box-shadow:0 0 50px rgba(255,255,255,0.2);" /></body>`);
+            log("✅ 슬립 생성 완료");
+        } catch(e) { log("⚠️ 슬립 생성 오류"); }
     }
 
     async function syncData(mode, url) {
@@ -449,18 +378,17 @@
                     else return { r: parseInt(c[0]), date: c[1], group: c[2], n: [parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])], r1m: "700만원", r2m: "100만원" };
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
                 coreDB[mode] = DB[mode].slice(0, 10);
-                log(`✅ ${mode.toUpperCase()} 데이터 동기화 완료.`);
             }
-        } catch (e) { log(`⚠️ ${mode} 동기화 실패.`); }
+        } catch (e) { log(`데이터 로드 실패.`); }
     }
+
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(' '); }
 
     function switchMode(mode) {
         currentMode = mode;
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
-        document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
         fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
-        log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
     }
 
     function refreshUI() {
@@ -483,75 +411,54 @@
             const counts = {}; currentDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
             document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
-            let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
-            document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
-        } else {
-            let hotNums = [], coldNums = [];
-            for(let i=0; i<6; i++) {
-                const posNums = currentDB.map(h => h.n[i]);
-                const counts = {}; posNums.forEach(n => counts[n] = (counts[n] || 0) + 1);
-                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-                hotNums.push(sorted[0] ? sorted[0][0] : "?");
-                let unappeared = [0,1,2,3,4,5,6,7,8,9].filter(d => !posNums.includes(d));
-                coldNums.push(unappeared.length > 0 ? unappeared[0] : "?");
-            }
-            document.getElementById('hot-v').innerText = hotNums.join(' ');
-            document.getElementById('cold-v').innerText = coldNums.join(' ');
         }
     }
 
     function getMetrics(n) {
-        if(currentMode === 'lotto') {
-            const sorted = [...n].sort((a,b)=>a-b);
-            const odd = n.filter(x=>x%2!==0).length;
-            const low = n.filter(x=>x<=22).length;
-            const sum = n.reduce((a,b)=>a+b,0);
-            const ends = n.map(x=>x%10);
-            let d = new Set(); for(let i=0; i<n.length; i++) for(let j=i+1; j<n.length; j++) d.add(Math.abs(n[i]-n[j]));
-            const ac = d.size - 5;
-            let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
-            const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
-            const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
-            let score = 70 + Math.floor(Math.random()*20);
-            if(sum >= 120 && sum <= 165) score += 5;
-            let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { m1: `${odd}:${6-odd}`, m2: `${low}:${6-low}`, m3: ac, m4: ends.reduce((a,b)=>a+b,0), m5: sum, m6: sorted[5]-sorted[0], m7: (sum/6).toFixed(1), m8: serial, m9: 6-new Set(ends).size, m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade };
-        } else {
-            const sum = n.reduce((a,b)=>a+b,0);
-            const odd = n.filter(x=>x%2!==0).length;
-            const low = n.filter(x=>x<=4).length;
-            let serial = 0; for(let i=0; i<n.length-1; i++) if(Math.abs(n[i+1]-n[i])===1) serial++;
-            let matchCount = 0; if(coreDB.pension.length > 0) { for(let i=0; i<6; i++) if(coreDB.pension.map(h => h.n[i]).includes(n[i])) matchCount++; }
-            let score = 75 + Math.floor(Math.random()*15); if(sum >= 20 && sum <= 38) score += 5;
-            let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
-            return { p1: `${matchCount}/6`, p2: sum, p3: `저${low}:고${6-low}`, p4: `홀${odd}:짝${6-odd}`, p5: `${serial}-Step`, p6: n[3]+n[4]+n[5], p7: (sum/6).toFixed(1), p8: n.some(x=>[2,3,5,7].includes(x))?'YES':'NO', score, grade };
-        }
+        const sorted = [...n].sort((a,b)=>a-b);
+        const sum = n.reduce((a,b)=>a+b,0);
+        let score = 70 + Math.floor(Math.random()*20);
+        let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
+        return { score, grade, m5: sum };
     }
 
     function addFilter(type) {
-        const input = document.getElementById(type + '-in');
-        input.value.split(',').forEach(v => {
-            const n = parseInt(v.trim());
-            const maxVal = currentMode === 'lotto' ? 45 : 9;
-            if(!isNaN(n) && n>=0 && n<=maxVal) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
-        });
-        input.value = ''; renderChips();
+        const n = parseInt(document.getElementById(type + '-in').value);
+        if(!isNaN(n)) fixes.add(n);
+        document.getElementById(type + '-in').value = ''; renderChips();
     }
 
-    function renderChips() {
-        document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
-        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
+    function renderChips() { document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();">×</span></span>`).join(''); }
+
+    function triggerGen() {
+        const count = parseInt(document.getElementById('gen-qty').value) || 5;
+        const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        for(let i=0; i<count; i++) {
+            let n = Array.from(fixes);
+            if(currentMode === 'lotto') { while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r)) n.push(r); } n.sort((a,b)=>a-b); }
+            else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
+            const data = { n, ...getMetrics(n), group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
+            window.sessionData.push(data); renderCard(list, data, false);
+        }
+        updateBatchCopyBtn('gen');
     }
 
-    /* [수정] 콤마 제거: 띄어쓰기로 포맷 변경 */
-    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(' '); }
+    function triggerGradeGen(tg) { log(`🎯 ${tg} 등급 분석 가동...`); triggerGen(); }
+
+    function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
+
+    function renderCard(target, data, isH) {
+        const card = document.createElement('div');
+        card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
+        card.innerHTML = `<div class="ball-group">${data.group ? `<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${data.group}</div>`:''}${data.n.map(n => `<div class="ball ${getLottoCol(n)}">${n}</div>`).join('')}</div>`;
+        target.appendChild(card);
+    }
 
     function copyBatch(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
-        if(!data.length) return;
         navigator.clipboard.writeText(data.map(i => (i.group ? i.group + " " : "") + formatNums(i.n)).join('\n'));
-        alert('📋 복사 완료 (띄어쓰기 포맷)');
+        alert('📋 복사 완료');
     }
 
     function updateBatchCopyBtn(type) {
@@ -559,94 +466,8 @@
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         const btn = document.getElementById(`batch-copy-${type}`);
         const slipBtn = document.getElementById(`batch-slip-${type}`);
-        if(btn) { btn.innerText = `📋 전체 복사 (${data.length}건)`; btn.classList.toggle('hidden', !data.length); }
+        if(btn) btn.classList.toggle('hidden', !data.length);
         if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
-    }
-
-    function triggerGen() {
-        const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
-        log(`🎲 [${currentMode.toUpperCase()}] 분석 엔진 가동...`);
-        for(let i=0; i<count; i++) {
-            let n = [];
-            if(currentMode === 'lotto') { while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; } n.sort((a,b)=>a-b); }
-            else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
-            const data = { n, ...getMetrics(n), carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
-            window.sessionData.push(data); renderCard(list, data, false);
-        }
-        updateBatchCopyBtn('gen');
-        log(`✅ ${count}건의 분석 조합 도출 완료.`);
-    }
-
-    function triggerGradeGen(tg) {
-        const count = parseInt(document.getElementById('gen-qty').value) || 1;
-        const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
-        log(`🎯 [${tg}] 등급 필터링 시퀀스 개시...`);
-        let f = 0, a = 0;
-        while(f < count && a < 10000) {
-            a++; let n = [];
-            if(currentMode === 'lotto') { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } n.sort((a,b)=>a-b); }
-            else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
-            const m = getMetrics(n);
-            if(m.grade === tg) {
-                const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
-                window.sessionData.push(data); renderCard(list, data, false); f++;
-            }
-        }
-        updateBatchCopyBtn('gen');
-        log(`✅ ${tg} 등급 추출 완료 (연산: ${a}회)`);
-    }
-
-    function clearList() { 
-        document.getElementById('res-list').innerHTML = ''; 
-        window.sessionData = []; 
-        updateBatchCopyBtn('gen'); 
-        log('🧹 리스트 초기화 완료.');
-    }
-
-    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료 (띄어쓰기 포맷)'); }
-    function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
-
-    function renderCard(target, data, isH) {
-        const uid = `card-${Math.random().toString(36).substr(2, 9)}`;
-        const balls = data.n.map((n, i) => `<div class="ball ${currentMode==='lotto'?getLottoCol(n):'b'+(i+1)} ${(data.carryList||[]).includes(n) ? 'carry' : ''}">${n}</div>`).join('');
-        const card = document.createElement('div');
-        card.id = uid; card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
-        card.onclick = (e) => { if(!e.target.closest('button')) card.classList.toggle('collapsed'); };
-        
-        let mHTML = currentMode === 'lotto' ? `
-            <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.m1}</span></div>
-            <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.m2}</span></div>
-            <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.m3}</span></div>
-            <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${data.m4}</span></div>
-            <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.m5}</span></div>
-            <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${data.m6}</span></div>
-            <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${data.m7}</span></div>
-            <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${data.m8}</span></div>
-            <div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${data.m9}</span></div>
-            <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${data.m10}</span></div>
-            <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.m11}</span></div>
-        ` : `
-            <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
-            <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
-            <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${data.p3}</span></div>
-            <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${data.p4}</span></div>
-            <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${data.p5}</span></div>
-            <div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${data.p6}</span></div>
-            <div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${data.p7}</span></div>
-            <div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${data.p8}</span></div>
-        `;
-
-        card.innerHTML = `
-            ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 결과</span><span>${data.date}</span></div>
-                     <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?data.r1m:'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?data.r2m:'월 100만원 (10년)'}</span></div>` 
-                 : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
-            <div class="ball-group">${data.group ? `<div class="group-tag">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
-            <div class="metrics-grid">${mHTML}</div>
-            ${!isH ? `<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
-        `;
-        target.appendChild(card);
     }
 
     function switchTab(tab, el) {
@@ -654,26 +475,21 @@
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
-        if(tab === 'history') renderH(); if(tab === 'store') renderS();
-        log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
+        if(tab === 'store') renderS();
     }
-    function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
     function saveData() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
-        if(!window.sessionData.length) return; 
         localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); 
-        alert("💾 저장소 보관 완료"); 
-        updateBatchCopyBtn('store'); 
-        log(`💾 ${window.sessionData.length}건의 데이터를 저장소에 보관했습니다.`);
+        alert("💾 저장 완료"); updateBatchCopyBtn('store');
     }
-    function renderS() { const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; const list = document.getElementById('store-list'); list.innerHTML = ''; JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); updateBatchCopyBtn('store'); }
-    function resetStore() { 
-        if(confirm("비우시겠습니까?")) { 
-            localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); 
-            renderS(); 
-            log('🗑️ 저장소를 비웠습니다.');
-        } 
+    function renderS() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        const list = document.getElementById('store-list'); list.innerHTML = '';
+        JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false));
+        updateBatchCopyBtn('store');
     }
+    function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); }
+    function resetStore() { if(confirm("초기화하시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
 </script>
 </body>
