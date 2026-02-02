@@ -151,7 +151,7 @@
     <div class="dday-ticker" id="dday-display">LOADING QUANTUM TIMER...</div>
 
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v18.6</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v18.7</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -168,10 +168,7 @@
     </div>
 
     <div id="recent-win-display" class="recent-summary">
-        <div class="recent-meta">
-            <span id="recent-round-label">📡 SYNCING CLOUD DATA...</span>
-            <span id="recent-date-label">----.--.--</span>
-        </div>
+        <div class="recent-meta"><span id="recent-round-label">📡 SYNCING CLOUD DATA...</span><span id="recent-date-label">----.--.--</span></div>
         <div id="recent-balls-row" class="recent-balls"></div>
     </div>
 
@@ -193,15 +190,9 @@
 
     <div id="gen-panel">
         <div class="filter-section">
-            <div class="input-group">
-                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)">
-                <button class="btn-add" onclick="addFilter('fix')">고정</button>
-            </div>
+            <div class="input-group"><input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)"><button class="btn-add" onclick="addFilter('fix')">고정</button></div>
             <div id="fix-chips" class="chip-group"></div>
-            <div class="input-group">
-                <input type="text" id="exc-in" class="input-main" placeholder="제외수 (콤마구분)">
-                <button class="btn-add" onclick="addFilter('exc')">제외</button>
-            </div>
+            <div class="input-group"><input type="text" id="exc-in" class="input-main" placeholder="제외수 (콤마구분)"><button class="btn-add" onclick="addFilter('exc')">제외</button></div>
             <div id="exc-chips" class="chip-group"></div>
         </div>
 
@@ -295,42 +286,40 @@
         log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
-    /* [수정] 모바일 사진 저장 최적화 캡처 함수 */
+    /* [추가] 아이폰 사진첩 저장 대응 팝업 캡처 로직 */
     async function captureCard(id) {
         const card = document.getElementById(id);
         const wasCollapsed = card.classList.contains('collapsed');
         card.classList.remove('collapsed'); 
-        log("📸 이미지 생성 중...");
+        log("📸 분석 이미지 생성 중...");
         
         try {
             const canvas = await html2canvas(card, { 
                 backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg'), 
-                scale: 2,
-                useCORS: true,
-                logging: false
+                scale: 3,
+                useCORS: true
             });
             
-            // Blob 방식으로 전환 (모바일 앨범 저장 호환성 최상)
-            canvas.toBlob((blob) => {
-                const url = URL.createObjectURL(blob);
+            const imageData = canvas.toDataURL("image/png");
+            
+            const newWin = window.open("", "_blank");
+            if (newWin) {
+                newWin.document.write(`
+                    <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;">
+                        <p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p>
+                        <img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" />
+                        <button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button>
+                    </body>
+                `);
+                log("✅ 생성 완료! 새 창에서 길게 눌러 저장하세요.");
+            } else {
                 const link = document.createElement('a');
-                link.href = url;
+                link.href = imageData;
                 link.download = `Quantum_${currentMode}_${Date.now()}.png`;
-                
-                // 모바일 대응: 클릭 이벤트 트리거 및 새 탭 열기 방지
-                document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
-                
-                // 메모리 해제
-                setTimeout(() => URL.revokeObjectURL(url), 100);
-                log("✅ 이미지 저장 시도 완료 (갤러리를 확인하세요)");
-            }, 'image/png');
-
-        } catch (e) { 
-            log("⚠️ 이미지 생성 실패"); 
-            console.error(e);
-        }
+                alert("팝업이 차단되었습니다. 사파리 설정에서 팝업을 허용해주세요.");
+            }
+        } catch (e) { log("⚠️ 이미지 생성 실패"); }
         
         if(wasCollapsed) card.classList.add('collapsed');
     }
@@ -394,16 +383,12 @@
     function updateStats() {
         const currentDB = coreDB[currentMode];
         if(currentMode === 'lotto') {
-            document.getElementById('hot-label').innerText = "🔥 HOT (최근10회)";
-            document.getElementById('cold-label').innerText = "❄️ COLD (최근10회)";
             const counts = {}; currentDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
             document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
             let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
             document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
         } else {
-            document.getElementById('hot-label').innerText = "🔥 HOT (자리별)";
-            document.getElementById('cold-label').innerText = "❄️ COLD (자리별)";
             let hotNums = [], coldNums = [];
             for(let i=0; i<6; i++) {
                 const posNums = currentDB.map(h => h.n[i]);
@@ -547,7 +532,7 @@
 
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 ${currentMode==='lotto'?'당첨':'결과'}</span><span>${data.date}</span></div>
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 결과</span><span>${data.date}</span></div>
                      <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?data.r1m:'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?data.r2m:'월 100만원 (10년)'}</span></div>` 
                  : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
             <div class="ball-group">${data.group ? `<div class="group-tag">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
