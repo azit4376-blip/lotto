@@ -198,7 +198,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v19</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v18.9</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -489,7 +489,7 @@
         document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(currentMode==='lotto'?', ':''); }
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(' '); }
 
     function copyBatch(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
@@ -542,7 +542,7 @@
             }
         }
         updateBatchCopyBtn('gen');
-        log(`✅ ${tg} 등급 추출 완료.`);
+        log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
     }
 
     function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 초기화 완료.'); }
