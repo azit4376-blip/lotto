@@ -24,11 +24,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
         :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
+        
+        /* [추가] 라이트 모드 컬러셋 (v17.1 디자인 기반) */
         [data-theme='light'] { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --dim: #64748b; --glass: rgba(0,0,0,0.05); }
 
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; transition: background 0.3s; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
         
+        /* [추가] D-Day 스타일 */
         .dday-ticker { text-align: center; margin-bottom: 15px; font-family: 'Orbitron'; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
 
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
@@ -85,14 +88,16 @@
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s; overflow: hidden; }
         .res-card.collapsed, .history-card.collapsed { max-height: 155px; }
-        
+        [data-theme='light'] .res-card, [data-theme='light'] .history-card { background: #fff; border: 1px solid #e2e8f0; }
+
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; z-index: 5; }
         .badge-normal { background: var(--dim); color: #000; }
         .badge-strong { background: var(--strong); color: #fff; }
         .badge-legend { background: var(--legend); color: #fff; }
 
         .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
-        
+        [data-theme='light'] .ai-comment { color: var(--primary); }
+
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
@@ -112,15 +117,19 @@
         .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
 
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        [data-theme='light'] .metrics-grid { background: #f8fafc; border: 1px solid #e2e8f0; }
+
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
+        [data-theme='light'] .mt-val { color: #334155; }
         .highlight { color: var(--primary) !important; }
 
-        .btn-copy-all { width: 100%; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 10px; transition: 0.3s; display: block; }
-        
-        /* [추가] 슬립 저장 버튼 스타일 */
-        .btn-save-slip { width: 100%; background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; display: block; }
+        /* [추가] 카드 하단 액션 버튼 그룹 */
+        .card-btn-group { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-card-action { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
+
+        .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
 
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -128,6 +137,7 @@
         
         .btn-top { position: fixed; right: 20px; bottom: 120px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 1001; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
 
+        /* [추가] 테마 토글 버튼 스타일 */
         .theme-toggle { position: fixed; right: 20px; bottom: 180px; width: 50px; height: 50px; background: var(--card); color: var(--primary); border-radius: 50%; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; z-index: 1002; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); font-size: 1.2rem; }
 
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
@@ -137,14 +147,6 @@
         .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
 
         .hidden { display: none; }
-
-        /* [추가] 용지(Slip) 렌더링용 히든 영역 스타일 */
-        #quantum-slip-area { position: absolute; left: -9999px; width: 380px; background: #fff; padding: 30px; color: #000; font-family: 'Courier New', Courier, monospace; }
-        .slip-header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 15px; }
-        .slip-title { font-size: 1.6rem; font-weight: 900; margin: 0; }
-        .slip-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 800; font-size: 1.1rem; }
-        .slip-footer { text-align: center; margin-top: 20px; border-top: 2px dashed #000; padding-top: 10px; font-size: 0.7rem; color: #666; }
-        .btn-card-sub { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -153,8 +155,9 @@
     <div class="dday-ticker" id="dday-display">LOADING QUANTUM TIMER...</div>
 
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v18.5</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v18.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
+        
         <div class="visitor-counter">
             <div class="v-stat">SYSTEM VISITOR ANALYTICS</div>
             <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;">
@@ -169,17 +172,22 @@
     </div>
 
     <div id="recent-win-display" class="recent-summary">
-        <div class="recent-meta"><span id="recent-round-label">📡 SYNC...</span><span id="recent-date-label">----.--.--</span></div>
+        <div class="recent-meta">
+            <span id="recent-round-label">📡 SYNCING CLOUD DATA...</span>
+            <span id="recent-date-label">----.--.--</span>
+        </div>
         <div id="recent-balls-row" class="recent-balls"></div>
     </div>
 
     <div class="stats-container">
-        <div class="stat-card"><span class="stat-label" id="hot-label">🔥 HOT</span><span class="stat-value" id="hot-v">--</span></div>
-        <div class="stat-card"><span class="stat-label" id="cold-label">❄️ COLD</span><span class="stat-value" id="cold-v">--</span></div>
+        <div class="stat-card"><span class="stat-label" id="hot-label">🔥 HOT (최근10회)</span><span class="stat-value" id="hot-v">--</span></div>
+        <div class="stat-card"><span class="stat-label" id="cold-label">❄️ COLD (최근10회)</span><span class="stat-value" id="cold-v">--</span></div>
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
-    <div id="shared-terminal-container"><div class="terminal" id="term"></div></div>
+    <div id="shared-terminal-container">
+        <div class="terminal" id="term"></div>
+    </div>
 
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('gen', this)">🎲 분석생성</div>
@@ -189,15 +197,22 @@
 
     <div id="gen-panel">
         <div class="filter-section">
-            <div class="input-group"><input type="text" id="fix-in" class="input-main" placeholder="고정수"><button class="btn-add" onclick="addFilter('fix')">고정</button></div>
+            <div class="input-group">
+                <input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)">
+                <button class="btn-add" onclick="addFilter('fix')">고정</button>
+            </div>
             <div id="fix-chips" class="chip-group"></div>
-            <div class="input-group"><input type="text" id="exc-in" class="input-main" placeholder="제외수"><button class="btn-add" onclick="addFilter('exc')">제외</button></div>
+            <div class="input-group">
+                <input type="text" id="exc-in" class="input-main" placeholder="제외수 (콤마구분)">
+                <button class="btn-add" onclick="addFilter('exc')">제외</button>
+            </div>
             <div id="exc-chips" class="chip-group"></div>
         </div>
 
-        <div class="carry-guide" id="guide-text">전회차 당첨번호인 <b>'이월수'</b> 가 강조됩니다.</div>
+        <div class="carry-guide" id="guide-text">강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</div>
         
         <div class="custom-gen-box">
+            <span class="gen-label">QUANTITY SETTING</span>
             <div style="display:flex; align-items:center;">
                 <input type="number" id="gen-qty" class="input-qty" value="5" min="1" max="100">
                 <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
@@ -211,14 +226,12 @@
         </div>
 
         <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')">📋 생성된 모든 조합 복사하기 (0건)</button>
-        <button id="batch-slip-gen" class="btn-save-slip hidden" onclick="generateSlipImage('gen')">🎫 슬립 이미지 저장 (5조합 단위)</button>
         <div id="res-list"></div>
     </div>
 
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     <div id="store-panel" class="hidden">
         <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')">📋 저장된 모든 조합 복사하기 (0건)</button>
-        <button id="batch-slip-store" class="btn-save-slip hidden" onclick="generateSlipImage('store')">🎫 슬립 이미지 저장 (5조합 단위)</button>
         <div id="store-list"></div>
     </div>
 
@@ -228,34 +241,19 @@
     </div>
 
     <button id="btn-top" class="btn-top" onclick="window.scrollTo(0,0)">↑</button>
-    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
-    <div id="quantum-slip-area">
-        <div class="slip-header">
-            <p style="margin:0; font-size:0.8rem; letter-spacing:3px;">hi098123</p>
-            <h2 id="slip-type-title" class="slip-title">Lotto</h2>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-                <div style="text-align:left; font-size:0.75rem;">
-                    <p style="margin:2px 0;">제 <span id="slip-round">0000</span> 회</p>
-                    <p style="margin:2px 0;">발행일 : <span id="slip-date">0000/00/00</span></p>
-                </div>
-                <div style="border:1px solid #000; padding:5px; font-size:1.2rem;">QR</div>
-            </div>
-        </div>
-        <div id="slip-numbers-container"></div>
-        <div class="slip-footer">
-            <p>금액: ₩<span id="slip-total-price">0,000</span></p>
-            <p style="margin-top:10px; letter-spacing:5px;">|||| || | |||| | || |||| | ||| || ||||</p>
-            <p style="margin-top:5px; font-size:0.5rem;">QUANTUM NEURAL NETWORK ENGINE v18.5</p>
-        </div>
-    </div>
+    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
         <div class="disclaimer-box">
             <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
-            <div class="disclaimer-body">본 시스템은 통계 알고리즘 분석 도구이며 당첨을 보장하지 않습니다. 모든 결과의 책임은 사용자에게 있습니다.</div>
+            <div class="disclaimer-body">
+                본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 <b>100% 무료 인텔리전스 도구</b>입니다.<br><br>
+                1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
+                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+            </div>
         </div>
-        <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT.</div>
+        <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
     </div>
 </div>
 
@@ -273,13 +271,14 @@
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
         await syncData('lotto', LOTTO_CSV_URL);
         await syncData('pension', PENSION_CSV_URL);
-        updateDDay(); setInterval(updateDDay, 1000);
+        updateDDay(); setInterval(updateDDay, 1000); // [추가] 시계 작동
         refreshUI();
     };
 
+    /* [추가] D-Day 연산 로직 */
     function updateDDay() {
         const now = new Date();
-        const targetDay = currentMode === 'lotto' ? 6 : 4; 
+        const targetDay = currentMode === 'lotto' ? 6 : 4; // 토요일, 목요일
         const targetHour = currentMode === 'lotto' ? 20 : 19;
         let targetDate = new Date();
         targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
@@ -293,60 +292,42 @@
         document.getElementById('dday-display').innerText = `${currentMode.toUpperCase()} DRAW: ${d}D ${h}H ${m}M ${s}S`;
     }
 
+    /* [추가] 테마 토글 로직 */
     function toggleTheme() {
-        const body = document.body; const cur = body.getAttribute('data-theme') || 'dark';
-        const next = cur === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', next); log(`🌓 [${next.toUpperCase()}] 전환`);
+        const body = document.body;
+        const current = body.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', next);
+        log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
-    /* [신규] 슬립 이미지 생성 로직 (5개씩 분할 저장) */
-    async function generateSlipImage(type) {
-        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
-        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
-        if(!data.length) return;
-
-        const slipArea = document.getElementById('quantum-slip-area');
-        const container = document.getElementById('slip-numbers-container');
-        document.getElementById('slip-type-title').innerText = currentMode === 'lotto' ? "Lotto" : "Pension";
-        document.getElementById('slip-round').innerText = DB[currentMode][0].r + 1;
-        document.getElementById('slip-date').innerText = new Date().toLocaleDateString();
-
-        for (let i = 0; i < data.length; i += 5) {
-            const chunk = data.slice(i, i + 5);
-            container.innerHTML = '';
-            chunk.forEach((item, idx) => {
-                const row = document.createElement('div');
-                row.className = 'slip-row';
-                const alphabet = String.fromCharCode(65 + idx);
-                const numbers = formatNums(item.n).replace(/,/g, '');
-                row.innerHTML = `<span>${alphabet} 자 동</span> <span>${numbers}</span>`;
-                container.appendChild(row);
-            });
-            document.getElementById('slip-total-price').innerText = (chunk.length * 1000).toLocaleString();
-
-            log(`🎫 슬립 이미지 생성 중 (${Math.floor(i/5)+1}P)...`);
-            const canvas = await html2canvas(slipArea, { scale: 3 });
-            const link = document.createElement('a');
-            link.download = `Quantum_Slip_${Date.now()}_P${Math.floor(i/5)+1}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        }
-        log("✅ 슬립 이미지 저장 완료");
-    }
-
+    /* [추가] 이미지 캡처 로직 */
     async function captureCard(id) {
         const card = document.getElementById(id);
-        const was = card.classList.contains('collapsed');
-        card.classList.remove('collapsed');
-        log("📸 카드 이미지 생성 중...");
-        const canvas = await html2canvas(card, { backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg'), scale: 2 });
-        const link = document.createElement('a');
-        link.download = `Quantum_Card_${Date.now()}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-        if(was) card.classList.add('collapsed');
+        const wasCollapsed = card.classList.contains('collapsed');
+        card.classList.remove('collapsed'); // 캡처 위해 펼침
+        log("📸 이미지 생성 중...");
+        try {
+            const canvas = await html2canvas(card, { 
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg'), 
+                scale: 2 
+            });
+            const link = document.createElement('a');
+            link.download = `Quantum_${currentMode}_${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            log("✅ 이미지 저장 완료");
+        } catch (e) { log("⚠️ 이미지 저장 실패"); }
+        if(wasCollapsed) card.classList.add('collapsed');
     }
 
+    window.onscroll = function() {
+        const topBtn = document.getElementById("btn-top");
+        if (document.documentElement.scrollTop > 300) topBtn.style.display = "flex";
+        else topBtn.style.display = "none";
+    };
+
+    // --- 기존 v17.1 로직 완벽 보존 ---
     async function syncData(mode, url) {
         try {
             const response = await fetch(url);
@@ -369,7 +350,9 @@
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
-        fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
+        fixes.clear(); excs.clear(); renderChips();
+        clearList(); refreshUI();
+        log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
     }
 
     function refreshUI() {
@@ -386,25 +369,36 @@
         else ballsRow.innerHTML = `<div class="group-tag">${latest.group}</div>` + latest.n.map((num, i) => `<div class="ball-s b${i+1}">${num}</div>`).join('');
     }
 
-    function log(msg) { const t = document.getElementById('term'); const l = document.createElement('div'); l.className = 'log-line'; l.innerText = `> ${msg}`; t.appendChild(l); t.scrollTop = t.scrollHeight; }
+    function log(msg) { 
+        const t = document.getElementById('term'); 
+        const logLine = document.createElement('div');
+        logLine.className = 'log-line';
+        logLine.innerText = `> ${msg}`;
+        t.appendChild(logLine);
+        t.scrollTop = t.scrollHeight; 
+    }
 
     function updateStats() {
         const currentDB = coreDB[currentMode];
         if(currentMode === 'lotto') {
+            document.getElementById('hot-label').innerText = "🔥 HOT (최근10회)";
+            document.getElementById('cold-label').innerText = "❄️ COLD (최근10회)";
             const counts = {}; currentDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
             const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
             document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
             let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
             document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
         } else {
+            document.getElementById('hot-label').innerText = "🔥 HOT (자리별)";
+            document.getElementById('cold-label').innerText = "❄️ COLD (자리별)";
             let hotNums = [], coldNums = [];
             for(let i=0; i<6; i++) {
                 const posNums = currentDB.map(h => h.n[i]);
                 const counts = {}; posNums.forEach(n => counts[n] = (counts[n] || 0) + 1);
                 const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
                 hotNums.push(sorted[0] ? sorted[0][0] : "?");
-                let un = [0,1,2,3,4,5,6,7,8,9].filter(d => !posNums.includes(d));
-                coldNums.push(un.length > 0 ? un[0] : "?");
+                let unappeared = [0,1,2,3,4,5,6,7,8,9].filter(d => !posNums.includes(d));
+                coldNums.push(unappeared.length > 0 ? unappeared[0] : "?");
             }
             document.getElementById('hot-v').innerText = hotNums.join(' ');
             document.getElementById('cold-v').innerText = coldNums.join(' ');
@@ -457,7 +451,7 @@
         document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
     }
 
-    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(currentMode==='lotto'?', ':' '); }
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(currentMode==='lotto'?', ':''); }
 
     function copyBatch(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
@@ -470,10 +464,8 @@
     function updateBatchCopyBtn(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const btn = document.getElementById(`batch-copy-${type}`);
-        const slip = document.getElementById(`batch-slip-${type}`);
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(btn) { btn.innerText = `📋 모든 조합 복사하기 (${data.length}건)`; btn.classList.toggle('hidden', !data.length); }
-        if(slip) { slip.classList.toggle('hidden', !data.length); }
     }
 
     function triggerGen() {
@@ -507,6 +499,7 @@
     }
 
     function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); }
+    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료'); }
     function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
 
     function renderCard(target, data, isH) {
@@ -546,7 +539,7 @@
                  : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
             <div class="ball-group">${data.group ? `<div class="group-tag">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
             <div class="metrics-grid">${mHTML}</div>
-            ${!isH ? `<div class="card-btn-group"><button class="btn-card-sub" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-sub" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
+            ${!isH ? `<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
         `;
         target.appendChild(card);
     }
@@ -566,3 +559,4 @@
 </script>
 </body>
 </html>
+
