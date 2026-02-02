@@ -642,45 +642,70 @@
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
 
-        log("📸 슬립 이미지 렌더링 중...");
+        const totalPages = Math.ceil(data.length / 5);
+        log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
+        
         const zone = document.getElementById('slip-render-zone');
         const listTarget = document.getElementById('slip-list-target');
         const latest = DB[currentMode][0];
-        
-        document.getElementById('slip-round').innerHTML = `제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
-        document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
-        const totalPrice = (data.length * 1000).toLocaleString().replace(/,/g, ',');
-        document.getElementById('slip-price').innerText = `금액 ₩ ${totalPrice}`;
-        
-        listTarget.innerHTML = data.map((item, i) => {
-            const numIdx = i + 1; 
-                    const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-                    return `<div class="slip-row"><span class="slip-tag">${numIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div class="slip-numbers-box">${numsHTML}</div></div>`;
-                }).join('');
+        const images = [];
+
+        // 5게임씩 슬립 이미지 개별 생성 루프
+        for (let p = 0; p < totalPages; p++) {
+            const chunk = data.slice(p * 5, (p + 1) * 5);
+            
+            // 상단 정보 업데이트 (페이지 번호 포함)
+            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[${p+1}/${totalPages}]</span> &nbsp; 제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
+            document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
+            document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
+            
+            // 슬립 내용 채우기 (항상 A~E로 나오도록 설정)
+            listTarget.innerHTML = chunk.map((item, i) => {
+                // i는 현재 chunk 내의 인덱스이므로 0~4임 -> A~E로 변환
+                const charIdx = String.fromCharCode(65 + i); 
+                const numsHTML = item.n.map(n => `<span class="slip-num-unit" style="width:45px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.5rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+                return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
+            }).join('');
 
             try {
-                    const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
-                    const img = canvas.toDataURL("image/png");
-                    const newWin = window.open("", "_blank");
-                    if (newWin) {
-                        // [수정] 팝업창 상단에 안내 문구 및 스타일 추가
-                        newWin.document.write(`
-                            <body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;">
-                                <p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p>
-                                <img src="${img}" style="max-width:90%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
-                                <button onclick="window.close()" style="margin-top:30px; padding:15px 30px; background:#fff; color:#000; font-weight:900; border-radius:10px; border:none; cursor:pointer;">닫기</button>
-                            </body>
-                        `);
-                    } else {
-                        const link = document.createElement('a'); 
-                        link.href = img; 
-                        link.download = `Slip_${Date.now()}.png`; 
-                        link.click();
-                    }
-                    log("✅ 슬립 저장 완료");
-                } catch(e) { 
-                    log("⚠️ 슬립 생성 실패"); 
-                }
+                const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff' });
+                images.push(canvas.toDataURL("image/png"));
+            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); }
+        }
+
+        // 새 창에 슬라이더 인터페이스 출력
+        const newWin = window.open("", "_blank");
+        if (newWin) {
+            const imgTags = images.map((src, idx) => `
+                <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
+                    <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${totalPages}] 이미지를 길게 눌러 저장하세요</p>
+                    <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+                </div>
+            `).join('');
+
+            newWin.document.write(`
+                <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
+                    <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                        ${imgTags}
+                    </div>
+                    <div style="display:flex; gap:25px; margin-top:40px;">
+                        <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전 슬립</button>
+                        <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음 슬립</button>
+                    </div>
+                    <button onclick="window.close()" style="margin-top:40px; color:#94a3b8; background:none; border:none; text-decoration:underline; font-size:14px; cursor:pointer;">창 닫기</button>
+                    <script>
+                        let current = 0;
+                        const slides = document.getElementsByClassName('slide');
+                        function move(dir) {
+                            slides[current].style.display = 'none';
+                            current = (current + dir + slides.length) % slides.length;
+                            slides[current].style.display = 'flex';
+                        }
+                    <\/script>
+                </body>
+            `);
+            log(`✅ 총 ${totalPages}장의 슬립 생성 완료.`);
+        }
     }
 </script>
 </body>
