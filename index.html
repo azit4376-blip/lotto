@@ -83,10 +83,9 @@
 
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
-        /* [수정] 디자인 보존하며 반응형 메뉴 탭 설정 */
         .nav-tabs { 
             display: flex; 
-            flex-wrap: wrap; /* 자동 줄바꿈 추가 */
+            flex-wrap: wrap; 
             gap: 6px; 
             margin-bottom: 30px; 
             background: #111827; 
@@ -97,7 +96,7 @@
         [data-theme='light'] .nav-tabs { background: #e2e8f0; border: 1px solid #cbd5e1; }
         
         .tab { 
-            flex: 1 1 calc(33.33% - 10px); /* 3열 배치 */
+            flex: 1 1 calc(33.33% - 10px); 
             text-align: center; 
             padding: 12px 2px; 
             border-radius: 18px; 
@@ -110,11 +109,7 @@
         }
 
         @media screen and (max-width: 450px) {
-            .tab {
-                flex: 1 1 calc(50% - 10px); /* 모바일에서 2열 배치로 줄바꿈 */
-                font-size: 0.7rem;
-                padding: 12px 0px;
-            }
+            .tab { flex: 1 1 calc(50% - 10px); font-size: 0.7rem; padding: 12px 0px; }
         }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
         
@@ -243,7 +238,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM INSIGHT v20.0</h1>
+        <h1>🌌 QUANTUM INSIGHT v20.1</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -384,7 +379,6 @@
 </div>
 
 <script>
-    // [수정] 클라우드 API 설정
     const API_URLS = {
         lotto: "https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec",
         pension: "https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"
@@ -424,104 +418,78 @@
         t.scrollTop = t.scrollHeight; 
     }
 
-    // [수정] 데이터 전송 (회차 계산 포함)
-    async function pushToGlobal(data) {
+    // [핵심] 묶음 데이터 전송 함수 (기존 pushToGlobal 대체)
+    async function pushToGlobalBatch(dataList) {
+        if (!dataList || dataList.length === 0) return;
+        const targetUrl = API_URLS[currentMode];
         try {
-            const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
-            await fetch(API_URLS[currentMode], {
+            await fetch(targetUrl, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify({
-                    round: latestRound,
-                    numbers: data.n,
-                    grade: data.grade,
-                    mode: currentMode
-                })
+                body: JSON.stringify(dataList) 
             });
+            log(`🌐 [CLOUD] ${dataList.length}건 동기화 완료.`);
         } catch (e) { console.error("Cloud Sync Fail"); }
     }
 
-    // [수정] 클라우드 로드 함수
-        async function loadGlobalTimeline() {
-                const list = document.getElementById('history-list');
-                list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
-                try {
-                    const res = await fetch(API_URLS[currentMode]);
-                    let data = await res.json();
-                    list.innerHTML = '';
-                    
-                    if (!data || data.length === 0) {
-                        list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
-                        return;
-                    }
-
-                    // [최신순 정렬 및 100개 제한]
-                    data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    const limitedData = data.slice(0, 100);
-
-                    limitedData.forEach(item => {
-                        const dateObj = new Date(item.timestamp);
-                        
-                        // [날짜 형식 추출: YYYY. MM. DD]
-                        const dateStr = dateObj.toLocaleDateString('ko-KR', {
-                            year: 'numeric', month: '2-digit', day: '2-digit'
-                        }).replace(/\s/g, '');
-
-                        // [시간 형식 추출: 초(:ss) 포함]
-                        const timeStr = dateObj.toLocaleTimeString('ko-KR', { 
-                            hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' 
-                        });
-                        
-                        const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
-                        
-                        const card = document.createElement('div');
-                        card.className = 'history-card'; 
-                        card.style.cursor = 'default';
-                        
-                        const ballsHTML = nums.map((num, idx) => {
-                            const val = parseInt(num);
-                            let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
-                            return `<div class="ball ${colClass}">${num}</div>`;
-                        }).join('');
-
-                        card.innerHTML = `
-                            <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
-                            <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
-                                제 ${item.round}회 분석<br>
-                                <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
-                            </div>
-                            <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
-                        `;
-                        list.appendChild(card);
-                    });
-                } catch (e) { 
-                    list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; 
-                }
+    async function loadGlobalTimeline() {
+        const list = document.getElementById('history-list');
+        list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+        try {
+            const res = await fetch(API_URLS[currentMode]);
+            let data = await res.json();
+            list.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
+                return;
             }
+
+            // 최신순 정렬 및 100개 제한
+            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const limitedData = data.slice(0, 100);
+
+            limitedData.forEach(item => {
+                const dateObj = new Date(item.timestamp);
+                const dateStr = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\s/g, '');
+                const timeStr = dateObj.toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
+                
+                const card = document.createElement('div');
+                card.className = 'history-card'; 
+                card.style.cursor = 'default';
+                
+                const ballsHTML = nums.map((num, idx) => {
+                    const val = parseInt(num);
+                    let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
+                    return `<div class="ball ${colClass}">${num}</div>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
+                    <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
+                        제 ${item.round}회 분석<br>
+                        <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
+                    </div>
+                    <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
+                `;
+                list.appendChild(card);
+            });
+        } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
+    }
 
     function updateDDay() {
         const now = new Date();
         const targetDay = currentMode === 'lotto' ? 6 : 4; 
         const targetHour = currentMode === 'lotto' ? 20 : 19;
         const targetMinute = currentMode === 'lotto' ? 35 : 5;
-        
-        const modeLabel = currentMode === 'lotto' ? '로또 추첨까지' : '연금복권 추첨까지';
-        
-        let targetDate = new Date();
-        targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
-        targetDate.setHours(targetHour, targetMinute, 0, 0); 
-        
-        if (now > targetDate) {
-            targetDate.setDate(targetDate.getDate() + 7);
-        }
-        
-        const diff = targetDate - now;
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        
-        document.getElementById('dday-display').innerText = `${modeLabel}: ${d}일 ${h}시간 ${m}분 ${s}초`;
+        let tDate = new Date();
+        tDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
+        tDate.setHours(targetHour, targetMinute, 0, 0); 
+        if (now > tDate) tDate.setDate(tDate.getDate() + 7);
+        const diff = tDate - now;
+        const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+        document.getElementById('dday-display').innerText = `${currentMode==='lotto'?'로또':'연금'} 추첨까지: ${d}일 ${h}시간 ${m}분 ${s}초`;
     }
 
     function toggleTheme() {
@@ -558,7 +526,7 @@
                 DB[mode] = rows.map(row => {
                     const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                     if(mode === 'lotto') return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10], r2m: c[12] };
-                    else return { r: parseInt(c[0]), date: c[1], group: c[2], n: [parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])], r1m: "700만원", r2m: "100만원" };
+                    else return { r: parseInt(c[0]), date: c[1], group: c[2], n: [parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])] };
                 }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
                 coreDB[mode] = DB[mode].slice(0, 10);
                 log(`✅ ${mode.toUpperCase()} 데이터 동기화 완료.`);
@@ -677,9 +645,13 @@
         if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
     }
 
-    function triggerGen() {
+    // [수정] 대량 생성 시 클라우드 멈춤 해결 (Batch 전송)
+    async function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        let batchData = [];
+        const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
+
         log(`🎲 [${currentMode.toUpperCase()}] 분석 엔진 가동...`);
         for(let i=0; i<count; i++) {
             let n = [];
@@ -687,15 +659,19 @@
             else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
             const data = { n, ...getMetrics(n), carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
             window.sessionData.push(data); renderCard(list, data, false);
-            pushToGlobal(data); // [클라우드 전송]
+            batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
         }
+        await pushToGlobalBatch(batchData); // 모든 생성이 끝난 후 딱 한 번만 전송
         updateBatchCopyBtn('gen');
         log(`✅ ${count}건 완료.`);
     }
 
-    function triggerGradeGen(tg) {
+    async function triggerGradeGen(tg) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        let batchData = [];
+        const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
+        
         log(`🎯 [${tg}] 등급 추출 개시...`);
         let f = 0, a = 0;
         while(f < count && a < 10000) {
@@ -705,11 +681,12 @@
             const m = getMetrics(n);
             if(m.grade === tg) {
                 const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
-                window.sessionData.push(data); renderCard(list, data, false); 
-                pushToGlobal(data); // [클라우드 전송]
+                window.sessionData.push(data); renderCard(list, data, false);
+                batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
                 f++;
             }
         }
+        await pushToGlobalBatch(batchData); // 루프 완료 후 한꺼번에 전송
         updateBatchCopyBtn('gen');
         log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
     }
@@ -760,18 +737,16 @@
         target.appendChild(card);
     }
 
-    // [수정] 탭 전환 로직 보강
     function switchTab(tab, el) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
         ['gen-panel', 'stats-panel', 'win-panel', 'history-panel', 'store-panel'].forEach(id => {
-            const p = document.getElementById(id);
-            if(p) p.classList.add('hidden');
+            const p = document.getElementById(id); if(p) p.classList.add('hidden');
         });
         document.getElementById(tab + '-panel').classList.remove('hidden');
 
         if(tab === 'stats') renderHeatmap();
-        if(tab === 'win') renderH(); // 기존 DB 당첨내역
-        if(tab === 'history') loadGlobalTimeline(); // 구글 시트 실시간 동기화
+        if(tab === 'win') renderH(); 
+        if(tab === 'history') loadGlobalTimeline(); 
         if(tab === 'store') renderS();
         log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
     }
