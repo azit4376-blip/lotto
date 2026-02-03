@@ -243,7 +243,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM INSIGHT v19.7</h1>
+        <h1>🌌 QUANTUM INSIGHT v20.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -404,7 +404,7 @@
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
         
         const qtySelect = document.getElementById('gen-qty');
-        for (let i = 1; i <= 20; i++) {
+        for (let i = 1; i <= 100; i++) {
             const opt = document.createElement('option'); opt.value = i; opt.innerText = i + " 게임"; qtySelect.appendChild(opt);
         }
         qtySelect.value = 5;
@@ -461,7 +461,13 @@
 
                     limitedData.forEach(item => {
                         const dateObj = new Date(item.timestamp);
-                        // [시간 형식: 초(:ss) 포함]
+                        
+                        // [날짜 형식 추출: YYYY. MM. DD]
+                        const dateStr = dateObj.toLocaleDateString('ko-KR', {
+                            year: 'numeric', month: '2-digit', day: '2-digit'
+                        }).replace(/\s/g, '');
+
+                        // [시간 형식 추출: 초(:ss) 포함]
                         const timeStr = dateObj.toLocaleTimeString('ko-KR', { 
                             hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' 
                         });
@@ -472,23 +478,17 @@
                         card.className = 'history-card'; 
                         card.style.cursor = 'default';
                         
-                        // [수정] 로또는 번호대별 색상, 연금은 자리수별 색상(b1~b6) 적용
                         const ballsHTML = nums.map((num, idx) => {
                             const val = parseInt(num);
-                            let colClass = '';
-                            if (currentMode === 'lotto') {
-                                colClass = getLottoCol(val);
-                            } else {
-                                // 연금복권: 각 자리 순서에 맞는 색상 클래스 부여 (b1, b2, b3, b4, b5, b6)
-                                colClass = `b${(idx % 6) + 1}`;
-                            }
+                            let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
                             return `<div class="ball ${colClass}">${num}</div>`;
                         }).join('');
 
                         card.innerHTML = `
                             <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
-                            <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px;">
-                                제 ${item.round}회 분석 | ${timeStr}
+                            <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
+                                제 ${item.round}회 분석<br>
+                                <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
                             </div>
                             <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
                         `;
