@@ -413,18 +413,31 @@
 
     function updateDDay() {
         const now = new Date();
-        const targetDay = currentMode === 'lotto' ? 6 : 4; 
-        const targetHour = currentMode === 'lotto' ? 20 : 19;
+        // 1. 요일 및 시간/분 설정 분기
+        const targetDay = currentMode === 'lotto' ? 6 : 4;  // 토요일(6), 목요일(4)
+        const targetHour = currentMode === 'lotto' ? 20 : 19; // 20시, 19시
+        const targetMinute = currentMode === 'lotto' ? 35 : 5; // 35분, 5분 (추가됨)
+        
         const modeLabel = currentMode === 'lotto' ? '로또 추첨까지' : '연금복권 추첨까지';
+        
         let targetDate = new Date();
+        // 2. 가장 가까운 목표 요일 계산
         targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
-        targetDate.setHours(targetHour, 0, 0, 0);
-        if (now > targetDate) targetDate.setDate(targetDate.getDate() + 7);
+        
+        // 3. 정확한 시간 및 분 설정 (초, 밀리초는 0으로 초기화)
+        targetDate.setHours(targetHour, targetMinute, 0, 0); 
+        
+        // 4. 만약 오늘 목표 시간이 이미 지났다면 다음 주로 넘김
+        if (now > targetDate) {
+            targetDate.setDate(targetDate.getDate() + 7);
+        }
+        
         const diff = targetDate - now;
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const m = Math.floor((diff / (1000 * 60)) % 60);
         const s = Math.floor((diff / 1000) % 60);
+        
         document.getElementById('dday-display').innerText = `${modeLabel}: ${d}일 ${h}시간 ${m}분 ${s}초`;
     }
 
