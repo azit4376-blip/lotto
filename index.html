@@ -116,7 +116,7 @@
             font-family: 'Orbitron'; 
             font-weight: 900; 
             font-size: 1rem; 
-            width: 100px; /* 화살표 공간을 위해 조금 넓힘 */
+            width: 100px; 
             text-align: center; 
             margin-right: 10px;
             outline: none;
@@ -142,6 +142,12 @@
 
         .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
         [data-theme='light'] .ai-comment { background: #f0f9ff; color: #0369a1; border-left-color: #0284c7; }
+
+        /* 패턴 통계 히트맵 스타일 */
+        .heatmap-cell { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .hm-num { font-weight: 900; font-size: 0.9rem; font-family: 'Orbitron'; }
+        .hm-count { font-size: 0.6rem; color: var(--dim); margin-top: 2px; }
+        .heatmap-cell.active { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
 
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
         .p-gold { color: var(--gold); }
@@ -191,7 +197,6 @@
 
         .hidden { display: none; }
         
-        /* 슬립 이미지 저장 전용 렌더링 레이아웃 */
         #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 440px; background: #fff; color: #000; padding: 50px 40px; border: 1px solid #ddd; }
         .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
         .slip-main-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
@@ -211,7 +216,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v19.1</h1>
+        <h1>🌌 QUANTUM LOTTO INSIGHT v19.2</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -244,6 +249,7 @@
 
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('gen', this)">🎲 분석생성</div>
+        <div class="tab" onclick="switchTab('stats', this)">📊 패턴통계</div>
         <div class="tab" onclick="switchTab('history', this)">📜 히스토리</div>
         <div class="tab" onclick="switchTab('store', this)">📂 저장소</div>
     </div>
@@ -279,7 +285,29 @@
         <div id="res-list"></div>
     </div>
 
+    <div id="stats-panel" class="hidden">
+        <div class="filter-section" style="text-align:center;">
+            <span class="gen-label">STATISTICAL RANGE</span>
+            <div class="gen-btn-row">
+                <button class="btn-gen active" onclick="updateStatsRange(10, this)">최근 10회</button>
+                <button class="btn-gen" onclick="updateStatsRange(30, this)">최근 30회</button>
+                <button class="btn-gen" onclick="updateStatsRange(50, this)">최근 50회</button>
+            </div>
+        </div>
+        
+        <div class="custom-gen-box">
+            <span class="gen-label">NUMBER FREQUENCY HEATMAP</span>
+            <div id="heatmap-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 15px;"></div>
+        </div>
+
+        <div id="stats-summary" style="display:flex; gap:10px;">
+            <div class="stat-card" style="flex:1;"><span class="stat-label">🔥 최고 빈도</span><span class="stat-value" id="stat-max-n">--</span></div>
+            <div class="stat-card" style="flex:1;"><span class="stat-label">❄️ 최저 빈도</span><span class="stat-value" id="stat-min-n">--</span></div>
+        </div>
+    </div>
+
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
+    
     <div id="store-panel" class="hidden">
         <div id="store-batch-row" style="display:flex; gap:8px; margin-bottom:20px;">
             <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1; margin-bottom:0;">📋 저장된 조합 복사</button>
@@ -334,12 +362,12 @@
     let DB = { lotto: [], pension: [] };
     let coreDB = { lotto: [], pension: [] };
     let fixes = new Set(), excs = new Set();
+    let currentStatsRange = 10;
     window.sessionData = []; 
 
     window.onload = async () => { 
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
         
-        // 수량 선택 셀렉트 박스에 1~100까지 옵션 생성
         const qtySelect = document.getElementById('gen-qty');
         for (let i = 1; i <= 100; i++) {
             const opt = document.createElement('option');
@@ -347,7 +375,7 @@
             opt.innerText = i + " 게임";
             qtySelect.appendChild(opt);
         }
-        qtySelect.value = 5; // 초기 로또 기본값 5세팅
+        qtySelect.value = 5;
 
         await syncData('lotto', LOTTO_CSV_URL);
         await syncData('pension', PENSION_CSV_URL);
@@ -364,7 +392,6 @@
         t.scrollTop = t.scrollHeight; 
     }
 
-    /* 한글 카운트다운 함수 */
     function updateDDay() {
         const now = new Date();
         const targetDay = currentMode === 'lotto' ? 6 : 4; 
@@ -428,10 +455,7 @@
         currentMode = mode;
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
-        
-        // 모드 변경 시 기본 선택값 변경
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
-        
         fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
         log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
     }
@@ -621,11 +645,58 @@
     function switchTab(tab, el) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
         document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
+        document.getElementById('stats-panel').classList.toggle('hidden', tab !== 'stats');
         document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
         document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
-        if(tab === 'history') renderH(); if(tab === 'store') renderS();
+        if(tab === 'stats') renderHeatmap();
+        if(tab === 'history') renderH(); 
+        if(tab === 'store') renderS();
         log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
     }
+
+    function updateStatsRange(range, el) {
+        currentStatsRange = range;
+        el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        renderHeatmap();
+    }
+
+    function renderHeatmap() {
+        const grid = document.getElementById('heatmap-grid');
+        grid.innerHTML = '';
+        const data = DB[currentMode].slice(0, currentStatsRange);
+        const counts = {};
+        const maxVal = currentMode === 'lotto' ? 45 : 9;
+        const startVal = currentMode === 'lotto' ? 1 : 0;
+
+        data.forEach(round => {
+            round.n.forEach(num => counts[num] = (counts[num] || 0) + 1);
+            if(currentMode === 'lotto' && round.b) counts[round.b] = (counts[round.b] || 0) + 1;
+        });
+
+        const values = Object.values(counts);
+        const maxCount = Math.max(...(values.length ? values : [1]));
+
+        for(let i = startVal; i <= maxVal; i++) {
+            const count = counts[i] || 0;
+            const ratio = count / maxCount;
+            const cell = document.createElement('div');
+            cell.className = 'heatmap-cell';
+            if(count > 0) {
+                cell.classList.add('active');
+                cell.style.backgroundColor = `rgba(56, 189, 248, ${0.1 + (ratio * 0.6)})`;
+                cell.style.borderColor = `rgba(56, 189, 248, ${0.3 + (ratio * 0.7)})`;
+            }
+            cell.innerHTML = `<span class="hm-num" style="color:${ratio > 0.7 ? '#fff' : 'var(--text)'}">${i}</span><span class="hm-count">${count}회</span>`;
+            grid.appendChild(cell);
+        }
+
+        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+        document.getElementById('stat-max-n').innerText = sorted[0] ? `${sorted[0][0]}번` : '--';
+        const unappeared = Array.from({length: maxVal - startVal + 1}, (_, i) => i + startVal).filter(n => !counts[n]);
+        document.getElementById('stat-min-n').innerText = unappeared.length > 0 ? `${unappeared[0]}번` : '--';
+    }
+
     function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
     function saveData() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
@@ -650,18 +721,13 @@
         const latest = DB[currentMode][0];
         const images = [];
 
-        // 5게임씩 슬립 이미지 개별 생성 루프
         for (let p = 0; p < totalPages; p++) {
             const chunk = data.slice(p * 5, (p + 1) * 5);
-            
-            // 상단 정보 업데이트 (페이지 번호 포함)
             document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
             document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
             document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
             
-            // 슬립 내용 채우기 (항상 A~E로 나오도록 설정)
             listTarget.innerHTML = chunk.map((item, i) => {
-                // i는 현재 chunk 내의 인덱스이므로 0~4임 -> A~E로 변환
                 const charIdx = String.fromCharCode(65 + i); 
                 const numsHTML = item.n.map(n => `<span class="slip-num-unit" style="width:45px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.5rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
                 return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
@@ -673,7 +739,6 @@
             } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); }
         }
 
-        // 새 창에 슬라이더 인터페이스 출력
         const newWin = window.open("", "_blank");
         if (newWin) {
             const imgTags = images.map((src, idx) => `
@@ -685,9 +750,7 @@
 
             newWin.document.write(`
                 <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
-                    <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                        ${imgTags}
-                    </div>
+                    <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
                     <div style="display:flex; gap:25px; margin-top:40px;">
                         <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전 슬립</button>
                         <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음 슬립</button>
