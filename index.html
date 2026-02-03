@@ -21,6 +21,52 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
+        /* [수정] 후원 섹션 디자인 */
+        .donation-wrap {
+            margin-top: 40px;
+            padding: 35px 20px;
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px dashed rgba(251, 191, 36, 0.3); /* 점선 테두리로 조금 더 부드러운 느낌 */
+            border-radius: 35px;
+            text-align: center;
+        }
+        .donation-title {
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-family: 'Orbitron', 'Pretendard';
+            letter-spacing: 1px;
+        }
+        .donation-sub {
+            font-size: 0.8rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        .qr-container {
+            background: #fff;
+            padding: 10px;
+            display: inline-block;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 18px;
+        }
+        .qr-img {
+            width: 140px;
+            height: 140px;
+            display: block;
+            border-radius: 8px;
+        }
+        .donation-msg {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            line-height: 1.7;
+            word-break: keep-all;
+        }
+        .donation-msg span { color: var(--gold); font-weight: 800; }
+        
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&family=Roboto+Mono:wght@700&display=swap');
         
         :root { 
@@ -370,16 +416,31 @@
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
-        <div class="disclaimer-box">
-            <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
-            <div class="disclaimer-body">
-                본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 100% 무료 인텔리전스 도구입니다.<br><br>
-                1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+            <div class="disclaimer-box">
+                <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
+                <div class="disclaimer-body">
+                    본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 100% 무료 인텔리전스 도구입니다.<br><br>
+                    1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
+                    2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+                </div>
             </div>
+
+            <div class="donation-wrap">
+                <div class="donation-title">COFFEE FOR DEVELOPER</div>
+                <div class="donation-sub">혹시 이번 회차에 당첨되셨나요? 😊</div>
+                
+                <div class="qr-container">
+                    <img src="https://github.com/azit4376-blip/lotto/blob/main/qrcode.png?raw=true" alt="Support QR" class="qr-img">
+                </div>
+                
+                <div class="donation-msg">
+                    제 분석 번호로 <span>기분 좋은 당첨</span>을 맞이하셨다면,<br>
+                    고생한 개발자에게 시원한 커피 한 잔 선물해 주시면 어떨까요?<br>
+                    여러분의 소중한 후원은 사이트 유지에 큰 힘이 됩니다.
+                </div>
+            </div>
+            <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
         </div>
-        <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
-    </div>
 </div>
 
 <div id="slip-render-zone">
