@@ -83,9 +83,10 @@
 
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
+    /* [수정] 메뉴 탭 레이아웃: PC/모바일 통합 3열 고정 배치 */
         .nav-tabs { 
             display: flex; 
-            flex-wrap: wrap; 
+            flex-wrap: wrap; /* 줄바꿈 허용 */
             gap: 6px; 
             margin-bottom: 30px; 
             background: #111827; 
@@ -96,7 +97,9 @@
         [data-theme='light'] .nav-tabs { background: #e2e8f0; border: 1px solid #cbd5e1; }
         
         .tab { 
-            flex: 1 1 calc(33.33% - 10px); 
+            /* 한 줄에 정확히 3개가 들어가도록 계산 (33.33%보다 아주 약간 작게 설정) */
+            flex: 1 1 calc(33% - 6px); 
+            box-sizing: border-box;
             text-align: center; 
             padding: 12px 2px; 
             border-radius: 18px; 
@@ -106,10 +109,17 @@
             color: var(--dim); 
             transition: 0.3s; 
             white-space: nowrap;
+            overflow: hidden;
         }
+        .tab.active { background: var(--primary); color: #000; font-weight: 900; }
 
-        @media screen and (max-width: 450px) {
-            .tab { flex: 1 1 calc(50% - 10px); font-size: 0.7rem; padding: 12px 0px; }
+        /* 화면이 아주 좁은 모바일 기기에서만 글자 크기 조정 */
+        @media screen and (max-width: 380px) {
+            .tab {
+                font-size: 0.7rem;
+                padding: 10px 0;
+                flex: 1 1 calc(33% - 4px);
+            }
         }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
         
