@@ -83,29 +83,36 @@
 
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
-        .nav-tabs { display: flex; gap: 8px; margin-bottom: 30px; background: #111827; padding: 6px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        /* [수정] 반응형 메뉴 탭 시스템 - 공간 부족 시 자연스럽게 2줄 배치 */
+        .nav-tabs { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 6px; 
+            margin-bottom: 30px; 
+            background: #111827; 
+            padding: 8px; 
+            border-radius: 25px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+        }
         [data-theme='light'] .nav-tabs { background: #e2e8f0; border: 1px solid #cbd5e1; }
         
         .tab { 
-            flex: 1; 
+            flex: 1 1 calc(33.33% - 10px); /* 3열 배치 시도 */
             text-align: center; 
-            padding: 14px 2px; /* 좌우 여백을 줄여 공간 확보 */
+            padding: 12px 2px; 
             border-radius: 18px; 
             cursor: pointer; 
-            font-size: 0.85rem; /* PC에서 살짝 조절 */
+            font-size: 0.8rem; 
             font-weight: 800; 
             color: var(--dim); 
             transition: 0.3s; 
-            white-space: nowrap; /* 글자가 아래로 떨어지는 것 방지 */
+            white-space: nowrap;
         }
 
-        /* 모바일 전용: 화면이 작아지면 자동으로 더 작게 조절 */
-        @media screen and (max-width: 400px) {
-            .tab {
-                font-size: 0.7rem; /* 모바일에서 글자 크기 축소 */
-                padding: 12px 0px; 
-            }
+        @media screen and (max-width: 450px) {
+            .tab { flex: 1 1 calc(50% - 10px); font-size: 0.7rem; } /* 모바일에서 2열로 자동 줄바꿈 */
         }
+
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
         
         .filter-section { background: var(--card); border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
@@ -122,7 +129,6 @@
         .chip-exc { background: var(--accent); color: #fff; }
 
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
-        [data-theme='light'] .carry-guide { background: #f0fdf4; color: #16a34a; }
 
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
@@ -159,23 +165,9 @@
         .badge-strong { background: var(--strong); color: #fff; }
         .badge-legend { background: var(--legend); color: #fff; }
 
-        .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
-        [data-theme='light'] .ai-comment { background: #f0f9ff; color: #0369a1; border-left-color: #0284c7; }
-
-        /* 패턴 통계 히트맵 스타일 */
-        .heatmap-cell { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .hm-num { font-weight: 900; font-size: 0.9rem; font-family: 'Orbitron'; }
-        .hm-count { font-size: 0.6rem; color: var(--dim); margin-top: 2px; }
-        .heatmap-cell.active { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-
-        .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
-        .p-gold { color: var(--gold); }
-        .p-blue { color: var(--primary); }
-
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: nowrap; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
-        .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
         
         .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
 
@@ -186,7 +178,7 @@
         .l5, .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
         .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
 
-        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; }
         [data-theme='light'] .metrics-grid { background: #f8fafc; border: 1px solid #e2e8f0; }
 
         .mt-box { text-align: center; }
@@ -235,7 +227,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM LOTTO INSIGHT v19.2</h1>
+        <h1>🌌 QUANTUM INSIGHT v19.7</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -259,8 +251,8 @@
     </div>
 
     <div class="stats-container">
-        <div class="stat-card"><span class="stat-label" id="hot-label">🔥 HOT (최근10회)</span><span class="stat-value" id="hot-v">--</span></div>
-        <div class="stat-card"><span class="stat-label" id="cold-label">❄️ COLD (최근10회)</span><span class="stat-value" id="cold-v">--</span></div>
+        <div class="stat-card"><span class="stat-label" id="hot-label">🔥 HOT</span><span class="stat-value" id="hot-v">--</span></div>
+        <div class="stat-card"><span class="stat-label" id="cold-label">❄️ COLD</span><span class="stat-value" id="cold-v">--</span></div>
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
 
@@ -269,7 +261,8 @@
     <div class="nav-tabs">
         <div class="tab active" onclick="switchTab('gen', this)">🎲 분석생성</div>
         <div class="tab" onclick="switchTab('stats', this)">📊 패턴통계</div>
-        <div class="tab" onclick="switchTab('history', this)">📜 히스토리</div>
+        <div class="tab" onclick="switchTab('win', this)">🏆 당첨결과</div>
+        <div class="tab" onclick="switchTab('history', this)">🌐 실시간조합</div>
         <div class="tab" onclick="switchTab('store', this)">📂 저장소</div>
     </div>
 
@@ -325,6 +318,7 @@
         </div>
     </div>
 
+    <div id="win-panel" class="hidden"><div id="win-list"></div></div>
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     
     <div id="store-panel" class="hidden">
@@ -374,6 +368,12 @@
 </div>
 
 <script>
+    // [수정] 클라우드 API 설정
+    const API_URLS = {
+        lotto: "https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec",
+        pension: "https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"
+    };
+
     const LOTTO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
     const PENSION_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRd4x0RXfEIeLkukYyrO3sU7qL4MX36JeSdfPXJjCO-Kt8bSgC6P341NC81DBTd3Yi8BS82VBvCBhte/pub?gid=0&single=true&output=csv";
     
@@ -411,23 +411,55 @@
         t.scrollTop = t.scrollHeight; 
     }
 
+    // [수정] 클라우드 전송 함수 (회차 정보 자동 포함)
+    async function pushToGlobal(data) {
+        try {
+            const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
+            await fetch(API_URLS[currentMode], {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    round: latestRound,
+                    mode: currentMode,
+                    numbers: data.n,
+                    grade: data.grade
+                })
+            });
+        } catch (e) { console.error("Cloud Sync Error"); }
+    }
+
+    // [수정] 클라우드 로드 함수
+    async function loadGlobalTimeline() {
+        const list = document.getElementById('history-list');
+        list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+        try {
+            const res = await fetch(API_URLS[currentMode]);
+            const data = await res.json();
+            list.innerHTML = '';
+            if (!data.length) {
+                list.innerHTML = '<div class="ai-comment">최근 클라우드 생성 기록이 없습니다.</div>';
+                return;
+            }
+            data.forEach(item => {
+                const timeStr = new Date(item.timestamp).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit' });
+                const nums = item.numbers.split(',').map(n => parseInt(n.trim()));
+                renderCard(list, { n: nums, grade: item.grade, score: 95, date: `제 ${item.round}회 분석 | ${timeStr}` }, true);
+            });
+        } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
+    }
+
     function updateDDay() {
         const now = new Date();
-        // 1. 요일 및 시간/분 설정 분기
-        const targetDay = currentMode === 'lotto' ? 6 : 4;  // 토요일(6), 목요일(4)
-        const targetHour = currentMode === 'lotto' ? 20 : 19; // 20시, 19시
-        const targetMinute = currentMode === 'lotto' ? 35 : 5; // 35분, 5분 (추가됨)
+        const targetDay = currentMode === 'lotto' ? 6 : 4; 
+        const targetHour = currentMode === 'lotto' ? 20 : 19;
+        const targetMinute = currentMode === 'lotto' ? 35 : 5;
         
         const modeLabel = currentMode === 'lotto' ? '로또 추첨까지' : '연금복권 추첨까지';
         
         let targetDate = new Date();
-        // 2. 가장 가까운 목표 요일 계산
         targetDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
-        
-        // 3. 정확한 시간 및 분 설정 (초, 밀리초는 0으로 초기화)
         targetDate.setHours(targetHour, targetMinute, 0, 0); 
         
-        // 4. 만약 오늘 목표 시간이 이미 지났다면 다음 주로 넘김
         if (now > targetDate) {
             targetDate.setDate(targetDate.getDate() + 7);
         }
@@ -594,6 +626,7 @@
         if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
     }
 
+    // [수정] 무작위 생성 시 클라우드 저장 트리거 추가
     function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
@@ -604,11 +637,13 @@
             else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
             const data = { n, ...getMetrics(n), carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
             window.sessionData.push(data); renderCard(list, data, false);
+            pushToGlobal(data); // 저장
         }
         updateBatchCopyBtn('gen');
         log(`✅ ${count}건 완료.`);
     }
 
+    // [수정] 등급 생성 시 클라우드 저장 트리거 추가
     function triggerGradeGen(tg) {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
@@ -621,7 +656,9 @@
             const m = getMetrics(n);
             if(m.grade === tg) {
                 const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
-                window.sessionData.push(data); renderCard(list, data, false); f++;
+                window.sessionData.push(data); renderCard(list, data, false); 
+                pushToGlobal(data); // 저장
+                f++;
             }
         }
         updateBatchCopyBtn('gen');
@@ -664,24 +701,28 @@
 
         card.innerHTML = `
             ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
-            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">제 ${data.r}회 결과</span><span>${data.date}</span></div>
-                     <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?data.r1m:'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?data.r2m:'월 100만원 (10년)'}</span></div>` 
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">${data.r ? '제 '+data.r+'회 결과' : data.date}</span><span>${data.date.includes('분석') ? '' : data.date}</span></div>
+                     <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?(data.r1m||'--'):'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?(data.r2m||'--'):'월 100만원 (10년)'}</span></div>` 
                  : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
-            <div class="ball-group">${data.group ? `<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
+            <div class="ball-group">${data.group ? `<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' && data.b ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
             <div class="metrics-grid">${mHTML}</div>
             ${!isH ? `<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
         `;
         target.appendChild(card);
     }
 
+    // [수정] 탭 전환 로직 - win(당첨결과)과 history(실시간) 분리
     function switchTab(tab, el) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
-        document.getElementById('gen-panel').classList.toggle('hidden', tab !== 'gen');
-        document.getElementById('stats-panel').classList.toggle('hidden', tab !== 'stats');
-        document.getElementById('history-panel').classList.toggle('hidden', tab !== 'history');
-        document.getElementById('store-panel').classList.toggle('hidden', tab !== 'store');
+        ['gen-panel', 'stats-panel', 'win-panel', 'history-panel', 'store-panel'].forEach(id => {
+            const p = document.getElementById(id);
+            if(p) p.classList.add('hidden');
+        });
+        document.getElementById(tab + '-panel').classList.remove('hidden');
+        
         if(tab === 'stats') renderHeatmap();
-        if(tab === 'history') renderH(); 
+        if(tab === 'win') renderH(); // 기존 당첨 데이터 로드
+        if(tab === 'history') loadGlobalTimeline(); // 구글 시트 실시간 데이터 로드
         if(tab === 'store') renderS();
         log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
     }
@@ -729,14 +770,27 @@
         document.getElementById('stat-min-n').innerText = unappeared.length > 0 ? `${unappeared[0]}번` : '--';
     }
 
-    function renderH() { const list = document.getElementById('history-list'); list.innerHTML = ''; DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); }
+    function renderH() { 
+        const list = document.getElementById('win-list'); 
+        list.innerHTML = ''; 
+        DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); 
+    }
+    
     function saveData() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
         if(!window.sessionData.length) return; 
         localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); 
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store');
     }
-    function renderS() { const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; const list = document.getElementById('store-list'); list.innerHTML = ''; JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); updateBatchCopyBtn('store'); }
+    
+    function renderS() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        const list = document.getElementById('store-list'); 
+        list.innerHTML = ''; 
+        JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); 
+        updateBatchCopyBtn('store'); 
+    }
+    
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); log('🗑️ 저장소를 비웠습니다.'); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
     
