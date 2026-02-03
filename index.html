@@ -699,9 +699,10 @@
             window.sessionData.push(data); renderCard(list, data, false);
             batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
         }
-        await pushToGlobalBatch(batchData); // 모든 생성이 끝난 후 딱 한 번만 전송
         updateBatchCopyBtn('gen');
         log(`✅ ${count}건 완료.`);
+
+        await pushToGlobalBatch(batchData); // 모든 생성이 끝난 후 딱 한 번만 전송
     }
 
     async function triggerGradeGen(tg) {
@@ -724,9 +725,10 @@
                 f++;
             }
         }
-        await pushToGlobalBatch(batchData); // 루프 완료 후 한꺼번에 전송
         updateBatchCopyBtn('gen');
         log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
+
+        await pushToGlobalBatch(batchData); // 루프 완료 후 한꺼번에 전송
     }
 
     function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 초기화 완료.'); }
