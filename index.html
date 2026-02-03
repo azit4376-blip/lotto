@@ -442,24 +442,62 @@
     }
 
     // [수정] 클라우드 로드 함수
-    async function loadGlobalTimeline() {
-        const list = document.getElementById('history-list');
-        list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
-        try {
-            const res = await fetch(API_URLS[currentMode]);
-            const data = await res.json();
-            list.innerHTML = '';
-            if (!data.length) {
-                list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
-                return;
+        async function loadGlobalTimeline() {
+                const list = document.getElementById('history-list');
+                list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+                try {
+                    const res = await fetch(API_URLS[currentMode]);
+                    let data = await res.json();
+                    list.innerHTML = '';
+                    
+                    if (!data || data.length === 0) {
+                        list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
+                        return;
+                    }
+
+                    // [최신순 정렬 및 100개 제한]
+                    data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    const limitedData = data.slice(0, 100);
+
+                    limitedData.forEach(item => {
+                        const dateObj = new Date(item.timestamp);
+                        // [시간 형식: 초(:ss) 포함]
+                        const timeStr = dateObj.toLocaleTimeString('ko-KR', { 
+                            hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' 
+                        });
+                        
+                        const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
+                        
+                        const card = document.createElement('div');
+                        card.className = 'history-card'; 
+                        card.style.cursor = 'default';
+                        
+                        // [수정] 로또는 번호대별 색상, 연금은 자리수별 색상(b1~b6) 적용
+                        const ballsHTML = nums.map((num, idx) => {
+                            const val = parseInt(num);
+                            let colClass = '';
+                            if (currentMode === 'lotto') {
+                                colClass = getLottoCol(val);
+                            } else {
+                                // 연금복권: 각 자리 순서에 맞는 색상 클래스 부여 (b1, b2, b3, b4, b5, b6)
+                                colClass = `b${(idx % 6) + 1}`;
+                            }
+                            return `<div class="ball ${colClass}">${num}</div>`;
+                        }).join('');
+
+                        card.innerHTML = `
+                            <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
+                            <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px;">
+                                제 ${item.round}회 분석 | ${timeStr}
+                            </div>
+                            <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
+                        `;
+                        list.appendChild(card);
+                    });
+                } catch (e) { 
+                    list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; 
+                }
             }
-            data.forEach(item => {
-                const timeStr = new Date(item.timestamp).toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit' });
-                const nums = item.numbers.split(',').map(n => parseInt(n.trim()));
-                renderCard(list, { n: nums, grade: item.grade, score: 95, date: `제 ${item.round}회 분석 | ${timeStr}` }, true);
-            });
-        } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 불러올 수 없습니다.</div>'; }
-    }
 
     function updateDDay() {
         const now = new Date();
