@@ -360,47 +360,55 @@
 
         .hidden { display: none; }
         
-        /* [최종] 영수증 스타일 슬립 렌더링 존 */
+         /* [최종] 영수증 스타일 슬립 렌더링 존 */
         #slip-render-zone { 
             position: absolute; 
             left: -9999px; 
             top: 0; 
             width: 520px; 
-            background: #fff; 
+            background: #ffffff; /* 순백색 배경 필수 */
             color: #000; 
             padding: 60px 45px; 
             border: 1px solid #ddd; 
             font-family: 'Pretendard', sans-serif; 
             overflow: hidden;
-            /* [추가] 미세 격자무늬 배경 */
+            /* 미세 격자무늬 배경 (선택 사항) */
             background-image: 
-                linear-gradient(#f1f1f1 1px, transparent 1px),
-                linear-gradient(90deg, #f1f1f1 1px, transparent 1px);
-            background-size: 20px 20px; /* 격자 간격 */
+                linear-gradient(#f9f9f9 1px, transparent 1px),
+                linear-gradient(90deg, #f9f9f9 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        /* [추가] 퀀텀 로고 워터마크 (반복형) */
-        #slip-render-zone::before {
-            content: "QUANTUM MULTI-INSIGHT";
+        /* [핵심] 워터마크 컨테이너 추가 */
+        .watermark-layer {
             position: absolute;
-            top: 0; left: 0; width: 150%; height: 150%;
-            font-size: 14px;
-            font-weight: 900;
-            color: rgba(0, 0, 0, 0.03); /* 아주 희미한 회색 */
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            transform: rotate(-25deg);
             display: flex;
             flex-wrap: wrap;
             align-content: flex-start;
-            transform: rotate(-25deg); /* 비스듬한 배치 */
+            justify-content: center;
             pointer-events: none;
-            z-index: 0;
-            line-height: 120px; /* 워터마크 세로 간격 */
-            letter-spacing: 10px;
+            z-index: 0; /* 내용보다 뒤에 배치 */
+            opacity: 0.04; /* 아주 희미하게 (0.03~0.05 권장) */
+        }
+
+        .watermark-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            color: #000;
+            margin: 40px; /* 워터마크 간격 */
+            white-space: nowrap;
         }
 
         /* 내용 영역을 워터마크 위로 올림 */
         .slip-header-wrap, .slip-meta-info, #slip-list-target, .slip-footer-wrap {
             position: relative;
-            z-index: 1;
+            z-index: 1; /* 워터마크보다 높은 우선순위 */
         }
 
         .slip-header-wrap { text-align: center; border-bottom: 4px double #000; padding-bottom: 20px; margin-bottom: 25px; }
@@ -432,7 +440,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v20.3</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v21.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -569,6 +577,9 @@
 </div>
 
     <div id="slip-render-zone">
+        <div class="watermark-layer" id="slip-watermark">
+        </div>
+
         <div class="slip-header-wrap">
             <h2 class="slip-main-title" id="slip-title">QUANTUM MULTI</h2>
             <span class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</span>
@@ -1059,6 +1070,17 @@
     const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
     const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
     if(!data.length) return;
+
+    // [추가] 워터마크 텍스트 반복 생성 로직
+    const watermarkContainer = document.getElementById('slip-watermark');
+    const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
+    watermarkContainer.innerHTML = "";
+    for(let i=0; i<60; i++) { // 충분한 횟수 반복
+        const span = document.createElement('span');
+        span.className = 'watermark-text';
+        span.innerText = wmText;
+        watermarkContainer.appendChild(span);
+    }
 
     const totalPages = Math.ceil(data.length / 5);
     log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
