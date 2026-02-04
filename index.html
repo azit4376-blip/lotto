@@ -4,158 +4,432 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUANTUM MULTI-INSIGHT</title>
+    
     <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg" />
     <meta name="description" content="QUANTUM MULTI-INSIGHT - AI 신경망 알고리즘 기반 로또 6/45 및 연금복권 720+ 정밀 분석 시스템. 11대 지표를 통해 최적의 골든존 조합을 도출합니다.">
     <meta name="keywords" content="로또분석, 로또번호생성기, 연금복권720, 연금복권분석, AI로또, 퀀텀로또, 로또통계, 복권예상번호">
     <meta name="author" content="QUANTUM LOTTO">
     <link rel="canonical" href="https://azit4376-blip.github.io/lotto/">
+    
     <meta property="og:type" content="website">
     <meta property="og:title" content="QUANTUM MULTI-INSIGHT">
     <meta property="og:description" content="데이터 기반의 정밀 로또/연금복권 분석 솔루션. 최적의 확률 밸런스를 확인하세요.">
     <meta property="og:url" content="https://azit4376-blip.github.io/lotto/">
+    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
+
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
-        .donation-wrap { margin-top: 40px; padding: 35px 20px; background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px dashed rgba(251, 191, 36, 0.3); border-radius: 35px; text-align: center; }
-        .donation-title { font-size: 1rem; color: var(--gold); font-weight: 900; margin-bottom: 8px; font-family: 'Orbitron', 'Pretendard'; letter-spacing: 1px; }
-        .donation-sub { font-size: 0.8rem; color: #fff; font-weight: 700; margin-bottom: 20px; letter-spacing: -0.5px; }
-        .qr-container { background: #fff; padding: 10px; display: inline-block; border-radius: 18px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); margin-bottom: 18px; }
-        .qr-img { width: 140px; height: 140px; display: block; border-radius: 8px; }
-        .donation-msg { font-size: 0.75rem; color: #94a3b8; line-height: 1.7; word-break: keep-all; }
+        /* [수정] 후원 섹션 디자인 */
+        .donation-wrap {
+            margin-top: 40px;
+            padding: 35px 20px;
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.05) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px dashed rgba(251, 191, 36, 0.3); /* 점선 테두리로 조금 더 부드러운 느낌 */
+            border-radius: 35px;
+            text-align: center;
+        }
+        .donation-title {
+            font-size: 1rem;
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 8px;
+            font-family: 'Orbitron', 'Pretendard';
+            letter-spacing: 1px;
+        }
+        .donation-sub {
+            font-size: 0.8rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        .qr-container {
+            background: #fff;
+            padding: 10px;
+            display: inline-block;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 18px;
+        }
+        .qr-img {
+            width: 140px;
+            height: 140px;
+            display: block;
+            border-radius: 8px;
+        }
+        .donation-msg {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            line-height: 1.7;
+            word-break: keep-all;
+        }
         .donation-msg span { color: var(--gold); font-weight: 800; }
         
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&family=Roboto+Mono:wght@700&display=swap');
         
-        :root { --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; }
-        [data-theme='light'] { --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --dim: #475569; --glass: rgba(0, 0, 0, 0.03); --primary: #0284c7; }
+        :root { 
+            --bg: #030712; --card: #1e293b; --primary: #38bdf8; --accent: #fb7185; 
+            --text: #ffffff; --dim: #94a3b8; --win: #4ade80; --gold: #fbbf24; 
+            --glass: rgba(255, 255, 255, 0.05); --strong: #f43f5e; --legend: #a855f7; 
+        }
+        
+        [data-theme='light'] { 
+            --bg: #f8fafc; 
+            --card: #ffffff; 
+            --text: #0f172a; 
+            --dim: #475569; 
+            --glass: rgba(0, 0, 0, 0.03); 
+            --primary: #0284c7; 
+        }
 
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; justify-content: center; scroll-behavior: smooth; transition: background 0.3s; }
         .dashboard { width: 100%; max-width: 500px; padding-bottom: 220px; }
+        
         .dday-ticker { text-align: center; margin-bottom: 15px; font-family: 'Orbitron', 'Pretendard'; font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; background: rgba(56, 189, 248, 0.05); padding: 8px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.1); }
+
         .main-header { text-align: center; padding: 50px 20px 30px; border-radius: 40px; background: linear-gradient(135deg, #0f172a 0%, #020617 100%); border: 1px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px; box-shadow: 0 0 40px rgba(56, 189, 248, 0.15); position: relative; }
         [data-theme='light'] .main-header { background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid rgba(2, 132, 199, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
         [data-theme='light'] .main-header h1 { color: #0369a1; text-shadow: none; }
         [data-theme='light'] .sub-tag { color: #0ea5e9; }
+
         .main-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); margin: 0; font-family: 'Orbitron'; letter-spacing: -1px; }
         .sub-tag { font-size: 0.65rem; color: #7dd3fc; margin-top: 12px; font-weight: 800; letter-spacing: 2px; font-family: 'Orbitron'; text-transform: uppercase; }
+
         .visitor-counter { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; background: rgba(0,0,0,0.4); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
         .v-stat { font-size: 0.6rem; color: var(--dim); font-weight: 700; font-family: 'Orbitron'; letter-spacing: 1px; }
         .hits-img { display: block; border-radius: 4px; filter: grayscale(1) brightness(1.5); }
+
         .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; background: #111827; padding: 6px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .mode-switch { background: #e2e8f0; border: 1px solid #cbd5e1; }
+        
         .mode-btn { flex: 1; padding: 12px; border-radius: 15px; border: none; background: transparent; color: var(--dim); font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
         .mode-btn.active { background: var(--primary); color: #000; box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
+
         .recent-summary { background: rgba(15, 23, 42, 0.8); border-radius: 25px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--primary); box-shadow: 0 0 15px rgba(56, 189, 248, 0.2); }
         [data-theme='light'] .recent-summary { background: #ffffff; border: 1px solid var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
         .recent-meta { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.75rem; font-weight: 800; color: var(--gold); }
         [data-theme='light'] .recent-meta { color: #b45309; }
+
         .recent-balls { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
         .ball-s { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; color: #fff; box-shadow: 0 3px 6px rgba(0,0,0,0.3); }
+
         .stats-container { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
         .stat-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 20px; text-align: center; min-width: 0; }
         [data-theme='light'] .stat-card { border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        
         .stat-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 5px; font-weight: 700; }
         .stat-value { font-size: 0.8rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; line-height: 1.2; }
         [data-theme='light'] .stat-value { color: #0284c7; }
+
         .terminal { background: #000; border-radius: 20px; padding: 18px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: #4ade80; margin-bottom: 25px; height: 110px; overflow-y: auto; border: 1px solid #1e293b; line-height: 1.6; }
         [data-theme='light'] .terminal { background: #1e293b; border: 1px solid #cbd5e1; }
+
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
-        #batch-copy-gen { background: rgba(16, 185, 129, 0.1) !important; border: 1px solid var(--win) !important; color: var(--win) !important; }
-        #batch-slip-gen { background: rgba(251, 191, 36, 0.1) !important; border: 1px solid var(--gold) !important; color: var(--gold) !important; }
-        #batch-copy-gen:hover, #batch-slip-gen:hover { filter: brightness(1.2); }
-        .nav-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 30px; background: #111827; padding: 8px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        
+        /* [수정] 생성 패널 - 전체 조합 복사 버튼 색상 복구 (초록색) */
+        #batch-copy-gen { 
+            background: rgba(16, 185, 129, 0.1) !important; 
+            border: 1px solid var(--win) !important; 
+            color: var(--win) !important; 
+        }
+
+        /* [수정] 생성 패널 - 슬립 이미지 저장 버튼 색상 복구 (노란색) */
+        #batch-slip-gen { 
+            background: rgba(251, 191, 36, 0.1) !important; 
+            border: 1px solid var(--gold) !important; 
+            color: var(--gold) !important; 
+        }
+
+        /* 호버 시 효과 추가 */
+        #batch-copy-gen:hover, #batch-slip-gen:hover {
+            filter: brightness(1.2);
+        }
+    /* [수정] 메뉴 탭 레이아웃: PC/모바일 통합 3열 고정 배치 */
+        .nav-tabs { 
+            display: flex; 
+            flex-wrap: wrap; /* 줄바꿈 허용 */
+            gap: 6px; 
+            margin-bottom: 30px; 
+            background: #111827; 
+            padding: 8px; 
+            border-radius: 25px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+        }
         [data-theme='light'] .nav-tabs { background: #e2e8f0; border: 1px solid #cbd5e1; }
-        .tab { flex: 1 1 calc(33% - 6px); box-sizing: border-box; text-align: center; padding: 12px 2px; border-radius: 18px; cursor: pointer; font-size: 0.85rem; font-weight: 800; color: var(--dim); transition: 0.3s; white-space: nowrap; overflow: hidden; }
+        
+        .tab { 
+            /* 한 줄에 정확히 3개가 들어가도록 계산 (33.33%보다 아주 약간 작게 설정) */
+            flex: 1 1 calc(33% - 6px); 
+            box-sizing: border-box;
+            text-align: center; 
+            padding: 12px 2px; 
+            border-radius: 18px; 
+            cursor: pointer; 
+            font-size: 0.85rem; 
+            font-weight: 800; 
+            color: var(--dim); 
+            transition: 0.3s; 
+            white-space: nowrap;
+            overflow: hidden;
+        }
         .tab.active { background: var(--primary); color: #000; font-weight: 900; }
-        @media screen and (max-width: 380px) { .tab { font-size: 0.7rem; padding: 10px 0; flex: 1 1 calc(33% - 4px); } }
+
+        /* 화면이 아주 좁은 모바일 기기에서만 글자 크기 조정 */
+        @media screen and (max-width: 380px) {
+            .tab {
+                font-size: 0.7rem;
+                padding: 10px 0;
+                flex: 1 1 calc(33% - 4px);
+            }
+        }
+        .tab.active { background: var(--primary); color: #000; font-weight: 900; }
+        
         .filter-section { background: var(--card); border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
         [data-theme='light'] .filter-section { border: 1px solid #e2e8f0; }
+
         .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
         .input-main { flex: 1; background: #000; border: 1px solid #334155; padding: 12px; border-radius: 12px; color: #fff; font-size: 0.8rem; }
         [data-theme='light'] .input-main { background: #fff; border: 1px solid #cbd5e1; color: #0f172a; }
+
         .btn-add { background: #334155; color: #fff; border: none; padding: 0 15px; border-radius: 12px; font-weight: 800; cursor: pointer; }
         .chip-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
         .chip { padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 900; display: flex; align-items: center; gap: 6px; }
         .chip-fix { background: var(--win); color: #000; }
         .chip-exc { background: var(--accent); color: #fff; }
+
         .carry-guide { background: rgba(74, 222, 128, 0.1); border: 1px solid var(--win); color: var(--win); padding: 12px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
         [data-theme='light'] .carry-guide { background: #f0fdf4; color: #16a34a; }
+
         .custom-gen-box { background: var(--glass); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         .gen-label { font-size: 0.75rem; color: var(--primary); font-weight: 900; margin-bottom: 15px; display: block; font-family: 'Orbitron'; letter-spacing: 1px; }
-        .input-qty { background: #000; border: 2px solid #334155; border-radius: 12px; padding: 10px; color: var(--win); font-family: 'Orbitron'; font-weight: 900; font-size: 1rem; width: 100px; text-align: center; margin-right: 10px; outline: none; }
+        .input-qty { 
+            background: #000; 
+            border: 2px solid #334155; 
+            border-radius: 12px; 
+            padding: 10px; 
+            color: var(--win); 
+            font-family: 'Orbitron'; 
+            font-weight: 900; 
+            font-size: 1rem; 
+            width: 100px; 
+            text-align: center; 
+            margin-right: 10px;
+            outline: none;
+        }
         [data-theme='light'] .input-qty { background: #fff; border: 2px solid #cbd5e1; color: #16a34a; }
+
+
+
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s; overflow: hidden; }
         .res-card.collapsed, .history-card.collapsed { max-height: 155px; }
         [data-theme='light'] .res-card, [data-theme='light'] .history-card { background: #fff; border: 1px solid #e2e8f0; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+
         .badge { position: absolute; top: 18px; right: 18px; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 900; font-family: 'Orbitron'; z-index: 5; }
         .badge-normal { background: var(--dim); color: #000; }
         .badge-strong { background: var(--strong); color: #fff; }
         .badge-legend { background: var(--legend); color: #fff; }
+
         .ai-comment { background: rgba(56, 189, 248, 0.1); border-left: 5px solid var(--primary); padding: 12px; border-radius: 0 12px 12px 0; font-size: 0.75rem; color: #bae6fd; font-weight: 700; margin-bottom: 20px; line-height: 1.5; }
         [data-theme='light'] .ai-comment { background: #f0f9ff; color: #0369a1; border-left-color: #0284c7; }
+
         .heatmap-cell { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .hm-num { font-weight: 900; font-size: 0.9rem; font-family: 'Orbitron'; }
         .hm-count { font-size: 0.6rem; color: var(--dim); margin-top: 2px; }
         .heatmap-cell.active { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
+
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
+
         .ball-group { display: flex; gap: 8px; justify-content: center; margin: 20px 0; flex-wrap: nowrap; }
         .ball { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: #fff; position: relative; box-shadow: 0 5px 12px rgba(0,0,0,0.4); }
         .ball.carry { border: 3px solid var(--win); box-shadow: 0 0 15px var(--win); }
         .ball.carry::after { content: '이월'; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--win); font-weight: 900; }
+        
         .group-tag { background: var(--gold); color: #000; padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-weight: 900; margin-right: 8px; align-self: center; }
-        .l1, .b1 { background: radial-gradient(circle, #f87171, #dc2626); }
-        .l2, .b2 { background: radial-gradient(circle, #fb923c, #ea580c); }
-        .l3, .b3 { background: radial-gradient(circle, #fbbf24, #d97706); }
-        .l4, .b4 { background: radial-gradient(circle, #4ade80, #16a34a); }
-        .l5, .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); }
-        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); }
+
+        .l1, .b1 { background: radial-gradient(circle, #f87171, #dc2626); } 
+        .l2, .b2 { background: radial-gradient(circle, #fb923c, #ea580c); } 
+        .l3, .b3 { background: radial-gradient(circle, #fbbf24, #d97706); } 
+        .l4, .b4 { background: radial-gradient(circle, #4ade80, #16a34a); } 
+        .l5, .b5 { background: radial-gradient(circle, #60a5fa, #2563eb); } 
+        .b6 { background: radial-gradient(circle, #a855f7, #7c3aed); } 
+
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 18px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
         [data-theme='light'] .metrics-grid { background: #f8fafc; border: 1px solid #e2e8f0; }
+
         .mt-box { text-align: center; }
         .mt-label { font-size: 0.6rem; color: var(--dim); display: block; margin-bottom: 4px; font-weight: 800; }
         .mt-val { font-size: 0.75rem; font-weight: 900; color: #f1f5f9; }
         [data-theme='light'] .mt-val { color: #334155; }
         .highlight { color: var(--primary) !important; }
+
         .card-btn-group { display: flex; gap: 8px; margin-top: 10px; }
         .btn-card-action { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
-        .gen-btn-row { display: grid !important; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 15px; }
-        .btn-gen { width: 100%; background: #334155; color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 0; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.75rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+
+        /* [통합] 생성 버튼 레이아웃: 1층 3개 / 2층 2개 고정 */
+        .gen-btn-row { 
+            display: grid !important; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 8px; 
+            margin-top: 15px; 
+        }
+
+        .btn-gen { 
+            width: 100%; 
+            background: #334155; 
+            color: #fff; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 14px 0; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-size: 0.75rem; 
+            text-align: center; 
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 4px;
+        }
+
+        /* 등급별 생성 버튼 (1층) - 각 2칸씩 점유 */
         .btn-normal { grid-column: span 2; border-color: var(--dim) !important; color: var(--dim) !important; }
         .btn-strong { grid-column: span 2; border-color: var(--strong) !important; color: var(--strong) !important; }
         .btn-legend { grid-column: span 2; border-color: var(--legend) !important; color: var(--legend) !important; }
-        .btn-save-inline, .btn-clear-gen { grid-column: span 3; flex-direction: row !important; font-size: 0.8rem; padding: 16px 0; }
+
+        /* 보관 및 초기화 버튼 (2층) - 각 3칸씩 점유 */
+        .btn-save-inline, .btn-clear-gen { 
+            grid-column: span 3; 
+            flex-direction: row !important; 
+            font-size: 0.8rem; 
+            padding: 16px 0; 
+        }
+
+        /* 2층 개별 디자인 */
         .btn-save-inline { border-color: var(--win) !important; color: var(--win) !important; background: rgba(74, 222, 128, 0.05); }
         .btn-clear-gen { border-color: var(--accent) !important; color: var(--accent) !important; }
-        #store-batch-row { display: none; gap: 8px; margin-bottom: 20px; align-items: stretch; }
-        .btn-copy-all, #store-batch-row .btn-clear-store { flex: 1; height: 48px; margin: 0 !important; padding: 0 5px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+
+        /* [최종] 저장소 내부 버튼 한 줄 정렬 */
+        #store-batch-row {
+            display: none; /* 데이터가 있을 때만 renderS에서 flex로 변경 */
+            gap: 8px; 
+            margin-bottom: 20px; 
+            align-items: stretch;
+        }
+
+        .btn-copy-all, #store-batch-row .btn-clear-store { 
+            flex: 1; 
+            height: 48px; 
+            margin: 0 !important; 
+            padding: 0 5px;
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: 900; 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            white-space: nowrap;
+        }
+
+        /* 저장소 버튼 개별 색상 */
         #batch-copy-store { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); }
         #batch-slip-store { background: rgba(251, 191, 36, 0.1); border: 1px solid var(--gold); color: var(--gold); }
         #store-batch-row .btn-clear-store { flex: 0.7; border: 1px solid var(--accent); color: var(--accent); background: transparent; }
+
         .btn-gen:active, .btn-copy-all:active { transform: scale(0.96); }
+
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-reset { background: var(--accent); color: #fff; padding: 20px; border-radius: 22px; border: none; font-weight: 900; }
+        
         .btn-top { position: fixed; right: 20px; bottom: 120px; width: 50px; height: 50px; background: var(--primary); color: #000; border-radius: 50%; border: none; font-size: 1.2rem; font-weight: 900; cursor: pointer; display: none; align-items: center; justify-content: center; z-index: 1001; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; }
+
         .theme-toggle { position: fixed; right: 20px; bottom: 180px; width: 50px; height: 50px; background: var(--card); color: var(--primary); border-radius: 50%; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; z-index: 1002; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); font-size: 1.2rem; }
+
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
         .disclaimer-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; text-align: left; }
         .disclaimer-head { font-size: 0.95rem; color: #fff; font-weight: 900; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
         .disclaimer-body { font-size: 0.8rem; color: #94a3b8; line-height: 1.9; text-align: justify; word-break: keep-all; }
         .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
+
         .hidden { display: none; }
-        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 520px; background: #fff; color: #000; padding: 60px 45px; border: 1px solid #ddd; font-family: 'Pretendard', sans-serif; overflow: hidden; background-image: linear-gradient(#f1f1f1 1px, transparent 1px), linear-gradient(90deg, #f1f1f1 1px, transparent 1px); background-size: 20px 20px; }
-        #slip-render-zone::before { content: "QUANTUM MULTI-INSIGHT"; position: absolute; top: 0; left: 0; width: 150%; height: 150%; font-size: 14px; font-weight: 900; color: rgba(0, 0, 0, 0.03); display: flex; flex-wrap: wrap; align-content: flex-start; transform: rotate(-25deg); pointer-events: none; z-index: 0; line-height: 120px; letter-spacing: 10px; }
-        .slip-header-wrap, .slip-meta-info, #slip-list-target, .slip-footer-wrap { position: relative; z-index: 1; }
+        
+         /* [최종] 영수증 스타일 슬립 렌더링 존 */
+        #slip-render-zone { 
+            position: absolute; 
+            left: -9999px; 
+            top: 0; 
+            width: 520px; 
+            background: #ffffff; /* 순백색 배경 필수 */
+            color: #000; 
+            padding: 60px 45px; 
+            border: 1px solid #ddd; 
+            font-family: 'Pretendard', sans-serif; 
+            overflow: hidden;
+            /* 미세 격자무늬 배경 (선택 사항) */
+            background-image: 
+                linear-gradient(#f9f9f9 1px, transparent 1px),
+                linear-gradient(90deg, #f9f9f9 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* [핵심] 워터마크 컨테이너 추가 */
+        .watermark-layer {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            transform: rotate(-25deg);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 0; /* 내용보다 뒤에 배치 */
+            opacity: 0.04; /* 아주 희미하게 (0.03~0.05 권장) */
+        }
+
+        .watermark-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 900;
+            color: #000;
+            margin: 40px; /* 워터마크 간격 */
+            white-space: nowrap;
+        }
+
+        /* 내용 영역을 워터마크 위로 올림 */
+        .slip-header-wrap, .slip-meta-info, #slip-list-target, .slip-footer-wrap {
+            position: relative;
+            z-index: 1; /* 워터마크보다 높은 우선순위 */
+        }
+
         .slip-header-wrap { text-align: center; border-bottom: 4px double #000; padding-bottom: 20px; margin-bottom: 25px; }
         .slip-main-title { font-size: 2.4rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
         .slip-sub-title { font-size: 1rem; margin-top: 10px; font-weight: 800; color: #333; letter-spacing: 6px; display: block; }
+
         .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 15px; font-weight: 700; color: #444; }
+
         .slip-row { display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         .slip-tag { width: 85px; font-size: 1rem; font-weight: 900; color: #555; }
-        .slip-num-unit { width: 55px; text-align: center; font-size: 1.7rem; font-weight: 900; font-family: 'Roboto Mono', monospace; color: #000; letter-spacing: 1px; }
+
+        .slip-num-unit { 
+            width: 55px; 
+            text-align: center; 
+            font-size: 1.7rem; 
+            font-weight: 900; 
+            font-family: 'Roboto Mono', monospace; 
+            color: #000; 
+            letter-spacing: 1px; 
+        }
+
         .slip-footer-wrap { border-top: 4px double #000; margin-top: 40px; padding-top: 25px; }
         .slip-price-tag { text-align: right; font-size: 1.8rem; font-weight: 900; font-family: 'Roboto Mono', monospace; }
         .slip-site-url { text-align: center; font-size: 0.9rem; color: #222; margin-top: 20px; font-weight: 900; letter-spacing: 1px; }
@@ -168,13 +442,17 @@
     <div class="main-header">
         <h1>🌌 QUANTUM MULTI-INSIGHT v21.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
+        
         <div class="visitor-counter">
             <div class="v-stat">SYSTEM VISITOR ANALYTICS</div>
-            <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;"><img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Fazit4376-blip.github.io%2Flotto%2F?color=gray&label=HITS&size=small" alt="hits" class="hits-img" /></a>
+            <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;">
+                <img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Fazit4376-blip.github.io%2Flotto%2F?color=gray&label=HITS&size=small" alt="hits" class="hits-img" />
+            </a>
         </div>
     </div>
 
     <div class="dday-ticker" id="dday-display">추첨 데이터 동기화 중...</div>
+
     <div class="mode-switch">
         <button id="mode-lotto" class="mode-btn active" onclick="switchMode('lotto')">🎰 로또 6/45</button>
         <button id="mode-pension" class="mode-btn" onclick="switchMode('pension')">🎫 연금 720+</button>
@@ -221,6 +499,7 @@
                 <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')"><span>⚪</span> Normal 생성</button>
                 <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')"><span>🔥</span> Strong 생성</button>
                 <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')"><span>💎</span> Legend 생성</button>
+                
                 <button class="btn-gen btn-save-inline" onclick="saveData()">💾 분석 조합 보관하기</button>
                 <button class="btn-gen btn-clear-gen" onclick="clearList()">🗑️ 화면 Clear</button>
             </div>
@@ -242,10 +521,12 @@
                 <button class="btn-gen" onclick="updateStatsRange(50, this)">최근 50회</button>
             </div>
         </div>
+        
         <div class="custom-gen-box">
             <span class="gen-label">NUMBER FREQUENCY HEATMAP</span>
             <div id="heatmap-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 15px;"></div>
         </div>
+
         <div id="stats-summary" style="display:flex; gap:10px;">
             <div class="stat-card" style="flex:1;"><span class="stat-label">🔥 최고 빈도</span><span class="stat-value" id="stat-max-n">--</span></div>
             <div class="stat-card" style="flex:1;"><span class="stat-label">❄️ 최저 빈도</span><span class="stat-value" id="stat-min-n">--</span></div>
@@ -268,107 +549,632 @@
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
-        <div class="disclaimer-box">
-            <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
-            <div class="disclaimer-body">
-                본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 100% 무료 인텔리전스 도구입니다.<br><br>
-                1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
-                2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+            <div class="disclaimer-box">
+                <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
+                <div class="disclaimer-body">
+                    본 시스템은 로또 및 연금복권의 데이터를 신경망 알고리즘으로 분석한 100% 무료 인텔리전스 도구입니다.<br><br>
+                    1. <b>데이터 분석:</b> 최근 10회차의 핵심 패턴과 50회차의 누적 지표를 결합하여 최적의 확률 구역을 도출합니다.<br>
+                    2. <b>자기 책임:</b> 모든 결과 활용의 책임은 사용자 본인에게 있으며, 당첨 여부는 실제 추첨 결과에 따릅니다.
+                </div>
             </div>
-        </div>
 
-        <div class="donation-wrap">
-            <div class="donation-title">COFFEE FOR DEVELOPER</div>
-            <div class="donation-sub">혹시 이번 회차에 당첨되셨나요? 😊</div>
-            <div class="qr-container"><img src="https://github.com/azit4376-blip/lotto/blob/main/qrcode.png?raw=true" alt="Support QR" class="qr-img"></div>
-            <div class="donation-msg">제 분석 번호로 <span>기분 좋은 당첨</span>을 맞이하셨다면,<br>고생한 개발자에게 시원한 커피 한 잔 선물해 주시면 어떨까요?<br>여러분의 소중한 후원은 사이트 유지에 큰 힘이 됩니다.</div>
+            <div class="donation-wrap">
+                <div class="donation-title">COFFEE FOR DEVELOPER</div>
+                <div class="donation-sub">혹시 이번 회차에 당첨되셨나요? 😊</div>
+                
+                <div class="qr-container">
+                    <img src="https://github.com/azit4376-blip/lotto/blob/main/qrcode.png?raw=true" alt="Support QR" class="qr-img">
+                </div>
+                
+                <div class="donation-msg">
+                    제 분석 번호로 <span>기분 좋은 당첨</span>을 맞이하셨다면,<br>
+                    고생한 개발자에게 시원한 커피 한 잔 선물해 주시면 어떨까요?<br>
+                    여러분의 소중한 후원은 사이트 유지에 큰 힘이 됩니다.
+                </div>
+            </div>
+            <div class="copy-text">© 2026 QUANTUM MULTI-INSIGHT. ALL RIGHTS RESERVED.</div>
         </div>
-        <div class="copy-text">© 2026 QUANTUM MULTI-INSIGHT. ALL RIGHTS RESERVED.</div>
-    </div>
 </div>
 
-<div id="slip-render-zone">
-    <div class="slip-header-wrap">
-        <h2 class="slip-main-title" id="slip-title">QUANTUM MULTI</h2>
-        <span class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</span>
-    </div>
-    <div class="slip-meta-info">
-        <span id="slip-round">제 &nbsp; ---- &nbsp; 회 &nbsp; 분석조합</span>
-        <span id="slip-time">2026.01.01 &nbsp; 00 : 00 : 00</span>
-    </div>
-    <div id="slip-list-target"></div>
-    <div class="slip-footer-wrap">
-        <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
-        <div class="slip-site-url">azit4376-blip.github.io/lotto/</div>
-        <div class="slip-verify">VALIDATED BY QUANTUM MULTI-INSIGHT ENGINE</div>
+    <div id="slip-render-zone">
+        <div class="watermark-layer" id="slip-watermark">
+        </div>
+
+        <div class="slip-header-wrap">
+            <h2 class="slip-main-title" id="slip-title">QUANTUM MULTI</h2>
+            <span class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</span>
+        </div>
+        <div class="slip-meta-info">
+            <span id="slip-round">제 &nbsp; ---- &nbsp; 회 &nbsp; 분석조합</span>
+            <span id="slip-time">2026.01.01 &nbsp; 00 : 00 : 00</span>
+        </div>
+        <div id="slip-list-target"></div>
+        <div class="slip-footer-wrap">
+            <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
+            <div class="slip-site-url">azit4376-blip.github.io/lotto/</div>
+            <div class="slip-verify">VALIDATED BY QUANTUM MULTI-INSIGHT ENGINE</div>
+        </div>
     </div>
 </div>
 
 <script>
-const API_URLS={lotto:"https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec",pension:"https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"},LOTTO_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv",PENSION_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vRd4x0RXfEIeLkukYyrO3sU7qL4MX36JeSdfPXJjCO-Kt8bSgC6P341NC81DBTd3Yi8BS82VBvCBhte/pub?gid=0&single=true&output=csv";let currentMode='lotto',DB={lotto:[],pension:[]},coreDB={lotto:[],pension:[]},fixes=new Set(),excs=new Set(),currentStatsRange=10;window.sessionData=[];
+    const API_URLS = {
+        lotto: "https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec",
+        pension: "https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"
+    };
 
-window.onload=async()=>{log("🛰️ 퀀텀 데이터베이스 접속 중...");const q=document.getElementById('gen-qty');for(let i=1;i<=100;i++){const o=document.createElement('option');o.value=i;o.innerText=i+" 게임";q.appendChild(o)}q.value=5;await syncData('lotto',LOTTO_CSV_URL);await syncData('pension',PENSION_CSV_URL);updateDDay();setInterval(updateDDay,1000);refreshUI()};
+    const LOTTO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
+    const PENSION_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRd4x0RXfEIeLkukYyrO3sU7qL4MX36JeSdfPXJjCO-Kt8bSgC6P341NC81DBTd3Yi8BS82VBvCBhte/pub?gid=0&single=true&output=csv";
+    
+    let currentMode = 'lotto';
+    let DB = { lotto: [], pension: [] };
+    let coreDB = { lotto: [], pension: [] };
+    let fixes = new Set(), excs = new Set();
+    let currentStatsRange = 10;
+    window.sessionData = []; 
 
-function log(m){const t=document.getElementById('term'),l=document.createElement('div');l.className='log-line';l.innerText=`> ${m}`;t.appendChild(l);t.scrollTop=t.scrollHeight}
+    window.onload = async () => { 
+        log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
+        
+        const qtySelect = document.getElementById('gen-qty');
+        for (let i = 1; i <= 100; i++) {
+            const opt = document.createElement('option'); opt.value = i; opt.innerText = i + " 게임"; qtySelect.appendChild(opt);
+        }
+        qtySelect.value = 5;
 
-async function pushToGlobalBatch(d){if(!d||!d.length)return;try{await fetch(API_URLS[currentMode],{method:'POST',mode:'no-cors',body:JSON.stringify(d)});log(`🌐 [CLOUD] ${d.length}건 동기화 완료.`)}catch(e){console.error("Cloud Sync Fail")}}
+        await syncData('lotto', LOTTO_CSV_URL);
+        await syncData('pension', PENSION_CSV_URL);
+        updateDDay(); setInterval(updateDDay, 1000); 
+        refreshUI();
+    };
 
-async function loadGlobalTimeline(){const l=document.getElementById('history-list');l.innerHTML='<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>';try{const r=await fetch(API_URLS[currentMode]);let d=await r.json();l.innerHTML='';if(!d||!d.length){l.innerHTML='<div class="ai-comment">최근 생성 기록이 없습니다.</div>';return}d.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));const ld=d.slice(0,100);ld.forEach(i=>{const dt=new Date(i.timestamp),ds=dt.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\s/g,''),ts=dt.toLocaleTimeString('ko-KR',{hour12:true,hour:'2-digit',minute:'2-digit',second:'2-digit'}),ns=i.numbers.split(',').map(n=>n.trim().padStart(currentMode==='lotto'?2:1,'0')),c=document.createElement('div');c.className='history-card';c.style.cursor='default';const bh=ns.map((n,x)=>{const v=parseInt(n),col=currentMode==='lotto'?getLottoCol(v):`b${(x%6)+1}`;return`<div class="ball ${col}">${n}</div>`}).join('');c.innerHTML=`<span class="badge badge-${(i.grade||'NORMAL').toLowerCase()}">${i.grade}</span><div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">제 ${i.round}회 분석<br><span style="color:var(--dim); font-size:0.65rem;">${ds} ${ts}</span></div><div class="ball-group" style="margin-bottom:0; justify-content: center;">${bh}</div>`;l.appendChild(c)})}catch(e){l.innerHTML='<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'}}
+    function log(msg) { 
+        const t = document.getElementById('term'); 
+        const logLine = document.createElement('div');
+        logLine.className = 'log-line';
+        logLine.innerText = `> ${msg}`;
+        t.appendChild(logLine);
+        t.scrollTop = t.scrollHeight; 
+    }
 
-function updateDDay(){const n=new Date(),td=currentMode==='lotto'?6:4,th=currentMode==='lotto'?20:19,tm=currentMode==='lotto'?35:5;let t=new Date();t.setDate(n.getDate()+(td+7-n.getDay())%7);t.setHours(th,tm,0,0);if(n>t)t.setDate(t.getDate()+7);const df=t-n,d=Math.floor(df/86400000),h=Math.floor((df%86400000)/3600000),m=Math.floor((df%3600000)/60000),s=Math.floor((df%60000)/1000);document.getElementById('dday-display').innerText=`${currentMode==='lotto'?'로또':'연금'} 추첨까지: ${d}일 ${h}시간 ${m}분 ${s}초`}
+    // [핵심] 묶음 데이터 전송 함수 (기존 pushToGlobal 대체)
+    async function pushToGlobalBatch(dataList) {
+        if (!dataList || dataList.length === 0) return;
+        const targetUrl = API_URLS[currentMode];
+        try {
+            await fetch(targetUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(dataList) 
+            });
+            log(`🌐 [CLOUD] ${dataList.length}건 동기화 완료.`);
+        } catch (e) { console.error("Cloud Sync Fail"); }
+    }
 
-function toggleTheme(){const b=document.body,c=b.getAttribute('data-theme')||'dark',n=c==='dark'?'light':'dark';b.setAttribute('data-theme',n);log(`🌓 [${n.toUpperCase()}] 모드로 전환`)}
+    async function loadGlobalTimeline() {
+        const list = document.getElementById('history-list');
+        list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+        try {
+            const res = await fetch(API_URLS[currentMode]);
+            let data = await res.json();
+            list.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
+                return;
+            }
 
-async function captureCard(id){const c=document.getElementById(id);if(!c)return;const w=c.classList.contains('collapsed');c.classList.remove('collapsed');log("📸 분석 이미지 생성 중...");try{const cv=await html2canvas(c,{backgroundColor:getComputedStyle(document.body).getPropertyValue('--bg')||'#000',scale:3,useCORS:true}),bl=await new Promise(r=>cv.toBlob(r,'image/png')),im=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent),fn=`Quantum_Card_${id}_${Date.now()}.png`;if(!im){const u=URL.createObjectURL(bl),l=document.createElement('a');l.href=u;l.download=fn;document.body.appendChild(l);l.click();l.remove();URL.revokeObjectURL(u);log("✅ 즉시 저장 완료!")}else{const id=cv.toDataURL("image/png"),nw=window.open("","_blank");if(nw)nw.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;"><p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p><img src="${id}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" /><button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button></body>`)}}catch(e){log("⚠️ 생성 실패");console.error(e)}if(w)c.classList.add('collapsed')}
+            // 최신순 정렬 및 100개 제한
+            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const limitedData = data.slice(0, 100);
 
-async function syncData(m,u){try{const r=await fetch(u),t=await r.text();let rws=t.split(/\r?\n/).filter(r=>r.trim()!=='').slice(1);if(rws.length>0){DB[m]=rws.map(rw=>{const c=rw.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/^"|"$/g,'').trim());if(m==='lotto')return{r:parseInt(c[0]),date:c[1],n:[parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])],b:parseInt(c[8]),r1m:c[10],r2m:c[12]};else return{r:parseInt(c[0]),date:c[1],group:c[2],n:[parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])]}}).filter(i=>!isNaN(i.r)).sort((a,b)=>b.r-a.r);coreDB[m]=DB[m].slice(0,10);log(`✅ ${m.toUpperCase()} 데이터 동기화 완료.`)}}catch(e){log(`⚠️ ${m} 동기화 실패.`)}}
+            limitedData.forEach(item => {
+                const dateObj = new Date(item.timestamp);
+                const dateStr = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\s/g, '');
+                const timeStr = dateObj.toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
+                
+                const card = document.createElement('div');
+                card.className = 'history-card'; 
+                card.style.cursor = 'default';
+                
+                const ballsHTML = nums.map((num, idx) => {
+                    const val = parseInt(num);
+                    let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
+                    return `<div class="ball ${colClass}">${num}</div>`;
+                }).join('');
 
-function switchMode(m){currentMode=m;document.getElementById('mode-lotto').classList.toggle('active',m==='lotto');document.getElementById('mode-pension').classList.toggle('active',m==='pension');document.getElementById('gen-qty').value=m==='lotto'?5:1;fixes.clear();excs.clear();renderChips();clearList();refreshUI();log(`🔄 [${m==='lotto'?'로또 6/45':'연금 720+'}] 모드로 전환`)}
+                card.innerHTML = `
+                    <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
+                    <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
+                        제 ${item.round}회 분석<br>
+                        <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
+                    </div>
+                    <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
+                `;
+                list.appendChild(card);
+            });
+        } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
+    }
 
-function refreshUI(){const d=DB[currentMode][0];if(!d)return;document.getElementById('target-round').innerText=(d.r+1)+"회";updateRecentWin(d);updateStats();renderH()}
+    function updateDDay() {
+        const now = new Date();
+        const targetDay = currentMode === 'lotto' ? 6 : 4; 
+        const targetHour = currentMode === 'lotto' ? 20 : 19;
+        const targetMinute = currentMode === 'lotto' ? 35 : 5;
+        let tDate = new Date();
+        tDate.setDate(now.getDate() + (targetDay + 7 - now.getDay()) % 7);
+        tDate.setHours(targetHour, targetMinute, 0, 0); 
+        if (now > tDate) tDate.setDate(tDate.getDate() + 7);
+        const diff = tDate - now;
+        const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+        document.getElementById('dday-display').innerText = `${currentMode==='lotto'?'로또':'연금'} 추첨까지: ${d}일 ${h}시간 ${m}분 ${s}초`;
+    }
 
-function updateRecentWin(l){document.getElementById('recent-round-label').innerText=`제 ${l.r}회 당첨 결과`;document.getElementById('recent-date-label').innerText=l.date;const br=document.getElementById('recent-balls-row');if(currentMode==='lotto')br.innerHTML=l.n.map(n=>`<div class="ball-s ${getLottoCol(n)}">${n}</div>`).join('')+`<span style="align-self:center; font-weight:900; margin:0 5px;">+</span>`+`<div class="ball-s ${getLottoCol(l.b)}">${l.b}</div>`;else br.innerHTML=`<div class="group-tag">${l.group}</div>`+l.n.map((n,i)=>`<div class="ball-s b${i+1}">${n}</div>`).join('')}
+    function toggleTheme() {
+        const body = document.body;
+        const current = body.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', next);
+        log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
+    }
 
-function updateStats(){const cdb=coreDB[currentMode];if(currentMode==='lotto'){const ct={};cdb.forEach(h=>h.n.forEach(n=>ct[n]=(ct[n]||0)+1));const st=Object.entries(ct).sort((a,b)=>b[1]-a[1]);document.getElementById('hot-v').innerText=(st[0]?st[0][0]:"--")+"번";let un=Array.from({length:45},(_,i)=>i+1).filter(n=>!cdb.some(h=>h.n.includes(n)));document.getElementById('cold-v').innerText=(un[0]?un[0]:"--")+"번"}else{let hn=[],cn=[];for(let i=0;i<6;i++){const pn=cdb.map(h=>h.n[i]),ct={};pn.forEach(n=>ct[n]=(ct[n]||0)+1);const st=Object.entries(ct).sort((a,b)=>b[1]-a[1]);hn.push(st[0]?st[0][0]:"?");let un=[0,1,2,3,4,5,6,7,8,9].filter(d=>!pn.includes(d));cn.push(un.length>0?un[0]:"?")}document.getElementById('hot-v').innerText=hn.join(' ');document.getElementById('cold-v').innerText=cn.join(' ')}}
+    /* [수정] 개별 카드 이미지 저장 (PC 즉시 저장 대응) */
+    async function captureCard(id) {
+        const card = document.getElementById(id);
+        if(!card) return;
+        const wasCollapsed = card.classList.contains('collapsed');
+        card.classList.remove('collapsed'); 
+        log("📸 분석 이미지 생성 중...");
+        try {
+            const canvas = await html2canvas(card, { backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg') || '#000', scale: 3, useCORS: true });
+            // canvas -> blob -> download
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const filename = `Quantum_Card_${id}_${Date.now()}.png`;
+            if (!isMobile) {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+                log("✅ 즉시 저장 완료!");
+            } else {
+                const imageData = canvas.toDataURL("image/png");
+                const newWin = window.open("", "_blank");
+                if (newWin) {
+                    newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;"><p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p><img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" /><button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button></body>`);
+                }
+            }
+        } catch (e) { log("⚠️ 생성 실패"); console.error(e); }
+        if(wasCollapsed) card.classList.add('collapsed');
+    }
 
-function getMetrics(n){if(currentMode==='lotto'){const s=[...n].sort((a,b)=>a-b),o=n.filter(x=>x%2!==0).length,l=n.filter(x=>x<=22).length,sm=n.reduce((a,b)=>a+b,0),e=n.map(x=>x%10);let d=new Set();for(let i=0;i<n.length;i++)for(let j=i+1;j<n.length;j++)d.add(Math.abs(n[i]-n[j]));const ac=d.size-5;let sr=0;for(let i=0;i<s.length-1;i++)if(s[i+1]-s[i]===1)sr++;const sc=[0,0,0,0,0];n.forEach(x=>{if(x<=10)sc[0]++;else if(x<=20)sc[1]++;else if(x<=30)sc[2]++;else if(x<=40)sc[3]++;else sc[4]++});const pr=[2,3,5,7,11,13,17,19,23,29,31,37,41,43];let scr=70+Math.floor(Math.random()*20);if(sm>=120&&sm<=165)scr+=5;let g=scr>=92?"LEGEND":(scr>=85?"STRONG":"NORMAL");return{m1:`${o}:${6-o}`,m2:`${l}:${6-l}`,m3:ac,m4:e.reduce((a,b)=>a+b,0),m5:sm,m6:s[5]-s[0],m7:(sm/6).toFixed(1),m8:sr,m9:6-new Set(e).size,m10:sc.join('-'),m11:n.filter(x=>pr.includes(x)).length,score:scr,grade:g}}else{const sm=n.reduce((a,b)=>a+b,0),o=n.filter(x=>x%2!==0).length,l=n.filter(x=>x<=4).length;let sr=0;for(let i=0;i<n.length-1;i++)if(Math.abs(n[i+1]-n[i])===1)sr++;let mc=0;if(coreDB.pension.length>0)for(let i=0;i<6;i++)if(coreDB.pension.map(h=>h.n[i]).includes(n[i]))mc++;let scr=75+Math.floor(Math.random()*15);if(sm>=20&&sm<=38)scr+=5;let g=scr>=92?"LEGEND":(scr>=85?"STRONG":"NORMAL");return{p1:`${mc}/6`,p2:sm,p3:`저${l}:고${6-l}`,p4:`홀${o}:짝${6-o}`,p5:`${sr}-Step`,p6:n[3]+n[4]+n[5],p7:(sm/6).toFixed(1),p8:n.some(x=>[2,3,5,7].includes(x))?'YES':'NO',score:scr,grade:g}}}
+    async function syncData(mode, url) {
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+            let rows = text.split(/\r?\n/).filter(r => r.trim() !== '').slice(1);
+            if(rows.length > 0) {
+                DB[mode] = rows.map(row => {
+                    const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+                    if(mode === 'lotto') return { r: parseInt(c[0]), date: c[1], n: [parseInt(c[2]),parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7])], b: parseInt(c[8]), r1m: c[10], r2m: c[12] };
+                    else return { r: parseInt(c[0]), date: c[1], group: c[2], n: [parseInt(c[3]),parseInt(c[4]),parseInt(c[5]),parseInt(c[6]),parseInt(c[7]),parseInt(c[8])] };
+                }).filter(i => !isNaN(i.r)).sort((a,b) => b.r - a.r);
+                coreDB[mode] = DB[mode].slice(0, 10);
+                log(`✅ ${mode.toUpperCase()} 데이터 동기화 완료.`);
+            }
+        } catch (e) { log(`⚠️ ${mode} 동기화 실패.`); }
+    }
 
-function addFilter(t){const i=document.getElementById(t+'-in'),mv=currentMode==='lotto'?45:9;i.value.split(',').forEach(v=>{const n=parseInt(v.trim());if(n>=0&&n<=mv){if(t==='fix'&&fixes.size<5)fixes.add(n);else if(t==='exc')excs.add(n)}});i.value='';renderChips()}
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
+        document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
+        document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
+        fixes.clear(); excs.clear(); renderChips(); clearList(); refreshUI();
+        log(`🔄 [${mode === 'lotto' ? '로또 6/45' : '연금 720+'}] 모드로 전환`);
+    }
 
-function renderChips(){document.getElementById('fix-chips').innerHTML=Array.from(fixes).map(n=>`<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');document.getElementById('exc-chips').innerHTML=Array.from(excs).map(n=>`<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('')}
+    function refreshUI() {
+        const data = DB[currentMode][0]; if(!data) return;
+        document.getElementById('target-round').innerText = (data.r + 1) + "회";
+        updateRecentWin(data); updateStats(); renderH();
+    }
 
-function formatNums(n){return n.map(x=>x.toString().padStart(currentMode==='lotto'?2:1,'0')).join(' ')}
+    function updateRecentWin(latest) {
+        document.getElementById('recent-round-label').innerText = `제 ${latest.r}회 당첨 결과`;
+        document.getElementById('recent-date-label').innerText = latest.date;
+        const ballsRow = document.getElementById('recent-balls-row');
+        if(currentMode === 'lotto') ballsRow.innerHTML = latest.n.map(num => `<div class="ball-s ${getLottoCol(num)}">${num}</div>`).join('') + `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span>` + `<div class="ball-s ${getLottoCol(latest.b)}">${latest.b}</div>`;
+        else ballsRow.innerHTML = `<div class="group-tag">${latest.group}</div>` + latest.n.map((num, i) => `<div class="ball-s b${i+1}">${num}</div>`).join('');
+    }
 
-function copyBatch(t){const sk=currentMode==='lotto'?'v13_db':'v13_pension_db',d=t==='gen'?window.sessionData:JSON.parse(localStorage.getItem(sk)||'[]');if(!d.length)return;navigator.clipboard.writeText(d.map(i=>(i.group?i.group+" ":"")+formatNums(i.n)).join('\n'));alert('📋 복사 완료')}
+    function updateStats() {
+        const currentDB = coreDB[currentMode];
+        if(currentMode === 'lotto') {
+            const counts = {}; currentDB.forEach(h => h.n.forEach(num => counts[num] = (counts[num] || 0) + 1));
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+            document.getElementById('hot-v').innerText = (sorted[0] ? sorted[0][0] : "--") + "번";
+            let un = Array.from({length:45},(_,i)=>i+1).filter(n => !currentDB.some(h => h.n.includes(n)));
+            document.getElementById('cold-v').innerText = (un[0] ? un[0] : "--") + "번";
+        } else {
+            let hotNums = [], coldNums = [];
+            for(let i=0; i<6; i++) {
+                const posNums = currentDB.map(h => h.n[i]);
+                const counts = {}; posNums.forEach(n => counts[n] = (counts[n] || 0) + 1);
+                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+                hotNums.push(sorted[0] ? sorted[0][0] : "?");
+                let unappeared = [0,1,2,3,4,5,6,7,8,9].filter(d => !posNums.includes(d));
+                coldNums.push(unappeared.length > 0 ? unappeared[0] : "?");
+            }
+            document.getElementById('hot-v').innerText = hotNums.join(' ');
+            document.getElementById('cold-v').innerText = coldNums.join(' ');
+        }
+    }
 
-function updateBatchCopyBtn(t){const sk=currentMode==='lotto'?'v13_db':'v13_pension_db',d=t==='gen'?window.sessionData:JSON.parse(localStorage.getItem(sk)||'[]'),cb=document.getElementById(`batch-copy-${t}`);if(cb){cb.innerText=`📋 전체 조합 복사 (${d.length}건)`;cb.classList.toggle('hidden',!d.length)}const sb=document.getElementById(`batch-slip-${t}`);if(sb)sb.classList.toggle('hidden',!d.length)}
+    function getMetrics(n) {
+        if(currentMode === 'lotto') {
+            const sorted = [...n].sort((a,b)=>a-b);
+            const odd = n.filter(x=>x%2!==0).length;
+            const low = n.filter(x=>x<=22).length;
+            const sum = n.reduce((a,b)=>a+b,0);
+            const ends = n.map(x=>x%10);
+            let d = new Set(); for(let i=0; i<n.length; i++) for(let j=i+1; j<n.length; j++) d.add(Math.abs(n[i]-n[j]));
+            const ac = d.size - 5;
+            let serial = 0; for(let i=0; i<sorted.length-1; i++) if(sorted[i+1]-sorted[i]===1) serial++;
+            const section = [0,0,0,0,0]; n.forEach(x => { if(x<=10) section[0]++; else if(x<=20) section[1]++; else if(x<=30) section[2]++; else if(x<=40) section[3]++; else section[4]++; });
+            const primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43];
+            let score = 70 + Math.floor(Math.random()*20);
+            if(sum >= 120 && sum <= 165) score += 5;
+            let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
+            return { m1: `${odd}:${6-odd}`, m2: `${low}:${6-low}`, m3: ac, m4: ends.reduce((a,b)=>a+b,0), m5: sum, m6: sorted[5]-sorted[0], m7: (sum/6).toFixed(1), m8: serial, m9: 6-new Set(ends).size, m10: section.join('-'), m11: n.filter(x=>primes.includes(x)).length, score, grade };
+        } else {
+            const sum = n.reduce((a,b)=>a+b,0);
+            const odd = n.filter(x=>x%2!==0).length;
+            const low = n.filter(x=>x<=4).length;
+            let serial = 0; for(let i=0; i<n.length-1; i++) if(Math.abs(n[i+1]-n[i])===1) serial++;
+            let matchCount = 0; if(coreDB.pension.length > 0) { for(let i=0; i<6; i++) if(coreDB.pension.map(h => h.n[i]).includes(n[i])) matchCount++; }
+            let score = 75 + Math.floor(Math.random()*15); if(sum >= 20 && sum <= 38) score += 5;
+            let grade = score >= 92 ? "LEGEND" : (score >= 85 ? "STRONG" : "NORMAL");
+            return { p1: `${matchCount}/6`, p2: sum, p3: `저${low}:고${6-low}`, p4: `홀${odd}:짝${6-odd}`, p5: `${serial}-Step`, p6: n[3]+n[4]+n[5], p7: (sum/6).toFixed(1), p8: n.some(x=>[2,3,5,7].includes(x))?'YES':'NO', score, grade };
+        }
+    }
 
-async function triggerGen(){const c=parseInt(document.getElementById('gen-qty').value)||1,l=document.getElementById('res-list');l.innerHTML='';window.sessionData=[];let bd=[],lr=DB[currentMode][0]?parseInt(DB[currentMode][0].r)+1:0;log(`🎲 [${currentMode.toUpperCase()}] 분석 엔진 가동...`);for(let i=0;i<c;i++){let n=[];if(currentMode==='lotto'){while(true){n=Array.from(fixes);while(n.length<6){let r=Math.floor(Math.random()*45)+1;if(!n.includes(r)&&!excs.has(r))n.push(r)}if(n.reduce((a,b)=>a+b,0)>=100)break}n.sort((a,b)=>a-b)}else{for(let j=0;j<6;j++)n.push(Math.floor(Math.random()*10))}const d={n,...getMetrics(n),carryList:currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[],group:currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null};window.sessionData.push(d);renderCard(l,d,false);bd.push({round:lr,mode:currentMode,numbers:d.n,grade:d.grade})}updateBatchCopyBtn('gen');log(`✅ ${c}건 완료.`);await pushToGlobalBatch(bd)}
+    function addFilter(type) {
+        const input = document.getElementById(type + '-in');
+        input.value.split(',').forEach(v => {
+            const n = parseInt(v.trim());
+            const maxVal = currentMode === 'lotto' ? 45 : 9;
+            if(n>=0 && n<=maxVal) { if(type === 'fix' && fixes.size < 5) fixes.add(n); else if(type === 'exc') excs.add(n); }
+        });
+        input.value = ''; renderChips();
+    }
 
-async function triggerGradeGen(tg){const c=parseInt(document.getElementById('gen-qty').value)||1,l=document.getElementById('res-list');l.innerHTML='';window.sessionData=[];let bd=[],lr=DB[currentMode][0]?parseInt(DB[currentMode][0].r)+1:0;log(`🎯 [${tg}] 등급 추출 개시...`);let f=0,a=0;while(f<c&&a<10000){a++;let n=[];if(currentMode==='lotto'){n=Array.from(fixes);while(n.length<6){let r=Math.floor(Math.random()*45)+1;if(!n.includes(r)&&!excs.has(r))n.push(r)}n.sort((a,b)=>a-b)}else{for(let j=0;j<6;j++)n.push(Math.floor(Math.random()*10))}const m=getMetrics(n);if(m.grade===tg){const d={n,...m,carryList:currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[],group:currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null};window.sessionData.push(d);renderCard(l,d,false);bd.push({round:lr,mode:currentMode,numbers:d.n,grade:d.grade});f++}}updateBatchCopyBtn('gen');log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);await pushToGlobalBatch(bd)}
+    function renderChips() {
+        document.getElementById('fix-chips').innerHTML = Array.from(fixes).map(n => `<span class="chip chip-fix">${n} <span onclick="fixes.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
+        document.getElementById('exc-chips').innerHTML = Array.from(excs).map(n => `<span class="chip chip-exc">${n} <span onclick="excs.delete(${n});renderChips();" style="cursor:pointer">×</span></span>`).join('');
+    }
 
-function clearList(){document.getElementById('res-list').innerHTML='';window.sessionData=[];updateBatchCopyBtn('gen');log('🧹 초기화 완료.')}
-function copyToClipboard(n,g){const t=(g?g+" ":"")+formatNums(n);navigator.clipboard.writeText(t);alert('복사 완료')}
-function getLottoCol(n){if(n<=10)return'l1';if(n<=20)return'l2';if(n<=30)return'l3';if(n<=40)return'l4';return'l5'}
+    function formatNums(nums) { return nums.map(n => n.toString().padStart(currentMode==='lotto'?2:1, '0')).join(' '); }
 
-function renderCard(tg,d,ih){const u=`card-${Math.random().toString(36).substr(2,9)}`,bs=d.n.map((n,i)=>`<div class="ball ${currentMode==='lotto'?getLottoCol(n):'b'+(i+1)} ${(d.carryList||[]).includes(n)?'carry':''}">${n}</div>`).join(''),c=document.createElement('div');c.id=u;c.className=ih?'history-card collapsed':'res-card collapsed';c.onclick=e=>{if(!e.target.closest('button'))c.classList.toggle('collapsed')};let mh=currentMode==='lotto'?`<div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${d.m1}</span></div><div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${d.m2}</span></div><div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${d.m3}</span></div><div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${d.m4}</span></div><div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${d.m5}</span></div><div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${d.m6}</span></div><div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${d.m7}</span></div><div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${d.m8}</span></div><div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${d.m9}</span></div><div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${d.m10}</span></div><div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${d.m11}</span></div>`:`<div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${d.p1}</span></div><div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${d.p2}</span></div><div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${d.p3}</span></div><div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${d.p4}</span></div><div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${d.p5}</span></div><div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${d.p6}</span></div><div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${d.p7}</span></div><div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${d.p8}</span></div>`;c.innerHTML=`${!ih?`<span class="badge badge-${d.grade.toLowerCase()}">${d.grade} ${d.score}%</span>`:''}${ih?`<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">${d.r?'제 '+d.r+'회 결과':d.date}</span><span>${d.date.includes('분석')?'':d.date}</span></div><div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?(d.r1m||'--'):'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?(d.r2m||'--'):'월 100만원 (10년)'}</span></div>`:'<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>'}<div class="ball-group">${d.group?`<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${d.group}</div>`:''}${bs}${ih&&currentMode==='lotto'&&d.b?`<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(d.b)}">${d.b}</div>`:''}</div><div class="metrics-grid">${mh}</div>${!ih?`<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${d.n}], '${d.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${u}')">📸 이미지 저장</button></div>`:''}`;tg.appendChild(c)}
+    function copyBatch(type) {
+        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+        if(!data.length) return;
+        navigator.clipboard.writeText(data.map(i => (i.group ? i.group + " " : "") + formatNums(i.n)).join('\n'));
+        alert('📋 복사 완료');
+    }
 
-function switchTab(tb,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['gen-panel','stats-panel','win-panel','history-panel','store-panel'].forEach(id=>{const p=document.getElementById(id);if(p)p.classList.add('hidden')});document.getElementById(tb+'-panel').classList.remove('hidden');if(tb==='stats')renderHeatmap();if(tb==='win')renderH();if(tb==='history')loadGlobalTimeline();if(tb==='store')renderS();log(`📂 [${el.innerText}] 탭으로 이동했습니다.`)}
+    function updateBatchCopyBtn(type) {
+        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+        const copyBtn = document.getElementById(`batch-copy-${type}`);
+        if(copyBtn) {
+            copyBtn.innerText = `📋 전체 조합 복사 (${data.length}건)`;
+            copyBtn.classList.toggle('hidden', !data.length);
+        }
+        const slipBtn = document.getElementById(`batch-slip-${type}`);
+        if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
+    }
 
-function updateStatsRange(r,el){currentStatsRange=r;el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderHeatmap()}
+    // [수정] 대량 생성 시 클라우드 멈춤 해결 (Batch 전송)
+    async function triggerGen() {
+        const count = parseInt(document.getElementById('gen-qty').value) || 1;
+        const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        let batchData = [];
+        const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
 
-function renderHeatmap(){const g=document.getElementById('heatmap-grid');g.innerHTML='';const d=DB[currentMode].slice(0,currentStatsRange),ct={},mv=currentMode==='lotto'?45:9,sv=currentMode==='lotto'?1:0;d.forEach(r=>{r.n.forEach(n=>ct[n]=(ct[n]||0)+1);if(currentMode==='lotto'&&r.b)ct[r.b]=(ct[r.b]||0)+1});const vs=Object.values(ct),mc=Math.max(...(vs.length?vs:[1]));for(let i=sv;i<=mv;i++){const c=ct[i]||0,rt=c/mc,cl=document.createElement('div');cl.className='heatmap-cell';if(c>0){cl.classList.add('active');cl.style.backgroundColor=`rgba(56, 189, 248, ${0.1+(rt*0.6)})`;cl.style.borderColor=`rgba(56, 189, 248, ${0.3+(rt*0.7)})`}cl.innerHTML=`<span class="hm-num" style="color:${rt>0.7?'#fff':'var(--text)'}">${i}</span><span class="hm-count">${c}회</span>`;g.appendChild(cl)}const st=Object.entries(ct).sort((a,b)=>b[1]-a[1]);document.getElementById('stat-max-n').innerText=st[0]?`${st[0][0]}번`:'--';const un=Array.from({length:mv-sv+1},(_,i)=>i+sv).filter(n=>!ct[n]);document.getElementById('stat-min-n').innerText=un.length>0?`${un[0]}번`:'--'}
+        log(`🎲 [${currentMode.toUpperCase()}] 분석 엔진 가동...`);
+        for(let i=0; i<count; i++) {
+            let n = [];
+            if(currentMode === 'lotto') { while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; } n.sort((a,b)=>a-b); }
+            else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
+            const data = { n, ...getMetrics(n), carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
+            window.sessionData.push(data); renderCard(list, data, false);
+            batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
+        }
+        updateBatchCopyBtn('gen');
+        log(`✅ ${count}건 완료.`);
 
-function renderH(){const l=document.getElementById('win-list');l.innerHTML='';DB[currentMode].forEach(h=>renderCard(l,{...h,...getMetrics(h.n)},true))}
+        await pushToGlobalBatch(batchData); // 모든 생성이 끝난 후 딱 한 번만 전송
+    }
 
-function saveData(){const sk=currentMode==='lotto'?'v13_db':'v13_pension_db';if(!window.sessionData.length)return;localStorage.setItem(sk,JSON.stringify([...window.sessionData,...JSON.parse(localStorage.getItem(sk)||'[]')]));alert("💾 저장소 보관 완료");updateBatchCopyBtn('store')}
+    async function triggerGradeGen(tg) {
+        const count = parseInt(document.getElementById('gen-qty').value) || 1;
+        const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
+        let batchData = [];
+        const latestRound = DB[currentMode][0] ? parseInt(DB[currentMode][0].r) + 1 : 0;
+        
+        log(`🎯 [${tg}] 등급 추출 개시...`);
+        let f = 0, a = 0;
+        while(f < count && a < 10000) {
+            a++; let n = [];
+            if(currentMode === 'lotto') { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } n.sort((a,b)=>a-b); }
+            else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
+            const m = getMetrics(n);
+            if(m.grade === tg) {
+                const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
+                window.sessionData.push(data); renderCard(list, data, false);
+                batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
+                f++;
+            }
+        }
+        updateBatchCopyBtn('gen');
+        log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
 
-function renderS(){const sk=currentMode==='lotto'?'v13_db':'v13_pension_db',l=document.getElementById('store-list'),br=document.getElementById('store-batch-row'),sd=JSON.parse(localStorage.getItem(sk)||'[]');l.innerHTML='';if(sd.length===0){if(br)br.style.display='none';l.innerHTML='<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>'}else{if(br)br.style.display='flex';sd.forEach(i=>renderCard(l,i,false))}updateBatchCopyBtn('store')}
+        await pushToGlobalBatch(batchData); // 루프 완료 후 한꺼번에 전송
+    }
 
-function resetStore(){if(confirm("비우시겠습니까?")){localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db');renderS();log('🗑️ 저장소를 비웠습니다.')}}
-window.onscroll=()=>{document.getElementById("btn-top").style.display=document.documentElement.scrollTop>300?"flex":"none"};
+    function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 초기화 완료.'); }
+    function copyToClipboard(nums, group) { const text = (group ? group + " " : "") + formatNums(nums); navigator.clipboard.writeText(text); alert('복사 완료'); }
+    function getLottoCol(n) { if(n<=10) return 'l1'; if(n<=20) return 'l2'; if(n<=30) return 'l3'; if(n<=40) return 'l4'; return 'l5'; }
 
-async function captureSlip(t){const sk=currentMode==='lotto'?'v13_db':'v13_pension_db',d=t==='gen'?window.sessionData:JSON.parse(localStorage.getItem(sk)||'[]');if(!d.length)return;const tp=Math.ceil(d.length/5);log(`📸 총 ${d.length}개 조합 (${tp}장) 슬립 생성 중...`);const z=document.getElementById('slip-render-zone'),lt=document.getElementById('slip-list-target'),st=document.getElementById('slip-title'),l=DB[currentMode][0],rn=l?l.r+1:'0000',imgs=[];st.innerText=currentMode==='lotto'?'QUANTUM LOTTO':'QUANTUM PENSION';for(let p=0;p<tp;p++){const ch=d.slice(p*5,(p+1)*5);document.getElementById('slip-round').innerHTML=`<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${tp}&nbsp;]</span> &nbsp; 제 &nbsp; ${rn} &nbsp; 회 &nbsp; 분석조합`;document.getElementById('slip-time').innerHTML=new Date().toLocaleString().replace(/:/g,' : ');document.getElementById('slip-price').innerText=`금액 ₩ ${(ch.length*1000).toLocaleString()}`;lt.innerHTML=ch.map((i,x)=>{const ci=String.fromCharCode(65+x),nh=i.n.map(n=>`<span class="slip-num-unit" style="width:52px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.6rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1,'0')}</span>`).join('');return`<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${ci} 조합</span>${i.group?`<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${i.group}</span>`:''}<div style="flex:1; display:flex; justify-content:space-between;">${nh}</div></div>`}).join('');try{const cv=await html2canvas(z,{scale:3,backgroundColor:'#fff',useCORS:true});imgs.push(cv.toDataURL("image/png"))}catch(e){log(`⚠️ ${p+1}번 슬립 생성 실패`);console.error(e)}}const im=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);if(!im){log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");for(let i=0;i<imgs.length;i++){try{const sr=imgs[i],rs=await fetch(sr),bl=await rs.blob(),u=URL.createObjectURL(bl),lk=document.createElement('a');lk.href=u;const mn=currentMode==='lotto'?'로또':'연금';lk.download=`${rn}회_${mn}_슬립_p${i+1}.png`;document.body.appendChild(lk);lk.click();lk.remove();URL.revokeObjectURL(u)}catch(e){log(`⚠️ 슬립 ${i+1} 다운로드 실패`)}}}else{const nw=window.open("","_blank");if(nw){const it=imgs.map((s,x)=>`<div class="slide" style="display: ${x===0?'flex':'none'}; flex-direction:column; align-items:center;"><p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${x+1}/${imgs.length}] 이미지를 길게 눌러 저장하세요</p><img src="${s}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" /></div>`).join('');nw.document.write(`<body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;"><div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${it}</div><div style="display:flex; gap:25px; margin-top:40px;"><button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전</button><button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음</button></div><button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">창 닫기</button><script>let current = 0;const slides = document.getElementsByClassName('slide');function move(dir) {slides[current].style.display = 'none';current = (current + dir + slides.length) % slides.length;slides[current].style.display = 'flex';}<\/script></body>`)}}}
+    function renderCard(target, data, isH) {
+        const uid = `card-${Math.random().toString(36).substr(2, 9)}`;
+        const balls = data.n.map((n, i) => `<div class="ball ${currentMode==='lotto'?getLottoCol(n):'b'+(i+1)} ${(data.carryList||[]).includes(n) ? 'carry' : ''}">${n}</div>`).join('');
+        const card = document.createElement('div');
+        card.id = uid; card.className = isH ? 'history-card collapsed' : 'res-card collapsed';
+        card.onclick = (e) => { if(!e.target.closest('button')) card.classList.toggle('collapsed'); };
+        
+        let mHTML = currentMode === 'lotto' ? `
+            <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${data.m1}</span></div>
+            <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${data.m2}</span></div>
+            <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${data.m3}</span></div>
+            <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${data.m4}</span></div>
+            <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${data.m5}</span></div>
+            <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${data.m6}</span></div>
+            <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${data.m7}</span></div>
+            <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${data.m8}</span></div>
+            <div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${data.m9}</span></div>
+            <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${data.m10}</span></div>
+            <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${data.m11}</span></div>
+        ` : `
+            <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${data.p1}</span></div>
+            <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${data.p2}</span></div>
+            <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${data.p3}</span></div>
+            <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${data.p4}</span></div>
+            <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${data.p5}</span></div>
+            <div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${data.p6}</span></div>
+            <div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${data.p7}</span></div>
+            <div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${data.p8}</span></div>
+        `;
+
+        card.innerHTML = `
+            ${!isH ? `<span class="badge badge-${data.grade.toLowerCase()}">${data.grade} ${data.score}%</span>` : ''}
+            ${isH ? `<div style="display:flex; justify-content:space-between; margin-bottom:10px;"><span style="color:var(--gold); font-weight:900;">${data.r ? '제 '+data.r+'회 결과' : data.date}</span><span>${data.date.includes('분석') ? '' : data.date}</span></div>
+                     <div class="prize-row"><span class="p-gold">1등: ${currentMode==='lotto'?(data.r1m||'--'):'월 700만원 (20년)'}</span><span class="p-blue">2등: ${currentMode==='lotto'?(data.r2m||'--'):'월 100만원 (10년)'}</span></div>` 
+                 : `<div class="ai-comment">AI 분석 결과 최적의 밸런스 점수 도출<br>클릭하여 상세 분석 데이터 보기</div>`}
+            <div class="ball-group">${data.group ? `<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${data.group}</div>`:''}${balls}${isH && currentMode==='lotto' && data.b ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>`:''}</div>
+            <div class="metrics-grid">${mHTML}</div>
+            ${!isH ? `<div class="card-btn-group"><button class="btn-card-action" onclick="copyToClipboard([${data.n}], '${data.group||''}')">📋 복사</button><button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button></div>` : ''}
+        `;
+        target.appendChild(card);
+    }
+
+    function switchTab(tab, el) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
+        ['gen-panel', 'stats-panel', 'win-panel', 'history-panel', 'store-panel'].forEach(id => {
+            const p = document.getElementById(id); if(p) p.classList.add('hidden');
+        });
+        document.getElementById(tab + '-panel').classList.remove('hidden');
+
+        if(tab === 'stats') renderHeatmap();
+        if(tab === 'win') renderH(); 
+        if(tab === 'history') loadGlobalTimeline(); 
+        if(tab === 'store') renderS();
+        log(`📂 [${el.innerText}] 탭으로 이동했습니다.`);
+    }
+
+    function updateStatsRange(range, el) {
+        currentStatsRange = range;
+        el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        renderHeatmap();
+    }
+
+    function renderHeatmap() {
+        const grid = document.getElementById('heatmap-grid');
+        grid.innerHTML = '';
+        const data = DB[currentMode].slice(0, currentStatsRange);
+        const counts = {};
+        const maxVal = currentMode === 'lotto' ? 45 : 9;
+        const startVal = currentMode === 'lotto' ? 1 : 0;
+
+        data.forEach(round => {
+            round.n.forEach(num => counts[num] = (counts[num] || 0) + 1);
+            if(currentMode === 'lotto' && round.b) counts[round.b] = (counts[round.b] || 0) + 1;
+        });
+
+        const values = Object.values(counts);
+        const maxCount = Math.max(...(values.length ? values : [1]));
+
+        for(let i = startVal; i <= maxVal; i++) {
+            const count = counts[i] || 0;
+            const ratio = count / maxCount;
+            const cell = document.createElement('div');
+            cell.className = 'heatmap-cell';
+            if(count > 0) {
+                cell.classList.add('active');
+                cell.style.backgroundColor = `rgba(56, 189, 248, ${0.1 + (ratio * 0.6)})`;
+                cell.style.borderColor = `rgba(56, 189, 248, ${0.3 + (ratio * 0.7)})`;
+            }
+            cell.innerHTML = `<span class="hm-num" style="color:${ratio > 0.7 ? '#fff' : 'var(--text)'}">${i}</span><span class="hm-count">${count}회</span>`;
+            grid.appendChild(cell);
+        }
+
+        const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+        document.getElementById('stat-max-n').innerText = sorted[0] ? `${sorted[0][0]}번` : '--';
+        const unappeared = Array.from({length: maxVal - startVal + 1}, (_, i) => i + startVal).filter(n => !counts[n]);
+        document.getElementById('stat-min-n').innerText = unappeared.length > 0 ? `${unappeared[0]}번` : '--';
+    }
+
+    function renderH() { 
+        const list = document.getElementById('win-list'); 
+        list.innerHTML = ''; 
+        DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); 
+    }
+    
+    function saveData() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        if(!window.sessionData.length) return; 
+        localStorage.setItem(sk, JSON.stringify([...window.sessionData, ...JSON.parse(localStorage.getItem(sk)||'[]')])); 
+        alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store');
+    }
+    
+    function renderS() { 
+        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+        const list = document.getElementById('store-list'); 
+        const batchRow = document.getElementById('store-batch-row');
+        const savedData = JSON.parse(localStorage.getItem(sk)||'[]');
+        
+        list.innerHTML = ''; 
+        
+        if(savedData.length === 0) {
+            if(batchRow) batchRow.style.display = 'none';
+            list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
+        } else {
+            if(batchRow) batchRow.style.display = 'flex';
+            savedData.forEach(i => renderCard(list, i, false)); 
+        }
+        updateBatchCopyBtn('store'); 
+    }
+    
+    function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); log('🗑️ 저장소를 비웠습니다.'); } }
+    window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
+    
+    async function captureSlip(type) {
+        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+        if(!data.length) return;
+
+        // [워터마크 생성]
+        const watermarkContainer = document.getElementById('slip-watermark');
+        const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
+        watermarkContainer.innerHTML = "";
+        for(let i=0; i<60; i++) { 
+            const span = document.createElement('span');
+            span.className = 'watermark-text';
+            span.innerText = wmText;
+            watermarkContainer.appendChild(span);
+        }
+
+        const totalPages = Math.ceil(data.length / 5);
+        log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
+        
+        const zone = document.getElementById('slip-render-zone');
+        const listTarget = document.getElementById('slip-list-target');
+        const slipTitle = document.getElementById('slip-title'); 
+        const latest = DB[currentMode][0];
+        const roundNum = latest ? latest.r + 1 : '0000'; 
+        const images = [];
+
+        slipTitle.innerText = wmText;
+
+        for (let p = 0; p < totalPages; p++) {
+            const chunk = data.slice(p * 5, (p + 1) * 5);
+            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${roundNum} &nbsp; 회 &nbsp; 분석조합`;
+            document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
+            document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
+            
+            listTarget.innerHTML = chunk.map((item, i) => {
+                const charIdx = String.fromCharCode(65 + i); 
+                const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+                return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
+            }).join('');
+
+            try {
+                const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
+                images.push(canvas.toDataURL("image/png"));
+            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
+        }
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (!isMobile) {
+            // [수정 포인트] 파일명에 사용할 시분초 생성 (HHMMSS 형식)
+            const now = new Date();
+            const timeStamp = now.getHours().toString().padStart(2, '0') + 
+                              now.getMinutes().toString().padStart(2, '0') + 
+                              now.getSeconds().toString().padStart(2, '0');
+
+            log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");
+            for (let i = 0; i < images.length; i++) {
+                try {
+                    const src = images[i];
+                    const res = await fetch(src);
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    
+                    const modeName = currentMode === 'lotto' ? '로또' : '연금';
+                    
+                    // 최종 파일명 설정: 예) 1150회_로또_슬립_p1_153045.png (15시 30분 45초 생성)
+                    link.download = `${roundNum}회_${modeName}_슬립_p${i+1}_${timeStamp}.png`;
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    URL.revokeObjectURL(url);
+                    log(`✅ 슬립 p${i+1} 다운로드 완료 (${timeStamp})`);
+                } catch (e) { log(`⚠️ 슬립 ${i+1} 다운로드 실패`); }
+            }
+        } else {
+            // 모바일 환경
+            const newWin = window.open("", "_blank");
+            if (newWin) {
+                const imgTags = images.map((src, idx) => `
+                    <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
+                        <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
+                        <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+                    </div>
+                `).join('');
+
+                newWin.document.write(`
+                    <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
+                        <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
+                        <div style="display:flex; gap:25px; margin-top:40px;">
+                            <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전</button>
+                            <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음</button>
+                        </div>
+                        <button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">창 닫기</button>
+                        <script>
+                            let current = 0;
+                            const slides = document.getElementsByClassName('slide');
+                            function move(dir) {
+                                slides[current].style.display = 'none';
+                                current = (current + dir + slides.length) % slides.length;
+                                slides[current].style.display = 'flex';
+                            }
+                        <\/script>
+                    </body>
+                `);
+            }
+        }
+    }
 </script>
 </body>
 </html>
