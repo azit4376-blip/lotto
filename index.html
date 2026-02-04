@@ -1067,105 +1067,114 @@
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
     
     async function captureSlip(type) {
-    const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
-    const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
-    if(!data.length) return;
+        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+        if(!data.length) return;
 
-    // [추가] 워터마크 텍스트 반복 생성 로직
-    const watermarkContainer = document.getElementById('slip-watermark');
-    const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
-    watermarkContainer.innerHTML = "";
-    for(let i=0; i<60; i++) { // 충분한 횟수 반복
-        const span = document.createElement('span');
-        span.className = 'watermark-text';
-        span.innerText = wmText;
-        watermarkContainer.appendChild(span);
-    }
+        // [워터마크 생성]
+        const watermarkContainer = document.getElementById('slip-watermark');
+        const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
+        watermarkContainer.innerHTML = "";
+        for(let i=0; i<60; i++) { 
+            const span = document.createElement('span');
+            span.className = 'watermark-text';
+            span.innerText = wmText;
+            watermarkContainer.appendChild(span);
+        }
 
-    const totalPages = Math.ceil(data.length / 5);
-    log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
-    
-    const zone = document.getElementById('slip-render-zone');
-    const listTarget = document.getElementById('slip-list-target');
-    const slipTitle = document.getElementById('slip-title'); // 제목 엘리먼트
-    const latest = DB[currentMode][0];
-    const roundNum = latest ? latest.r + 1 : '0000'; // 회차 정보
-    const images = [];
-
-    // [추가] 모드에 따라 슬립 제목 변경
-    slipTitle.innerText = currentMode === 'lotto' ? 'QUANTUM LOTTO' : 'QUANTUM PENSION';
-
-    for (let p = 0; p < totalPages; p++) {
-        const chunk = data.slice(p * 5, (p + 1) * 5);
-        document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${roundNum} &nbsp; 회 &nbsp; 분석조합`;
-        document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
-        document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
+        const totalPages = Math.ceil(data.length / 5);
+        log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
         
-        listTarget.innerHTML = chunk.map((item, i) => {
-            const charIdx = String.fromCharCode(65 + i); 
-            const numsHTML = item.n.map(n => `<span class="slip-num-unit" style="width:52px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.6rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-            return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
-        }).join('');
+        const zone = document.getElementById('slip-render-zone');
+        const listTarget = document.getElementById('slip-list-target');
+        const slipTitle = document.getElementById('slip-title'); 
+        const latest = DB[currentMode][0];
+        const roundNum = latest ? latest.r + 1 : '0000'; 
+        const images = [];
 
-        try {
-            const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
-            images.push(canvas.toDataURL("image/png"));
-        } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
-    }
+        slipTitle.innerText = wmText;
 
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (!isMobile) {
-        log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");
-        for (let i = 0; i < images.length; i++) {
+        for (let p = 0; p < totalPages; p++) {
+            const chunk = data.slice(p * 5, (p + 1) * 5);
+            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${roundNum} &nbsp; 회 &nbsp; 분석조합`;
+            document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
+            document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
+            
+            listTarget.innerHTML = chunk.map((item, i) => {
+                const charIdx = String.fromCharCode(65 + i); 
+                const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+                return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
+            }).join('');
+
             try {
-                const src = images[i];
-                const res = await fetch(src);
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                // [수정] 파일명에 회차 및 모드 추가
-                const modeName = currentMode === 'lotto' ? '로또' : '연금';
-                link.download = `${roundNum}회_${modeName}_슬립_p${i+1}.png`;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                URL.revokeObjectURL(url);
-            } catch (e) { log(`⚠️ 슬립 ${i+1} 다운로드 실패`); }
+                const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
+                images.push(canvas.toDataURL("image/png"));
+            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
         }
-    } else {
-        // 모바일은 기존과 동일하게 새창 띄우기
-        const newWin = window.open("", "_blank");
-        if (newWin) {
-            const imgTags = images.map((src, idx) => `
-                <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
-                    <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
-                    <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
-                </div>
-            `).join('');
 
-            newWin.document.write(`
-                <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
-                    <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
-                    <div style="display:flex; gap:25px; margin-top:40px;">
-                        <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전</button>
-                        <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음</button>
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (!isMobile) {
+            // [수정 포인트] 파일명에 사용할 시분초 생성 (HHMMSS 형식)
+            const now = new Date();
+            const timeStamp = now.getHours().toString().padStart(2, '0') + 
+                              now.getMinutes().toString().padStart(2, '0') + 
+                              now.getSeconds().toString().padStart(2, '0');
+
+            log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");
+            for (let i = 0; i < images.length; i++) {
+                try {
+                    const src = images[i];
+                    const res = await fetch(src);
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    
+                    const modeName = currentMode === 'lotto' ? '로또' : '연금';
+                    
+                    // 최종 파일명 설정: 예) 1150회_로또_슬립_p1_153045.png (15시 30분 45초 생성)
+                    link.download = `${roundNum}회_${modeName}_슬립_p${i+1}_${timeStamp}.png`;
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    URL.revokeObjectURL(url);
+                    log(`✅ 슬립 p${i+1} 다운로드 완료 (${timeStamp})`);
+                } catch (e) { log(`⚠️ 슬립 ${i+1} 다운로드 실패`); }
+            }
+        } else {
+            // 모바일 환경
+            const newWin = window.open("", "_blank");
+            if (newWin) {
+                const imgTags = images.map((src, idx) => `
+                    <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
+                        <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
+                        <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
                     </div>
-                    <button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">창 닫기</button>
-                    <script>
-                        let current = 0;
-                        const slides = document.getElementsByClassName('slide');
-                        function move(dir) {
-                            slides[current].style.display = 'none';
-                            current = (current + dir + slides.length) % slides.length;
-                            slides[current].style.display = 'flex';
-                        }
-                    <\/script>
-                </body>
-            `);
+                `).join('');
+
+                newWin.document.write(`
+                    <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
+                        <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
+                        <div style="display:flex; gap:25px; margin-top:40px;">
+                            <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전</button>
+                            <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음</button>
+                        </div>
+                        <button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">창 닫기</button>
+                        <script>
+                            let current = 0;
+                            const slides = document.getElementsByClassName('slide');
+                            function move(dir) {
+                                slides[current].style.display = 'none';
+                                current = (current + dir + slides.length) % slides.length;
+                                slides[current].style.display = 'flex';
+                            }
+                        <\/script>
+                    </body>
+                `);
+            }
         }
     }
-}
 </script>
 </body>
 </html>
