@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO INSIGHT</title>
+    <title>QUANTUM MULTI-INSIGHT</title>
     
     <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg" />
-    <meta name="description" content="QUANTUM LOTTO INSIGHT - AI 신경망 알고리즘 기반 로또 6/45 및 연금복권 720+ 정밀 분석 시스템. 11대 지표를 통해 최적의 골든존 조합을 도출합니다.">
+    <meta name="description" content="QUANTUM MULTI-INSIGHT - AI 신경망 알고리즘 기반 로또 6/45 및 연금복권 720+ 정밀 분석 시스템. 11대 지표를 통해 최적의 골든존 조합을 도출합니다.">
     <meta name="keywords" content="로또분석, 로또번호생성기, 연금복권720, 연금복권분석, AI로또, 퀀텀로또, 로또통계, 복권예상번호">
     <meta name="author" content="QUANTUM LOTTO">
     <link rel="canonical" href="https://azit4376-blip.github.io/lotto/">
     
     <meta property="og:type" content="website">
-    <meta property="og:title" content="QUANTUM LOTTO INSIGHT">
+    <meta property="og:title" content="QUANTUM MULTI-INSIGHT">
     <meta property="og:description" content="데이터 기반의 정밀 로또/연금복권 분석 솔루션. 최적의 확률 밸런스를 확인하세요.">
     <meta property="og:url" content="https://azit4376-blip.github.io/lotto/">
     
@@ -129,6 +129,24 @@
 
         .log-line { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 2px 0; word-break: break-all; }
         
+        /* [수정] 생성 패널 - 전체 조합 복사 버튼 색상 복구 (초록색) */
+        #batch-copy-gen { 
+            background: rgba(16, 185, 129, 0.1) !important; 
+            border: 1px solid var(--win) !important; 
+            color: var(--win) !important; 
+        }
+
+        /* [수정] 생성 패널 - 슬립 이미지 저장 버튼 색상 복구 (노란색) */
+        #batch-slip-gen { 
+            background: rgba(251, 191, 36, 0.1) !important; 
+            border: 1px solid var(--gold) !important; 
+            color: var(--gold) !important; 
+        }
+
+        /* 호버 시 효과 추가 */
+        #batch-copy-gen:hover, #batch-slip-gen:hover {
+            filter: brightness(1.2);
+        }
     /* [수정] 메뉴 탭 레이아웃: PC/모바일 통합 3열 고정 배치 */
         .nav-tabs { 
             display: flex; 
@@ -203,13 +221,7 @@
         }
         [data-theme='light'] .input-qty { background: #fff; border: 2px solid #cbd5e1; color: #16a34a; }
 
-        .gen-btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-        .btn-gen { flex: 1; min-width: 100px; background: #334155; color: #fff; border: 1px solid var(--glass); padding: 14px 0; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.2s; font-size: 0.8rem; }
-        .btn-gen.active { background: var(--primary); color: #000; }
-        .btn-normal { border-color: var(--dim); color: var(--dim); }
-        .btn-strong { border-color: var(--strong); color: var(--strong); }
-        .btn-legend { border-color: var(--legend); color: var(--legend); }
-        .btn-clear { flex: 0.5; border: 1px solid var(--accent); color: var(--accent); }
+
 
         .res-card, .history-card { background: #1e293b; border-radius: 35px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1); position: relative; cursor: pointer; transition: 0.4s; overflow: hidden; }
         .res-card.collapsed, .history-card.collapsed { max-height: 155px; }
@@ -258,7 +270,79 @@
         .card-btn-group { display: flex; gap: 8px; margin-top: 10px; }
         .btn-card-action { flex: 1; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: var(--primary); padding: 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
 
-        .btn-copy-all { width: 100%; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); padding: 14px; border-radius: 15px; font-size: 0.85rem; font-weight: 900; cursor: pointer; margin-bottom: 20px; transition: 0.3s; }
+        /* [통합] 생성 버튼 레이아웃: 1층 3개 / 2층 2개 고정 */
+        .gen-btn-row { 
+            display: grid !important; 
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 8px; 
+            margin-top: 15px; 
+        }
+
+        .btn-gen { 
+            width: 100%; 
+            background: #334155; 
+            color: #fff; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 14px 0; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            font-size: 0.75rem; 
+            text-align: center; 
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 4px;
+        }
+
+        /* 등급별 생성 버튼 (1층) - 각 2칸씩 점유 */
+        .btn-normal { grid-column: span 2; border-color: var(--dim) !important; color: var(--dim) !important; }
+        .btn-strong { grid-column: span 2; border-color: var(--strong) !important; color: var(--strong) !important; }
+        .btn-legend { grid-column: span 2; border-color: var(--legend) !important; color: var(--legend) !important; }
+
+        /* 보관 및 초기화 버튼 (2층) - 각 3칸씩 점유 */
+        .btn-save-inline, .btn-clear-gen { 
+            grid-column: span 3; 
+            flex-direction: row !important; 
+            font-size: 0.8rem; 
+            padding: 16px 0; 
+        }
+
+        /* 2층 개별 디자인 */
+        .btn-save-inline { border-color: var(--win) !important; color: var(--win) !important; background: rgba(74, 222, 128, 0.05); }
+        .btn-clear-gen { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+        /* [최종] 저장소 내부 버튼 한 줄 정렬 */
+        #store-batch-row {
+            display: none; /* 데이터가 있을 때만 renderS에서 flex로 변경 */
+            gap: 8px; 
+            margin-bottom: 20px; 
+            align-items: stretch;
+        }
+
+        .btn-copy-all, #store-batch-row .btn-clear-store { 
+            flex: 1; 
+            height: 48px; 
+            margin: 0 !important; 
+            padding: 0 5px;
+            border-radius: 12px; 
+            font-size: 0.75rem; 
+            font-weight: 900; 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            white-space: nowrap;
+        }
+
+        /* 저장소 버튼 개별 색상 */
+        #batch-copy-store { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--win); color: var(--win); }
+        #batch-slip-store { background: rgba(251, 191, 36, 0.1); border: 1px solid var(--gold); color: var(--gold); }
+        #store-batch-row .btn-clear-store { flex: 0.7; border: 1px solid var(--accent); color: var(--accent); background: transparent; }
+
+        .btn-gen:active, .btn-copy-all:active { transform: scale(0.96); }
 
         .action-bar { position: fixed; bottom: 30px; width: calc(100% - 40px); max-width: 460px; display: flex; gap: 10px; z-index: 1000; }
         .btn-save { flex: 1; background: var(--primary); color: #000; border: none; padding: 20px; border-radius: 22px; font-weight: 900; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -276,36 +360,79 @@
 
         .hidden { display: none; }
         
-        /* [수정] 슬립 이미지 렌더링 최적화: 글자 간격 및 가독성 개선 */
-        #slip-render-zone { position: absolute; left: -9999px; top: 0; width: 520px; background: #fff; color: #000; padding: 50px 40px; border: 1px solid #ddd; font-family: 'Pretendard', sans-serif; }
-        .slip-header-wrap { text-align: center; border-bottom: 3px double #000; padding-bottom: 15px; margin-bottom: 20px; }
-        .slip-main-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
-        .slip-sub-title { font-size: 0.95rem; margin-top: 8px; font-weight: 800; color: #444; letter-spacing: 4px; display: block; white-space: nowrap; }
-        .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 25px; border-bottom: 1px dashed #000; padding-bottom: 12px; font-weight: 700; }
-        .slip-row { display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #f0f0f0; }
-        .slip-tag { width: 75px; font-size: 0.95rem; font-weight: 900; color: #666; font-family: 'Pretendard'; }
-        .slip-numbers-box { flex: 1; display: flex; justify-content: space-between; padding-left: 10px; }
+        /* [최종] 영수증 스타일 슬립 렌더링 존 */
+        #slip-render-zone { 
+            position: absolute; 
+            left: -9999px; 
+            top: 0; 
+            width: 520px; 
+            background: #fff; 
+            color: #000; 
+            padding: 60px 45px; 
+            border: 1px solid #ddd; 
+            font-family: 'Pretendard', sans-serif; 
+            overflow: hidden;
+            /* [추가] 미세 격자무늬 배경 */
+            background-image: 
+                linear-gradient(#f1f1f1 1px, transparent 1px),
+                linear-gradient(90deg, #f1f1f1 1px, transparent 1px);
+            background-size: 20px 20px; /* 격자 간격 */
+        }
+
+        /* [추가] 퀀텀 로고 워터마크 (반복형) */
+        #slip-render-zone::before {
+            content: "QUANTUM MULTI-INSIGHT";
+            position: absolute;
+            top: 0; left: 0; width: 150%; height: 150%;
+            font-size: 14px;
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.03); /* 아주 희미한 회색 */
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            transform: rotate(-25deg); /* 비스듬한 배치 */
+            pointer-events: none;
+            z-index: 0;
+            line-height: 120px; /* 워터마크 세로 간격 */
+            letter-spacing: 10px;
+        }
+
+        /* 내용 영역을 워터마크 위로 올림 */
+        .slip-header-wrap, .slip-meta-info, #slip-list-target, .slip-footer-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        .slip-header-wrap { text-align: center; border-bottom: 4px double #000; padding-bottom: 20px; margin-bottom: 25px; }
+        .slip-main-title { font-size: 2.4rem; font-weight: 900; letter-spacing: 2px; font-family: 'Orbitron'; margin: 0; }
+        .slip-sub-title { font-size: 1rem; margin-top: 10px; font-weight: 800; color: #333; letter-spacing: 6px; display: block; }
+
+        .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 15px; font-weight: 700; color: #444; }
+
+        .slip-row { display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .slip-tag { width: 85px; font-size: 1rem; font-weight: 900; color: #555; }
+
         .slip-num-unit { 
-            width: 52px; /* 폭 확대: 숫자 간격 확보 */
+            width: 55px; 
             text-align: center; 
-            font-size: 1.6rem; 
+            font-size: 1.7rem; 
             font-weight: 900; 
             font-family: 'Roboto Mono', monospace; 
             color: #000; 
-            letter-spacing: 0.6px; /* 가독성 위해 간격 증가 (요구 반영) */
-            display:inline-block;
+            letter-spacing: 1px; 
         }
-        .slip-footer-wrap { border-top: 3px double #000; margin-top: 30px; padding-top: 20px; }
-        .slip-price-tag { text-align: right; font-size: 1.7rem; font-weight: 900; font-family: 'Roboto Mono', monospace; letter-spacing: -1px; }
-        .slip-site-url { text-align: center; font-size: 0.85rem; color: #333; margin-top: 15px; font-weight: 900; font-family: 'Pretendard', sans-serif; letter-spacing: 0.5px; }
-        .slip-verify { text-align: center; font-size: 0.7rem; color: #aaa; margin-top: 15px; letter-spacing: 2px; font-weight: 700; }
+
+        .slip-footer-wrap { border-top: 4px double #000; margin-top: 40px; padding-top: 25px; }
+        .slip-price-tag { text-align: right; font-size: 1.8rem; font-weight: 900; font-family: 'Roboto Mono', monospace; }
+        .slip-site-url { text-align: center; font-size: 0.9rem; color: #222; margin-top: 20px; font-weight: 900; letter-spacing: 1px; }
+        .slip-verify { text-align: center; font-size: 0.75rem; color: #999; margin-top: 15px; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM INSIGHT v20.3</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v20.3</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -361,10 +488,12 @@
                 <button class="btn-gen btn-primary" onclick="triggerGen()">일반 무작위 생성</button>
             </div>
             <div class="gen-btn-row">
-                <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')">Normal 생성</button>
-                <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')">Strong 생성</button>
-                <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')">Legend 생성</button>
-                <button class="btn-gen btn-clear" onclick="clearList()">Clear</button>
+                <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')"><span>⚪</span> Normal 생성</button>
+                <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')"><span>🔥</span> Strong 생성</button>
+                <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')"><span>💎</span> Legend 생성</button>
+                
+                <button class="btn-gen btn-save-inline" onclick="saveData()">💾 분석 조합 보관하기</button>
+                <button class="btn-gen btn-clear-gen" onclick="clearList()">🗑️ 화면 Clear</button>
             </div>
         </div>
 
@@ -400,16 +529,12 @@
     <div id="history-panel" class="hidden"><div id="history-list"></div></div>
     
     <div id="store-panel" class="hidden">
-        <div id="store-batch-row" style="display:flex; gap:8px; margin-bottom:20px;">
-            <button id="batch-copy-store" class="btn-copy-all hidden" onclick="copyBatch('store')" style="flex:1; margin-bottom:0;">📋 저장된 조합 복사</button>
-            <button id="batch-slip-store" class="btn-copy-all hidden" onclick="captureSlip('store')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold); margin-bottom:0;">📸 슬립 이미지 저장</button>
+        <div id="store-batch-row">
+            <button id="batch-copy-store" class="btn-copy-all" onclick="copyBatch('store')">📋 전체 복사</button>
+            <button id="batch-slip-store" class="btn-copy-all" onclick="captureSlip('store')">📸 슬립 저장</button>
+            <button class="btn-clear-store" onclick="resetStore()">🗑️ 비우기</button>
         </div>
         <div id="store-list"></div>
-    </div>
-
-    <div class="action-bar">
-        <button class="btn-save" onclick="saveData()">💾 분석 조합 저장소 보관하기</button>
-        <button class="btn-reset" onclick="resetStore()">🗑️</button>
     </div>
 
     <button id="btn-top" class="btn-top" onclick="window.scrollTo({ top:0, behavior:'smooth' })">↑</button>
@@ -439,24 +564,25 @@
                     여러분의 소중한 후원은 사이트 유지에 큰 힘이 됩니다.
                 </div>
             </div>
-            <div class="copy-text">© 2026 QUANTUM LOTTO INSIGHT. ALL RIGHTS RESERVED.</div>
+            <div class="copy-text">© 2026 QUANTUM MULTI-INSIGHT. ALL RIGHTS RESERVED.</div>
         </div>
 </div>
 
-<div id="slip-render-zone">
-    <div class="slip-header-wrap">
-        <h2 class="slip-main-title">QUANTUM LOTTO</h2>
-        <div class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</div>
-    </div>
-    <div class="slip-meta-info">
-        <span id="slip-round">제 &nbsp; ---- &nbsp; 회 &nbsp; 분석조합</span>
-        <span id="slip-time">2026.01.01 &nbsp; 00 : 00 : 00</span>
-    </div>
-    <div id="slip-list-target"></div>
-    <div class="slip-footer-wrap">
-        <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
-        <div class="slip-site-url">azit4376-blip.github.io/lotto/</div>
-        <div class="slip-verify">VALIDATED BY QUANTUM INSIGHT ENGINE</div>
+    <div id="slip-render-zone">
+        <div class="slip-header-wrap">
+            <h2 class="slip-main-title" id="slip-title">QUANTUM MULTI</h2>
+            <span class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</span>
+        </div>
+        <div class="slip-meta-info">
+            <span id="slip-round">제 &nbsp; ---- &nbsp; 회 &nbsp; 분석조합</span>
+            <span id="slip-time">2026.01.01 &nbsp; 00 : 00 : 00</span>
+        </div>
+        <div id="slip-list-target"></div>
+        <div class="slip-footer-wrap">
+            <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
+            <div class="slip-site-url">azit4376-blip.github.io/lotto/</div>
+            <div class="slip-verify">VALIDATED BY QUANTUM MULTI-INSIGHT ENGINE</div>
+        </div>
     </div>
 </div>
 
@@ -911,8 +1037,18 @@
     function renderS() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
         const list = document.getElementById('store-list'); 
+        const batchRow = document.getElementById('store-batch-row');
+        const savedData = JSON.parse(localStorage.getItem(sk)||'[]');
+        
         list.innerHTML = ''; 
-        JSON.parse(localStorage.getItem(sk)||'[]').forEach(i => renderCard(list, i, false)); 
+        
+        if(savedData.length === 0) {
+            if(batchRow) batchRow.style.display = 'none';
+            list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
+        } else {
+            if(batchRow) batchRow.style.display = 'flex';
+            savedData.forEach(i => renderCard(list, i, false)); 
+        }
         updateBatchCopyBtn('store'); 
     }
     
@@ -920,94 +1056,94 @@
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
     
     async function captureSlip(type) {
-        const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
-        const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
-        if(!data.length) return;
+    const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
+    const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
+    if(!data.length) return;
 
-        const totalPages = Math.ceil(data.length / 5);
-        log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
+    const totalPages = Math.ceil(data.length / 5);
+    log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
+    
+    const zone = document.getElementById('slip-render-zone');
+    const listTarget = document.getElementById('slip-list-target');
+    const slipTitle = document.getElementById('slip-title'); // 제목 엘리먼트
+    const latest = DB[currentMode][0];
+    const roundNum = latest ? latest.r + 1 : '0000'; // 회차 정보
+    const images = [];
+
+    // [추가] 모드에 따라 슬립 제목 변경
+    slipTitle.innerText = currentMode === 'lotto' ? 'QUANTUM LOTTO' : 'QUANTUM PENSION';
+
+    for (let p = 0; p < totalPages; p++) {
+        const chunk = data.slice(p * 5, (p + 1) * 5);
+        document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${roundNum} &nbsp; 회 &nbsp; 분석조합`;
+        document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
+        document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
         
-        const zone = document.getElementById('slip-render-zone');
-        const listTarget = document.getElementById('slip-list-target');
-        const latest = DB[currentMode][0];
-        const images = [];
+        listTarget.innerHTML = chunk.map((item, i) => {
+            const charIdx = String.fromCharCode(65 + i); 
+            const numsHTML = item.n.map(n => `<span class="slip-num-unit" style="width:52px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.6rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
+            return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
+        }).join('');
 
-        for (let p = 0; p < totalPages; p++) {
-            const chunk = data.slice(p * 5, (p + 1) * 5);
-            document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${latest ? latest.r+1 : '--'} &nbsp; 회 &nbsp; 분석조합`;
-            document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
-            document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
-            
-            listTarget.innerHTML = chunk.map((item, i) => {
-                const charIdx = String.fromCharCode(65 + i); 
-                const numsHTML = item.n.map(n => `<span class="slip-num-unit" style="width:52px; text-align:center; display:inline-block; font-family:'Roboto Mono'; font-size:1.6rem; font-weight:900;">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-                return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
-            }).join('');
+        try {
+            const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
+            images.push(canvas.toDataURL("image/png"));
+        } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
+    }
 
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) {
+        log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");
+        for (let i = 0; i < images.length; i++) {
             try {
-                const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
-                images.push(canvas.toDataURL("image/png"));
-            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
+                const src = images[i];
+                const res = await fetch(src);
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                // [수정] 파일명에 회차 및 모드 추가
+                const modeName = currentMode === 'lotto' ? '로또' : '연금';
+                link.download = `${roundNum}회_${modeName}_슬립_p${i+1}.png`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+            } catch (e) { log(`⚠️ 슬립 ${i+1} 다운로드 실패`); }
         }
+    } else {
+        // 모바일은 기존과 동일하게 새창 띄우기
+        const newWin = window.open("", "_blank");
+        if (newWin) {
+            const imgTags = images.map((src, idx) => `
+                <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
+                    <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
+                    <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+                </div>
+            `).join('');
 
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (!isMobile) {
-            // PC: 각 이미지 바로 다운로드 (팝업 없이)
-            log("⬇️ PC 환경 감지: 슬립 이미지를 즉시 다운로드 합니다...");
-            for (let i = 0; i < images.length; i++) {
-                try {
-                    const src = images[i];
-                    const res = await fetch(src);
-                    const blob = await res.blob();
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `Quantum_Slip_p${i+1}_${Date.now()}.png`;
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    URL.revokeObjectURL(url);
-                    log(`✅ 슬립 ${i+1}/${images.length} 다운로드 완료`);
-                } catch (e) {
-                    log(`⚠️ 슬립 ${i+1} 다운로드 실패`);
-                    console.error(e);
-                }
-            }
-            log(`✅ 총 ${images.length}장의 슬립 다운로드 완료.`);
-        } else {
-            // 모바일: 새창 방식 (기존 동작 유지)
-            const newWin = window.open("", "_blank");
-            if (newWin) {
-                const imgTags = images.map((src, idx) => `
-                    <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
-                        <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
-                        <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+            newWin.document.write(`
+                <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
+                    <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
+                    <div style="display:flex; gap:25px; margin-top:40px;">
+                        <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전</button>
+                        <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음</button>
                     </div>
-                `).join('');
-
-                newWin.document.write(`
-                    <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
-                        <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
-                        <div style="display:flex; gap:25px; margin-top:40px;">
-                            <button id="prev" onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">이전 슬립</button>
-                            <button id="next" onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">다음 슬립</button>
-                        </div>
-                        <button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);transition: background 0.2s;" onmouseover="this.style.backgroundColor='#dc2626'" onmouseout="this.style.backgroundColor='#ef4444'">창 닫기</button>
-                        <script>
-                            let current = 0;
-                            const slides = document.getElementsByClassName('slide');
-                            function move(dir) {
-                                slides[current].style.display = 'none';
-                                current = (current + dir + slides.length) % slides.length;
-                                slides[current].style.display = 'flex';
-                            }
-                        <\/script>
-                    </body>
-                `);
-                log(`✅ 총 ${images.length}장의 슬립 생성 완료.`);
-            }
+                    <button onclick="window.close()" style="margin-top: 40px; padding: 10px 20px; color: white; background-color: #ef4444; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">창 닫기</button>
+                    <script>
+                        let current = 0;
+                        const slides = document.getElementsByClassName('slide');
+                        function move(dir) {
+                            slides[current].style.display = 'none';
+                            current = (current + dir + slides.length) % slides.length;
+                            slides[current].style.display = 'flex';
+                        }
+                    <\/script>
+                </body>
+            `);
         }
     }
+}
 </script>
 </body>
 </html>
