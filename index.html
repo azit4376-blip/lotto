@@ -515,7 +515,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v23.0</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v24.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -1142,22 +1142,20 @@
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); log('🗑️ 저장소를 비웠습니다.'); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
     
-    /* [최종 수정] 슬립 이미지 저장 (영수증 스타일 데이터 적용) */
+    /* [최종 통합] 슬립 이미지 저장 및 모바일 전용 뷰어 구현 */
         async function captureSlip(type) {
             const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
             const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
             if(!data.length) return;
 
-            // 1. 날짜 및 TRX ID 실시간 계산
+            // 1. 공통 데이터 계산 (PC/모바일 동일)
             const now = new Date();
-            const uid = Math.random().toString(36).substr(2, 9).toUpperCase(); // TRX ID용
+            const uid = Math.random().toString(36).substr(2, 9).toUpperCase();
             const fullTimeStamp = Date.now();
             
-            // [로직] 가장 가까운 추첨일 계산 (로또:토6, 연금:목4)
             let drawDate = new Date();
             const targetDay = currentMode === 'lotto' ? 6 : 4; 
             const dayDiff = (targetDay + 7 - now.getDay()) % 7;
-            // 추첨일 당일 저녁 8시가 넘었으면 다음주로 설정
             if (dayDiff === 0 && now.getHours() >= 20) drawDate.setDate(now.getDate() + 7);
             else drawDate.setDate(now.getDate() + dayDiff);
 
@@ -1165,7 +1163,7 @@
             const drawDateStr = `추첨일 : ${drawDate.getFullYear()}.${(drawDate.getMonth()+1).toString().padStart(2,'0')}.${drawDate.getDate().toString().padStart(2,'0')} (${weekName[drawDate.getDay()]})`;
             const combinedDateStr = `조합일 : ${now.getFullYear()}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
 
-            // 2. 워터마크 레이어 생성
+            // 2. 워터마크 세팅
             const watermarkContainer = document.getElementById('slip-watermark');
             const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
             watermarkContainer.innerHTML = "";
@@ -1183,19 +1181,17 @@
             const roundNum = latest ? latest.r + 1 : '0000'; 
             const images = [];
             
-            // [중요] HTML 요소에 계산된 데이터 주입
             slipTitle.innerText = wmText;
             document.getElementById('slip-draw-date').innerText = drawDateStr;
             document.getElementById('slip-time').innerText = combinedDateStr;
             document.getElementById('slip-trx').innerText = `TRX : QT-${uid}`;
 
-            // 3. 슬립 렌더링 루프
+            // 3. 렌더링 (이 과정에서 이미지가 생성되므로 PC/모바일 결과물이 완벽히 같습니다)
             const totalPages = Math.ceil(data.length / 5);
             log(`📸 총 ${data.length}개 조합 분석 리포트 생성 중...`);
 
             for (let p = 0; p < totalPages; p++) {
                 const chunk = data.slice(p * 5, (p + 1) * 5);
-                // 회차 표시 업데이트
                 document.getElementById('slip-round').innerHTML = `<span style="color:#f43f5e; font-weight:900;">[&nbsp;${p+1} &nbsp;/&nbsp; ${totalPages}&nbsp;]</span> &nbsp; 제 &nbsp; ${roundNum} &nbsp; 회`;
                 document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
                 
@@ -1212,12 +1208,13 @@
                 }).join('');
 
                 try {
+                    // scale: 3 고정으로 고해상도 이미지 동일 추출
                     const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
                     images.push(canvas.toDataURL("image/png"));
                 } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); }
             }
 
-            // 4. 저장 및 출력 (PC/모바일 분기)
+            // 4. 출력 로직 (PC 다운로드 / 모바일 팝업 뷰어)
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const sysName = currentMode === 'lotto' ? 'QUANTUM_LOTTO' : 'QUANTUM_PENSION';
 
@@ -1225,29 +1222,32 @@
                 for (let i = 0; i < images.length; i++) {
                     const link = document.createElement('a');
                     link.href = images[i];
-                    // 파일명: 영문 전문 파일명 적용
                     link.download = `${sysName}_R${roundNum}_P${i+1}-${uid}_${fullTimeStamp}.png`;
                     document.body.appendChild(link);
                     link.click();
                     link.remove();
                 }
-                log(`✅ SYSTEM: Analysis Report Exported (${fullTimeStamp})`);
+                log(`✅ 분석 리포트 발행 완료 (${uid})`);
             } else {
-                // 모바일용 이미지 슬라이더 팝업
                 const newWin = window.open("", "_blank");
                 if (newWin) {
                     const imgTags = images.map((src, idx) => `
                         <div class="slide" style="display: ${idx === 0 ? 'flex' : 'none'}; flex-direction:column; align-items:center;">
-                            <p style="margin-bottom:20px; font-size:18px; font-weight:900;">👇 [${idx+1}/${images.length}] 이미지를 길게 눌러 저장하세요</p>
-                            <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
+                            <p style="margin-bottom:20px; font-size:16px; font-weight:900;">👇 [${idx+1}/${images.length}] 길게 눌러 이미지 저장</p>
+                            <img src="${src}" style="max-width:95%; border-radius:5px; box-shadow:0 0 30px rgba(255,255,255,0.2);" />
                         </div>`).join('');
+
                     newWin.document.write(`
-                        <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
+                        <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow-y:auto; padding: 20px 0;">
                             <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
-                            <div style="display:flex; gap:25px; margin-top:40px;">
-                                <button onclick="move(-1)" style="padding:15px 30px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900;">이전</button>
-                                <button onclick="move(1)" style="padding:15px 30px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900;">다음</button>
+                            
+                            <div style="display:flex; gap:20px; margin-top:30px;">
+                                <button onclick="move(-1)" style="padding:15px 35px; background:#334155; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:16px;">이전</button>
+                                <button onclick="move(1)" style="padding:15px 35px; background:#38bdf8; color:#000; border:none; border-radius:12px; font-weight:900; font-size:16px;">다음</button>
                             </div>
+                            
+                            <button onclick="window.close()" style="margin-top:25px; padding:12px 60px; background:#ef4444; color:#fff; border:none; border-radius:12px; font-weight:900; font-size:15px; cursor:pointer;">창 닫기</button>
+
                             <script>
                                 let current = 0;
                                 const slides = document.getElementsByClassName('slide');
@@ -1255,10 +1255,12 @@
                                     slides[current].style.display = 'none';
                                     current = (current + dir + slides.length) % slides.length;
                                     slides[current].style.display = 'flex';
+                                    window.scrollTo(0,0);
                                 }
                             <\/script>
                         </body>`);
                 }
+                log(`✅ 모바일 뷰어 리포트 생성 완료 (${uid})`);
             }
         }
 </script>
