@@ -417,11 +417,48 @@
 
         .slip-meta-info { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 30px; border-bottom: 1px dashed #333; padding-bottom: 15px; font-weight: 700; color: #444; }
 
-        .slip-row { display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .slip-tag { width: 85px; font-size: 1rem; font-weight: 900; color: #555; }
+        /* [수정] 영수증 행 구조 - 조와 번호를 한 줄로 유지 */
+        .slip-row { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            padding-bottom: 8px; 
+            border-bottom: 1px solid #eee; 
+            white-space: nowrap; /* 줄바꿈 절대 방지 */
+        }
 
+        /* [수정] A조, B조 등의 태그 너비 조정 */
+        .slip-tag { 
+            width: 65px; 
+            flex-shrink: 0; 
+            font-size: 0.9rem; 
+            font-weight: 900; 
+            color: #555; 
+        }
+
+        /* [추가] '1조' 텍스트를 숫자와 동일하게 설정 */
+        .slip-group-val {
+            width: 65px; 
+            flex-shrink: 0;
+            font-size: 1.7rem; /* 옆의 숫자와 동일한 크기 */
+            font-weight: 900;
+            font-family: 'Roboto Mono', monospace; 
+            color: #000; 
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        /* [추가] 번호들을 감싸는 컨테이너 */
+        .slip-num-container {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* [기존 유지 및 미세조정] 숫자 단위 */
         .slip-num-unit { 
-            width: 55px; 
+            width: 45px; 
             text-align: center; 
             font-size: 1.7rem; 
             font-weight: 900; 
@@ -1100,10 +1137,22 @@
             document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
             document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
             
+            // captureSlip 함수 내부의 chunk.map 루프 부분을 아래와 같이 수정
             listTarget.innerHTML = chunk.map((item, i) => {
                 const charIdx = String.fromCharCode(65 + i); 
                 const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-                return `<div class="slip-row" style="display:flex; align-items:center; margin-bottom:15px;"><span class="slip-tag">${charIdx} 조합</span>${item.group ? `<span style="font-weight:900; margin-right:15px; font-size:1.3rem;">${item.group}</span>` : ''}<div style="flex:1; display:flex; justify-content:space-between;">${numsHTML}</div></div>`;
+                
+                // [수정] item.group(조)을 .slip-group-val 클래스로 감싸서 출력
+                const groupHTML = item.group ? `<span class="slip-group-val">${item.group}</span>` : '';
+
+                return `
+                    <div class="slip-row">
+                        <span class="slip-tag">${charIdx} 조합</span>
+                        ${groupHTML}
+                        <div class="slip-num-container">
+                            ${numsHTML}
+                        </div>
+                    </div>`;
             }).join('');
 
             try {
