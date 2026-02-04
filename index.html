@@ -477,7 +477,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v21.0</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v22.0</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -756,7 +756,7 @@
         log(`🌓 [${next.toUpperCase()}] 모드로 전환`);
     }
 
-    /* [수정] 개별 카드 이미지 저장 (PC 즉시 저장 대응) */
+    /* [수정] 개별 카드 이미지 저장 (기능 복구 및 최적화) */
     async function captureCard(id) {
         const card = document.getElementById(id);
         if(!card) return;
@@ -765,22 +765,27 @@
         log("📸 분석 이미지 생성 중...");
         try {
             const canvas = await html2canvas(card, { backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg') || '#000', scale: 3, useCORS: true });
-            // canvas -> blob -> download
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const imageData = canvas.toDataURL("image/png");
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const filename = `Quantum_Card_${id}_${Date.now()}.png`;
+            
             if (!isMobile) {
-                const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
-                link.href = url;
-                link.download = filename;
+                link.href = imageData;
+                
+                // 1. 회차 정보 및 모드 이름 가져오기
+                const latest = DB[currentMode][0];
+                const roundNum = latest ? latest.r + 1 : '0000';
+                const modeName = currentMode === 'lotto' ? 'LOTTO' : 'PENSION';
+                
+                // 2. 최종 파일명 구조 적용
+                // 예: QUANTUM_CARD_LOTTO_R1210_CORE_SET-card-8179pj5kt_1770201347394.png
+                link.download = `QUANTUM_CARD_${modeName}_R${roundNum}_CORE_SET-${id}_${Date.now()}.png`;
+                
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-                URL.revokeObjectURL(url);
-                log("✅ 즉시 저장 완료!");
+                log("✅ 개별 이미지 전문화 저장 완료");
             } else {
-                const imageData = canvas.toDataURL("image/png");
                 const newWin = window.open("", "_blank");
                 if (newWin) {
                     newWin.document.write(`<body style="margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff;"><p style="margin-bottom:20px; font-size:16px;">👇 이미지를 길게 눌러 <b>[사진 앱에 저장]</b> 하세요</p><img src="${imageData}" style="max-width:90%; border-radius:15px; box-shadow:0 0 30px rgba(56,189,248,0.4);" /><button onclick="window.close()" style="margin-top:30px; padding:12px 25px; background:#334155; color:#fff; border:none; border-radius:10px; font-weight:800; cursor:pointer;">닫기</button></body>`);
@@ -918,7 +923,6 @@
         if(slipBtn) slipBtn.classList.toggle('hidden', !data.length);
     }
 
-    // [수정] 대량 생성 시 클라우드 멈춤 해결 (Batch 전송)
     async function triggerGen() {
         const count = parseInt(document.getElementById('gen-qty').value) || 1;
         const list = document.getElementById('res-list'); list.innerHTML = ''; window.sessionData = [];
@@ -936,8 +940,7 @@
         }
         updateBatchCopyBtn('gen');
         log(`✅ ${count}건 완료.`);
-
-        await pushToGlobalBatch(batchData); // 모든 생성이 끝난 후 딱 한 번만 전송
+        await pushToGlobalBatch(batchData);
     }
 
     async function triggerGradeGen(tg) {
@@ -962,8 +965,7 @@
         }
         updateBatchCopyBtn('gen');
         log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
-
-        await pushToGlobalBatch(batchData); // 루프 완료 후 한꺼번에 전송
+        await pushToGlobalBatch(batchData);
     }
 
     function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 초기화 완료.'); }
@@ -1018,7 +1020,6 @@
             const p = document.getElementById(id); if(p) p.classList.add('hidden');
         });
         document.getElementById(tab + '-panel').classList.remove('hidden');
-
         if(tab === 'stats') renderHeatmap();
         if(tab === 'win') renderH(); 
         if(tab === 'history') loadGlobalTimeline(); 
@@ -1040,15 +1041,12 @@
         const counts = {};
         const maxVal = currentMode === 'lotto' ? 45 : 9;
         const startVal = currentMode === 'lotto' ? 1 : 0;
-
         data.forEach(round => {
             round.n.forEach(num => counts[num] = (counts[num] || 0) + 1);
             if(currentMode === 'lotto' && round.b) counts[round.b] = (counts[round.b] || 0) + 1;
         });
-
         const values = Object.values(counts);
         const maxCount = Math.max(...(values.length ? values : [1]));
-
         for(let i = startVal; i <= maxVal; i++) {
             const count = counts[i] || 0;
             const ratio = count / maxCount;
@@ -1062,7 +1060,6 @@
             cell.innerHTML = `<span class="hm-num" style="color:${ratio > 0.7 ? '#fff' : 'var(--text)'}">${i}</span><span class="hm-count">${count}회</span>`;
             grid.appendChild(cell);
         }
-
         const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
         document.getElementById('stat-max-n').innerText = sorted[0] ? `${sorted[0][0]}번` : '--';
         const unappeared = Array.from({length: maxVal - startVal + 1}, (_, i) => i + startVal).filter(n => !counts[n]);
@@ -1087,9 +1084,7 @@
         const list = document.getElementById('store-list'); 
         const batchRow = document.getElementById('store-batch-row');
         const savedData = JSON.parse(localStorage.getItem(sk)||'[]');
-        
         list.innerHTML = ''; 
-        
         if(savedData.length === 0) {
             if(batchRow) batchRow.style.display = 'none';
             list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
@@ -1103,12 +1098,12 @@
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); log('🗑️ 저장소를 비웠습니다.'); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
     
+    /* [수정] 슬립 이미지 저장 (요청하신 파일명 형식 적용) */
     async function captureSlip(type) {
         const sk = currentMode === 'lotto' ? 'v13_db' : 'v13_pension_db';
         const data = type === 'gen' ? window.sessionData : JSON.parse(localStorage.getItem(sk) || '[]');
         if(!data.length) return;
 
-        // [워터마크 생성]
         const watermarkContainer = document.getElementById('slip-watermark');
         const wmText = currentMode === 'lotto' ? "QUANTUM LOTTO" : "QUANTUM PENSION";
         watermarkContainer.innerHTML = "";
@@ -1120,7 +1115,7 @@
         }
 
         const totalPages = Math.ceil(data.length / 5);
-        log(`📸 총 ${data.length}개 조합 (${totalPages}장) 슬립 생성 중...`);
+        log(`📸 총 ${data.length}개 조합 슬립 생성 중...`);
         
         const zone = document.getElementById('slip-render-zone');
         const listTarget = document.getElementById('slip-list-target');
@@ -1128,7 +1123,6 @@
         const latest = DB[currentMode][0];
         const roundNum = latest ? latest.r + 1 : '0000'; 
         const images = [];
-
         slipTitle.innerText = wmText;
 
         for (let p = 0; p < totalPages; p++) {
@@ -1137,14 +1131,10 @@
             document.getElementById('slip-time').innerHTML = new Date().toLocaleString().replace(/:/g, ' : ');
             document.getElementById('slip-price').innerText = `금액 ₩ ${(chunk.length * 1000).toLocaleString()}`;
             
-            // captureSlip 함수 내부의 chunk.map 루프 부분을 아래와 같이 수정
             listTarget.innerHTML = chunk.map((item, i) => {
                 const charIdx = String.fromCharCode(65 + i); 
                 const numsHTML = item.n.map(n => `<span class="slip-num-unit">${n.toString().padStart(currentMode==='lotto'?2:1, '0')}</span>`).join('');
-                
-                // [수정] item.group(조)을 .slip-group-val 클래스로 감싸서 출력
                 const groupHTML = item.group ? `<span class="slip-group-val">${item.group}</span>` : '';
-
                 return `
                     <div class="slip-row">
                         <span class="slip-tag">${charIdx} 조합</span>
@@ -1158,41 +1148,29 @@
             try {
                 const canvas = await html2canvas(zone, { scale: 3, backgroundColor: '#fff', useCORS: true });
                 images.push(canvas.toDataURL("image/png"));
-            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); console.error(e); }
+            } catch(e) { log(`⚠️ ${p+1}번 슬립 생성 실패`); }
         }
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (!isMobile) {
-            // [수정 포인트] 파일명에 사용할 시분초 생성 (HHMMSS 형식)
-            const now = new Date();
-            const timeStamp = now.getHours().toString().padStart(2, '0') + 
-                              now.getMinutes().toString().padStart(2, '0') + 
-                              now.getSeconds().toString().padStart(2, '0');
+            // [Confirmed] 요청하신 UID 및 타임스탬프 형식 적용
+            const uid = Math.random().toString(36).substr(2, 9);
+            const fullTimeStamp = Date.now();
+            const modeName = currentMode === 'lotto' ? '로또' : '연금';
 
-            log("⬇️ PC 환경: 회차별 슬립 이미지를 다운로드 합니다...");
             for (let i = 0; i < images.length; i++) {
-                try {
-                    const src = images[i];
-                    const res = await fetch(src);
-                    const blob = await res.blob();
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    
-                    const modeName = currentMode === 'lotto' ? '로또' : '연금';
-                    
-                    // 최종 파일명 설정: 예) 1150회_로또_슬립_p1_153045.png (15시 30분 45초 생성)
-                    link.download = `${roundNum}회_${modeName}_슬립_p${i+1}_${timeStamp}.png`;
-                    
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    URL.revokeObjectURL(url);
-                    log(`✅ 슬립 p${i+1} 다운로드 완료 (${timeStamp})`);
-                } catch (e) { log(`⚠️ 슬립 ${i+1} 다운로드 실패`); }
+                const link = document.createElement('a');
+                link.href = images[i];
+                // 최종 파일명 예: QUANTUM_LOTTO_R1210_P1-14ifu0cr4_1770200426254.png
+                const sysName = currentMode === 'lotto' ? 'QUANTUM_LOTTO' : 'QUANTUM_PENSION';
+                link.download = `${sysName}_R${roundNum}_P${i+1}-${uid}_${fullTimeStamp}.png`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
             }
+            log("✅ 모든 슬립 저장 완료");
         } else {
-            // 모바일 환경
+            // 모바일 환경 슬라이더 로직
             const newWin = window.open("", "_blank");
             if (newWin) {
                 const imgTags = images.map((src, idx) => `
@@ -1201,7 +1179,6 @@
                         <img src="${src}" style="max-width:92%; border-radius:5px; box-shadow:0 0 40px rgba(255,255,255,0.2);" />
                     </div>
                 `).join('');
-
                 newWin.document.write(`
                     <body style="margin:0; background:#000; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; overflow:hidden;">
                         <div id="slider-container" style="width:100%; display:flex; flex-direction:column; align-items:center;">${imgTags}</div>
