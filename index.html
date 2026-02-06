@@ -355,6 +355,11 @@
         .footer { text-align: center; padding: 80px 25px 220px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 50px; }
         .disclaimer-box { background: #111827; border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; text-align: left; }
         .disclaimer-head { font-size: 0.95rem; color: #fff; font-weight: 900; margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px; }
+        /* [추가] 정보 안내 섹션 전용 스타일 */
+        .info-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
+        .info-table td { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .info-table td:first-child { font-weight: 900; color: var(--gold); width: 30%; }
+        .info-emphasis { color: var(--win); font-weight: 800; }       
         .disclaimer-body { font-size: 0.8rem; color: #94a3b8; line-height: 1.9; text-align: justify; word-break: keep-all; }
         .copy-text { margin-top: 30px; font-size: 0.7rem; color: var(--dim); font-family: 'Orbitron'; letter-spacing: 1px; }
 
@@ -624,6 +629,13 @@
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <div class="footer">
+            <div id="info-panel" class="info-section" style="margin-bottom: 20px;">
+                <div class="disclaimer-box" style="border-color: var(--primary);">
+                    <div id="info-title" class="disclaimer-head" style="border-left-color: var(--primary);">📡 로또 6/45 당첨 정보 안내</div>
+                    <div id="info-content" class="disclaimer-body">
+                        </div>
+                </div>
+            </div>        
             <div class="disclaimer-box">
                 <div class="disclaimer-head">🚨 법적 고지 및 프리미엄 분석 안내</div>
                 <div class="disclaimer-body">
@@ -869,7 +881,49 @@
     function refreshUI() {
         const data = DB[currentMode][0]; if(!data) return;
         document.getElementById('target-round').innerText = (data.r + 1) + "회";
+        
+        // [수정] 당첨 정보 안내 동적 변경
+        updateInfoSection();
+        
         updateRecentWin(data); updateStats(); renderH();
+    }
+
+    // [추가] 모드별 정보 업데이트 함수
+    function updateInfoSection() {
+        const title = document.getElementById('info-title');
+        const content = document.getElementById('info-content');
+        
+        if (currentMode === 'lotto') {
+            title.innerHTML = "🎰 로또 6/45 당첨 기준 및 안내";
+            content.innerHTML = `
+                <table class="info-table">
+                    <tr><td>1등</td><td>당첨번호 <span class="info-emphasis">6개</span> 숫자 일치</td></tr>
+                    <tr><td>2등</td><td>당첨번호 <span class="info-emphasis">5개 + 보너스</span> 일치</td></tr>
+                    <tr><td>3등</td><td>당첨번호 <span class="info-emphasis">5개</span> 숫자 일치</td></tr>
+                    <tr><td>4등</td><td>당첨번호 <span class="info-emphasis">4개</span> 숫자 일치 (50,000원)</td></tr>
+                    <tr><td>5등</td><td>당첨번호 <span class="info-emphasis">3개</span> 숫자 일치 (5,000원)</td></tr>
+                </table>
+                <p style="margin-top:15px; font-size:0.7rem; color:var(--dim);">
+                    📅 <span style="color:#fff;">지급기한:</span> 지급개시일로부터 1년 (휴일인 경우 익영업일)
+                </p>
+            `;
+        } else {
+            title.innerHTML = "🎫 연금복권 720+ 당첨 기준 및 안내";
+            content.innerHTML = `
+                <div style="margin-bottom:15px;">
+                    <span style="color:var(--primary); font-weight:800;">📺 추첨방송:</span> 매주 목요일 오후 7시 5분경 MBC
+                </div>
+                <table class="info-table">
+                    <tr><td>1~7등</td><td>1등 번호 기준 자리수 일치</td></tr>
+                    <tr><td>보너스</td><td>보너스 번호 기준 일치</td></tr>
+                </table>
+                <p style="margin-top:15px; font-size:0.7rem; color:var(--dim); line-height:1.6;">
+                    ✅ 1등: <span class="info-emphasis">월 700만원 x 20년</span><br>
+                    ✅ 2등: <span class="info-emphasis">월 100만원 x 10년</span><br>
+                    📅 <span style="color:#fff;">지급기한:</span> 지급개시일로부터 1년
+                </p>
+            `;
+        }
     }
 
     function updateRecentWin(latest) {
