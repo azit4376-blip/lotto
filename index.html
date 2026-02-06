@@ -1027,7 +1027,7 @@
         }
         updateBatchCopyBtn('gen');
         log(`✅ ${count}건 완료.`);
-        await pushToGlobalBatch(dataList);
+        await pushToGlobalBatch(batchData);
     }
 
     async function triggerGradeGen(tg) {
@@ -1051,7 +1051,7 @@
         }
         updateBatchCopyBtn('gen');
         log(`✅ ${tg} 등급 추출 완료. (연산: ${a}회)`);
-        await pushToGlobalBatch(dataList);
+        await pushToGlobalBatch(batchData);
     }
 
     function clearList() { document.getElementById('res-list').innerHTML = ''; window.sessionData = []; updateBatchCopyBtn('gen'); log('🧹 초기화 완료.'); }
