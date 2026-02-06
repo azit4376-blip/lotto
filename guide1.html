@@ -3,28 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 6/45 당첨 확률 높이는 분석법 | QUANTUM MULTI-INSIGHT</title>
+    <title>로또 6/45 분석 가이드 | QUANTUM MULTI-INSIGHT</title>
     <style>
-        body { font-family: 'Pretendard', sans-serif; line-height: 1.8; color: #cbd5e1; background: #030712; max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        h1 { color: #38bdf8; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; font-size: 1.5rem; }
-        h2 { color: #fbbf24; margin-top: 30px; font-size: 1.2rem; }
-        p { font-size: 1rem; color: #94a3b8; }
-        .back-btn { display: inline-block; margin-top: 40px; padding: 10px 20px; border: 1px solid #38bdf8; color: #38bdf8; text-decoration: none; border-radius: 8px; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
+        
+        :root { 
+            --bg: #030712; --card: rgba(30, 41, 59, 0.7); --primary: #38bdf8; 
+            --text: #cbd5e1; --gold: #fbbf24; 
+        }
+
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); 
+            background-attachment: fixed;
+            color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; 
+            position: relative; overflow-x: hidden; min-height: 100vh;
+        }
+
+        body::before {
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
+            background-size: 550px 550px; animation: backgroundMove 100s linear infinite;
+            z-index: -1; opacity: 0.2;
+        }
+
+        @keyframes backgroundMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        .container { width: 100%; max-width: 600px; z-index: 1; }
+
+        .card-container {
+            background: var(--card); backdrop-filter: blur(15px);
+            padding: 35px; border-radius: 35px; border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); line-height: 1.8;
+        }
+
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 25px; border-left: 5px solid var(--primary); padding-left: 15px; }
+        h2 { color: var(--gold); font-size: 1.2rem; margin-top: 30px; font-weight: 800; }
+        p { font-size: 0.95rem; color: #94a3b8; word-break: keep-all; }
+        strong { color: #fff; }
+
+        .back-btn { 
+            display: inline-block; margin-top: 40px; padding: 12px 25px; 
+            background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); 
+            color: var(--primary); text-decoration: none; border-radius: 15px; 
+            font-weight: 800; transition: 0.3s; text-align: center; width: 100%; box-sizing: border-box;
+        }
+        .back-btn:hover { background: var(--primary); color: #000; }
     </style>
 </head>
 <body>
-    <h1>로또 6/45 당첨 확률을 높이는 통계적 분석법</h1>
-    <p>많은 사람들이 로또를 단순한 '운'이라고 생각하지만, 역대 당첨 데이터를 분석해보면 특정한 통계적 흐름을 발견할 수 있습니다. 본 가이드에서는 퀀텀 AI 분석 엔진이 사용하는 핵심 지표들을 설명합니다.</p>
-    
-    <h2>1. 홀수와 짝수의 균형 (Odd/Even Ratio)</h2>
-    <p>로또 번호 6개가 모두 홀수이거나 모두 짝수일 확률은 매우 낮습니다. 통계적으로 가장 많이 출현하는 비율은 3:3 또는 2:4, 4:2입니다. 번호를 조합할 때 이 균형을 맞추는 것이 중요합니다.</p>
-    
-    <h2>2. 총합의 구간 (Sum Range)</h2>
-    <p>당첨 번호 6개 숫자의 합은 보통 100에서 170 사이에서 가장 많이 발생합니다. 극단적으로 낮은 숫자만 나오거나 높은 숫자만 나올 확률을 제외함으로써 당첨 확률을 미세하게 조정할 수 있습니다.</p>
-    
-    <h2>3. 이월수(Carry-over Numbers) 활용</h2>
-    <p>이월수란 직전 회차에 나왔던 번호가 이번 회차에 다시 등장하는 것을 말합니다. 통계적으로 매 회차 1~2개의 이월수가 포함될 확률이 약 60% 이상입니다.</p>
-    
-    <a href="index.html" class="back-btn">메인으로 돌아가기</a>
+    <div class="container">
+        <div class="card-container">
+            <h1>LOTTO 6/45 GUIDE</h1>
+            <p>로또를 단순한 '운'이 아닌 통계적 데이터로 분석합니다. 퀀텀 AI 엔진의 핵심 알고리즘을 확인하세요.</p>
+            
+            <h2>1. 홀수와 짝수의 균형</h2>
+            <p>로또 번호 6개가 모두 홀수이거나 짝수일 확률은 극히 낮습니다. 가장 이상적인 <strong>3:3 혹은 2:4 비율</strong>을 우선적으로 도출합니다.</p>
+            
+            <h2>2. 총합 지표 (Sum Range)</h2>
+            <p>당첨 번호의 총합은 대개 <strong>100에서 170 사이</strong>에 집중됩니다. 데이터 기반 필터링을 통해 확률이 낮은 구간을 제외합니다.</p>
+            
+            <h2>3. 이월수(Carry-over) 데이터</h2>
+            <p>직전 회차 번호가 다시 등장할 확률은 약 60% 이상입니다. 최근 흐름을 분석하여 유의미한 이월수를 조합에 반영합니다.</p>
+            
+            <a href="index.html" class="back-btn">← 메인 분석기로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>
