@@ -3,73 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 6/45 분석 가이드 | QUANTUM MULTI-INSIGHT</title>
+    <title>로또 6/45 정밀 분석 가이드 | QUANTUM MULTI-INSIGHT</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
-        
-        :root { 
-            --bg: #030712; --card: rgba(30, 41, 59, 0.7); --primary: #38bdf8; 
-            --text: #cbd5e1; --gold: #fbbf24; 
-        }
-
-        body { 
-            font-family: 'Pretendard', sans-serif; 
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); 
-            background-attachment: fixed;
-            color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; 
-            position: relative; overflow-x: hidden; min-height: 100vh;
-        }
-
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
-            background-size: 550px 550px; animation: backgroundMove 100s linear infinite;
-            z-index: -1; opacity: 0.2;
-        }
-
-        @keyframes backgroundMove {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 1000px; }
-        }
-
-        .container { width: 100%; max-width: 600px; z-index: 1; }
-
-        .card-container {
-            background: var(--card); backdrop-filter: blur(15px);
-            padding: 35px; border-radius: 35px; border: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); line-height: 1.8;
-        }
-
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 25px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        h2 { color: var(--gold); font-size: 1.2rem; margin-top: 30px; font-weight: 800; }
-        p { font-size: 0.95rem; color: #94a3b8; word-break: keep-all; }
-        strong { color: #fff; }
-
-        .back-btn { 
-            display: inline-block; margin-top: 40px; padding: 12px 25px; 
-            background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); 
-            color: var(--primary); text-decoration: none; border-radius: 15px; 
-            font-weight: 800; transition: 0.3s; text-align: center; width: 100%; box-sizing: border-box;
-        }
-        .back-btn:hover { background: var(--primary); color: #000; }
+        :root { --bg: #030712; --card: rgba(30, 41, 59, 0.7); --primary: #38bdf8; --text: #cbd5e1; --gold: #fbbf24; }
+        body { font-family: 'Pretendard', sans-serif; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); background-attachment: fixed; color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; position: relative; overflow-x: hidden; min-height: 100vh; }
+        body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px); background-size: 550px 550px; animation: backgroundMove 100s linear infinite; z-index: -1; opacity: 0.2; }
+        @keyframes backgroundMove { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
+        .container { width: 100%; max-width: 700px; z-index: 1; }
+        .card-container { background: var(--card); backdrop-filter: blur(15px); padding: 40px; border-radius: 35px; border: 1px solid rgba(56, 189, 248, 0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.5); line-height: 1.8; }
+        h1 { font-family: 'Orbitron', sans-serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 25px; border-left: 5px solid var(--primary); padding-left: 15px; letter-spacing: -1px; }
+        h2 { color: var(--gold); font-size: 1.25rem; margin-top: 35px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        p { font-size: 1rem; color: #94a3b8; word-break: keep-all; margin-bottom: 15px; }
+        ul { padding-left: 20px; margin-bottom: 20px; }
+        li { color: #94a3b8; margin-bottom: 10px; list-style-type: square; }
+        strong { color: #fff; font-weight: 700; }
+        .highlight-box { background: rgba(56, 189, 248, 0.05); padding: 20px; border-radius: 15px; border: 1px dashed rgba(56, 189, 248, 0.3); margin: 25px 0; }
+        .back-btn { display: inline-block; margin-top: 40px; padding: 15px 25px; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); color: var(--primary); text-decoration: none; border-radius: 15px; font-weight: 800; transition: 0.3s; text-align: center; width: 100%; box-sizing: border-box; }
+        .back-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="card-container">
-            <h1>LOTTO 6/45 GUIDE</h1>
-            <p>로또를 단순한 '운'이 아닌 통계적 데이터로 분석합니다. 퀀텀 AI 엔진의 핵심 알고리즘을 확인하세요.</p>
+            <h1>LOTTO ANALYSIS STRATEGY</h1>
+            <p>QUANTUM MULTI-INSIGHT 분석 엔진은 단순한 난수 생성이 아닌, 역대 당첨 데이터의 통계적 유의성을 기반으로 설계되었습니다. 본 가이드는 당첨 확률을 통계적으로 접근하기 위한 핵심 지표들을 설명합니다.</p>
             
-            <h2>1. 홀수와 짝수의 균형</h2>
-            <p>로또 번호 6개가 모두 홀수이거나 짝수일 확률은 극히 낮습니다. 가장 이상적인 <strong>3:3 혹은 2:4 비율</strong>을 우선적으로 도출합니다.</p>
+            <div class="highlight-box">
+                <strong>💡 핵심 원칙:</strong> 극단적인 확률을 배제하고, 역대 당첨 회차에서 가장 빈번하게 출현한 '골든존' 데이터를 우선적으로 조합합니다.
+            </div>
+
+            <h2>01. 홀짝 및 저고 비율 (Odd/Even Balance)</h2>
+            <p>번호 6개가 모두 홀수이거나 짝수일 확률은 약 1% 미만입니다. 퀀텀 엔진은 다음의 최적 비율을 지향합니다.</p>
+            <ul>
+                <li><strong>3:3 비율:</strong> 가장 이상적인 균형 상태로 전체 당첨의 약 33%를 차지합니다.</li>
+                <li><strong>2:4 또는 4:2 비율:</strong> 통계적으로 빈번하게 발생하는 균형 파괴 구간입니다.</li>
+            </ul>
+
+            <h2>02. 총합 지표 및 구간 분석 (Sum Range)</h2>
+            <p>당첨 번호 6개의 합계는 대부분 <strong>100에서 170 사이</strong>의 종형 곡선을 그리며 출현합니다. 우리는 이 범위를 벗어나는 조합을 하향 조정하여 필터링 성능을 극대화합니다.</p>
             
-            <h2>2. 총합 지표 (Sum Range)</h2>
-            <p>당첨 번호의 총합은 대개 <strong>100에서 170 사이</strong>에 집중됩니다. 데이터 기반 필터링을 통해 확률이 낮은 구간을 제외합니다.</p>
+            <h2>03. 이월수와 인접수 (Carry-over Logic)</h2>
+            <p>직전 회차의 당첨 번호가 다시 출현하는 이월수는 분석의 핵심입니다.</p>
+            <ul>
+                <li>최근 10회차 기준, 매 회차 <strong>1~2개의 이월수</strong>가 포함될 확률은 60%를 상회합니다.</li>
+                <li>당첨 번호의 앞뒤 숫자인 '인접수' 역시 연쇄적으로 출현하는 경향이 있습니다.</li>
+            </ul>
+
+            <h2>04. AC값 (Complexity 분석)</h2>
+            <p>숫자 간의 차이 값을 분석하여 조합의 복잡도를 측정하는 <strong>AC(Arithmetic Complexity)</strong> 지표를 활용합니다. 로또 분석에서 유의미한 수치인 AC값 7 이상의 복잡한 조합을 우선 추출합니다.</p>
             
-            <h2>3. 이월수(Carry-over) 데이터</h2>
-            <p>직전 회차 번호가 다시 등장할 확률은 약 60% 이상입니다. 최근 흐름을 분석하여 유의미한 이월수를 조합에 반영합니다.</p>
-            
-            <a href="index.html" class="back-btn">← 메인 분석기로 돌아가기</a>
+            <a href="index.html" class="back-btn">← QUANTUM 분석 시스템 복귀</a>
         </div>
     </div>
 </body>
