@@ -5,104 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>개인정보처리방침 | QUANTUM MULTI-INSIGHT</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Pretendard:wght@400;600;900&display=swap');
-        
-        :root { 
-            --bg: #030712; --card: rgba(30, 41, 59, 0.7); --primary: #38bdf8; 
-            --text: #cbd5e1; --gold: #fbbf24; 
-        }
-
-        body { 
-            font-family: 'Pretendard', sans-serif; 
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); 
-            background-attachment: fixed;
-            color: var(--text); margin: 0; padding: 20px; display: flex; justify-content: center; 
-            position: relative; overflow-x: hidden; min-height: 100vh;
-        }
-
-        /* 우주 배경 애니메이션 */
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
-            background-size: 550px 550px; animation: backgroundMove 100s linear infinite;
-            z-index: -1; opacity: 0.2;
-        }
-
-        @keyframes backgroundMove {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 1000px; }
-        }
-
-        .container { width: 100%; max-width: 700px; z-index: 1; }
-
-        .card-container {
-            background: var(--card); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 35px; border: 1px solid rgba(56, 189, 248, 0.2);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); line-height: 1.8;
-        }
-
-        h1 { font-family: 'Orbitron', sans-serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 10px; border-left: 5px solid var(--primary); padding-left: 15px; }
-        h2 { color: var(--gold); font-size: 1.1rem; margin-top: 35px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        p, li { font-size: 0.95rem; color: #94a3b8; word-break: keep-all; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 10px; list-style-type: square; }
-        strong { color: #fff; }
-        .date-tag { color: var(--primary); font-weight: bold; margin-bottom: 30px; display: block; font-family: 'Orbitron'; font-size: 0.8rem; }
-
-        .back-btn { 
-            display: inline-block; margin-top: 40px; padding: 15px 25px; 
-            background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); 
-            color: var(--primary); text-decoration: none; border-radius: 15px; 
-            font-weight: 800; transition: 0.3s; text-align: center; width: 100%; box-sizing: border-box;
-        }
-        .back-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
-        a { color: var(--primary); text-decoration: none; border-bottom: 1px dashed var(--primary); }
+        body { font-family: 'Pretendard', sans-serif; line-height: 1.6; color: #334155; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: #f8fafc; }
+        h1 { color: #0f172a; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; }
+        h2 { color: #1e293b; margin-top: 30px; }
+        p, li { font-size: 0.95rem; }
+        .date { color: #64748b; font-size: 0.85rem; }
+        .home-btn { display: inline-block; margin-top: 40px; padding: 10px 20px; background: #38bdf8; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card-container">
-            <h1>PRIVACY POLICY</h1>
-            <span class="date-tag">EFFECTIVE DATE: 2026. 02. 06</span>
 
-            <p><strong>QUANTUM MULTI-INSIGHT</strong>(이하 '본 사이트')는 이용자의 개인정보를 소중히 여기며, 관련 법령을 준수하기 위해 최선을 다하고 있습니다. 본 방침을 통해 서비스 이용 과정에서 데이터가 어떻게 처리되는지 상세히 안내드립니다.</p>
+    <h1>개인정보처리방침</h1>
+    <p class="date">시행일: 2026년 2월 6일</p>
 
-            <h2>1. 수집하는 개인정보 항목</h2>
-            <p>본 사이트는 별도의 회원가입 절차 없이 모든 서비스를 익명으로 이용하실 수 있습니다. 따라서 이용자의 성함, 연락처 등 민감한 개인정보를 강제로 수집하지 않습니다. 다만, 서비스 최적화 과정에서 아래 정보가 수집될 수 있습니다.</p>
-            <ul>
-                <li><strong>자동 수집 항목:</strong> 접속 IP 주소, 쿠키(Cookie), 방문 기록, 브라우저 및 기기 정보</li>
-            </ul>
+    <p><strong>QUANTUM MULTI-INSIGHT</strong>(이하 '본 사이트')는 이용자의 개인정보를 중요시하며, "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.</p>
 
-            <h2>2. 개인정보의 수집 및 이용 목적</h2>
-            <p>수집된 익명 정보는 오직 다음의 목적을 위해서만 활용됩니다.</p>
-            <ul>
-                <li>사이트 접속 빈도 파악 및 서비스 이용 통계 분석</li>
-                <li>분석 엔진 성능 개선 및 사용자 환경 최적화</li>
-                <li>제3자 광고 파트너(Google AdSense 등)를 통한 맞춤형 광고 송출</li>
-            </ul>
+    <h2>1. 수집하는 개인정보 항목</h2>
+    <p>본 사이트는 별도의 회원가입 없이 이용 가능하며, 이용자의 이름, 연락처 등 민감한 개인정보를 강제로 수집하지 않습니다. 다만, 서비스 이용 과정에서 IP 주소, 쿠키, 방문 기록 등이 자동으로 생성되어 수집될 수 있습니다.</p>
 
-            <h2>3. 제3자 광고 및 쿠키 사용 고지</h2>
-            <p>본 사이트는 효율적인 운영을 위해 구글(Google)의 광고 서비스를 이용할 수 있습니다.</p>
-            <ul>
-                <li>구글을 포함한 제3자 제공업체는 이용자의 이전 방문 기록을 바탕으로 광고를 게재하기 위해 쿠키를 사용합니다.</li>
-                <li>구글의 광고 쿠키를 통해 구글과 파트너는 본 사이트 및 인터넷상의 다른 사이트 방문 기록을 토대로 맞춤 광고를 제공할 수 있습니다.</li>
-                <li>이용자는 <a href="https://adssettings.google.com" target="_blank">구글 광고 설정</a> 페이지를 통해 개인 맞춤 광고를 언제든지 해제할 수 있습니다.</li>
-            </ul>
+    <h2>2. 개인정보의 수집 및 이용목적</h2>
+    <p>수집된 정보는 다음과 같은 목적을 위해 활용됩니다.</p>
+    <ul>
+        <li>사이트 접속 빈도 파악 및 서비스 이용 통계 분석</li>
+        <li>구글 애드센스(Google AdSense)를 통한 광고 송출</li>
+    </ul>
 
-            <h2>4. 개인정보의 보유 및 파기</h2>
-            <p>본 사이트는 이용 목적이 달성된 후에는 수집된 정보를 지체 없이 파기하는 것을 원칙으로 합니다. 개인을 식별할 수 없는 통계 데이터는 서비스 개선을 위한 내부 자료로만 활용됩니다.</p>
+    <h2>3. 구글 애드센스 및 쿠키 사용 고지</h2>
+    <p>본 사이트는 구글(Google)에서 제공하는 웹 분석 서비스 및 광고 게재 서비스를 이용합니다.</p>
+    <ul>
+        <li>구글을 포함한 제3자 제공업체는 사용자의 이전 웹사이트 방문 기록을 바탕으로 광고를 게재하기 위해 쿠키를 사용합니다.</li>
+        <li>구글의 광고 쿠키를 사용하여 구글과 파트너는 본 사이트 및 인터넷상의 다른 사이트 방문 기록을 토대로 사용자에게 적절한 광고를 제공할 수 있습니다.</li>
+        <li>사용자는 <a href="https://adssettings.google.com" target="_blank">구글 광고 설정</a>을 방문하여 개인 맞춤 광고를 해제할 수 있습니다.</li>
+    </ul>
 
-            <h2>5. 이용자의 권리 및 거부 방법</h2>
-            <p>이용자는 웹 브라우저의 옵션 설정을 통해 모든 쿠키를 허용하거나, 저장될 때마다 확인을 거치거나, 모든 쿠키의 저장을 거부할 수 있는 선택권을 가집니다.</p>
+    <h2>4. 개인정보의 보유 및 파기</h2>
+    <p>본 사이트는 원칙적으로 개인정보 수집 및 이용목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.</p>
 
-            <h2>6. 개인정보 보호 문의</h2>
-            <p>개인정보 처리 방침과 관련하여 궁금한 사항이나 의견이 있으시면 아래 연락처로 문의해 주시기 바랍니다.</p>
-            <ul>
-                <li><strong>이메일:</strong> <a href="mailto:azit4376@gmail.com">azit4376@gmail.com</a></li>
-            </ul>
+    <h2>5. 이용자의 권리</h2>
+    <p>이용자는 언제든지 자신의 브라우저 설정에서 쿠키 수집을 거부할 수 있습니다.</p>
 
-            <a href="index.html" class="back-btn">← RETURN TO SYSTEM</a>
-        </div>
-    </div>
+    <h2>6. 문의처</h2>
+    <p>개인정보 보호와 관련하여 문의사항이 있으시면 아래 이메일로 연락주시기 바랍니다.</p>
+    <p>이메일: <a href="mailto:azit4376@gmail.com">azit4376@gmail.com</a></p>
+
+    <a href="index.html" class="home-btn">메인으로 돌아가기</a>
+
 </body>
 </html>
