@@ -888,40 +888,36 @@
         updateRecentWin(data); updateStats(); renderH();
     }
 
-    // [추가] 모드별 정보 업데이트 함수
+        // [추가] 모드별 정보 업데이트 함수
     function updateInfoSection() {
         const title = document.getElementById('info-title');
         const content = document.getElementById('info-content');
         
         if (currentMode === 'lotto') {
-            title.innerHTML = "🎰 로또 6/45 당첨 기준 및 안내";
+            title.innerHTML = "🎰 LOTTO 6/45 당첨 및 수령 안내";
             content.innerHTML = `
                 <table class="info-table">
                     <tr><td>1등</td><td>당첨번호 <span class="info-emphasis">6개</span> 숫자 일치</td></tr>
                     <tr><td>2등</td><td>당첨번호 <span class="info-emphasis">5개 + 보너스</span> 일치</td></tr>
                     <tr><td>3등</td><td>당첨번호 <span class="info-emphasis">5개</span> 숫자 일치</td></tr>
-                    <tr><td>4등</td><td>당첨번호 <span class="info-emphasis">4개</span> 숫자 일치 (50,000원)</td></tr>
-                    <tr><td>5등</td><td>당첨번호 <span class="info-emphasis">3개</span> 숫자 일치 (5,000원)</td></tr>
+                    <tr><td>4등</td><td>당첨번호 <span class="info-emphasis">4개</span> 숫자 일치</td></tr>
+                    <tr><td>5등</td><td>당첨번호 <span class="info-emphasis">3개</span> 숫자 일치</td></tr>
+                    <tr><td>추첨일시</td><td>매주 <span class="info-emphasis">토요일</span> 오후 8시 35분경 (MBC)</td></tr>
+                    <tr><td>지급기한</td><td>지급개시일로부터 <span class="info-emphasis">1년</span> (휴일 익영업일)</td></tr>
                 </table>
-                <p style="margin-top:15px; font-size:0.7rem; color:var(--dim);">
-                    📅 <span style="color:#fff;">지급기한:</span> 지급개시일로부터 1년 (휴일인 경우 익영업일)
-                </p>
             `;
         } else {
-            title.innerHTML = "🎫 연금복권 720+ 당첨 기준 및 안내";
+            title.innerHTML = "🎫 PENSION 720+ 당첨 및 수령 안내";
             content.innerHTML = `
-                <div style="margin-bottom:15px;">
-                    <span style="color:var(--primary); font-weight:800;">📺 추첨방송:</span> 매주 목요일 오후 7시 5분경 MBC
-                </div>
                 <table class="info-table">
-                    <tr><td>1~7등</td><td>1등 번호 기준 자리수 일치</td></tr>
-                    <tr><td>보너스</td><td>보너스 번호 기준 일치</td></tr>
+                    <tr><td>1등</td><td>조 + <span class="info-emphasis">6자리</span> 일치 (1등 번호 기준)</td></tr>
+                    <tr><td>2~7등</td><td>각 등수별 <span class="info-emphasis">일치 조건</span> (1등 번호 기준)</td></tr>
+                    <tr><td>보너스</td><td>보너스 번호 기준 <span class="info-emphasis">6자리</span> 일치</td></tr>
+                    <tr><td>당첨조건</td><td>1~7등은 <span class="info-emphasis">1등 번호</span>, 보너스는 전용번호 기준</td></tr>
+                    <tr><td>추첨방송</td><td>매주 <span class="info-emphasis">목요일</span> 오후 7시 05분경 (MBC)</td></tr>
+                    <tr><td>추첨정보</td><td>매주 목요일 MBC 생방송 추첨 진행</td></tr>
+                    <tr><td>지급기한</td><td>지급개시일로부터 <span class="info-emphasis">1년</span> (휴일 익영업일)</td></tr>
                 </table>
-                <p style="margin-top:15px; font-size:0.7rem; color:var(--dim); line-height:1.6;">
-                    ✅ 1등: <span class="info-emphasis">월 700만원 x 20년</span><br>
-                    ✅ 2등: <span class="info-emphasis">월 100만원 x 10년</span><br>
-                    📅 <span style="color:#fff;">지급기한:</span> 지급개시일로부터 1년
-                </p>
             `;
         }
     }
