@@ -1128,7 +1128,7 @@
             let n = [];
             if(currentMode === 'lotto') { while(true) { n = Array.from(fixes); while(n.length < 6) { let r = Math.floor(Math.random()*45)+1; if(!n.includes(r) && !excs.has(r)) n.push(r); } if(n.reduce((a,b)=>a+b,0) >= 100) break; } n.sort((a,b)=>a-b); }
             else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
-            const data = { n, ...getMetrics(n), carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
+            const data = { n, ...getMetrics(n), targetRound: latestRound, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
             window.sessionData.push(data); renderCard(list, data, false);
             batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
         }
@@ -1150,7 +1150,7 @@
             else { for(let j=0; j<6; j++) n.push(Math.floor(Math.random()*10)); }
             const m = getMetrics(n);
             if(m.grade === tg) {
-                const data = { n, ...m, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
+                const data = { n, ...m, targetRound: latestRound, carryList: currentMode==='lotto'?(DB.lotto[0]?DB.lotto[0].n:[]):[], group: currentMode==='pension'?(Math.floor(Math.random()*5)+1)+"조":null };
                 window.sessionData.push(data); renderCard(list, data, false);
                 batchData.push({ round: latestRound, mode: currentMode, numbers: data.n, grade: data.grade });
                 f++;
@@ -1296,22 +1296,74 @@
     
     // [수정] 저장소 렌더링 (더보기 기능 포함)
     function renderS() { 
-        const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
-        const list = document.getElementById('store-list'); 
-        const batchRow = document.getElementById('store-batch-row');
-        const savedData = JSON.parse(localStorage.getItem(sk)||'[]');
-        list.innerHTML = ''; 
-        if(savedData.length === 0) {
-            if(batchRow) batchRow.style.display = 'none';
-            list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
-        } else {
-            if(batchRow) batchRow.style.display = 'flex';
-            const displayData = savedData.slice(0, pageStatus.store);
-            displayData.forEach(i => renderCard(list, i, false)); 
-            addMoreButton(list, savedData.length, pageStatus.store, 'store');
+            const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
+            const list = document.getElementById('store-list'); 
+            const batchRow = document.getElementById('store-batch-row');
+            const savedData = JSON.parse(localStorage.getItem(sk)||'[]');
+            list.innerHTML = ''; 
+            
+            if(savedData.length === 0) {
+                if(batchRow) batchRow.style.display = 'none';
+                list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
+            } else {
+                if(batchRow) batchRow.style.display = 'flex';
+                const displayData = savedData.slice(0, pageStatus.store);
+                
+                displayData.forEach(item => {
+                    // 저장된 회차 정보를 판독기에 전달 (없으면 최신회차+1로 가정)
+                    const tRound = item.targetRound || (DB[currentMode][0].r + 1);
+                    const prize = checkLivePrize(currentMode, item.n.map(Number), tRound, item.group);
+
+                    const uid = `store-${Math.random().toString(36).substr(2, 9)}`;
+                    const balls = item.n.map((n, i) => `<div class="ball ${currentMode==='lotto'?getLottoCol(n):'b'+(i+1)}">${n}</div>`).join('');
+                    
+                    const card = document.createElement('div');
+                    card.id = uid;
+                    card.className = 'res-card collapsed';
+                    card.onclick = (e) => { if(!e.target.closest('button')) card.classList.toggle('collapsed'); };
+
+                    // 로또 11대 지표 및 연금 지표 HTML
+                    let mHTML = currentMode === 'lotto' ? `
+                        <div class="mt-box"><span class="mt-label">홀짝</span><span class="mt-val">${item.m1}</span></div>
+                        <div class="mt-box"><span class="mt-label">저고</span><span class="mt-val">${item.m2}</span></div>
+                        <div class="mt-box"><span class="mt-label">AC값</span><span class="mt-val highlight">${item.m3}</span></div>
+                        <div class="mt-box"><span class="mt-label">끝수합</span><span class="mt-val">${item.m4}</span></div>
+                        <div class="mt-box"><span class="mt-label">총합</span><span class="mt-val highlight">${item.m5}</span></div>
+                        <div class="mt-box"><span class="mt-label">범위</span><span class="mt-val">${item.m6}</span></div>
+                        <div class="mt-box"><span class="mt-label">평균</span><span class="mt-val">${item.m7}</span></div>
+                        <div class="mt-box"><span class="mt-label">연속</span><span class="mt-val highlight">${item.m8}</span></div>
+                        <div class="mt-box"><span class="mt-label">끝중복</span><span class="mt-val">${item.m9}</span></div>
+                        <div class="mt-box" style="grid-column: span 2;"><span class="mt-label">구간분포</span><span class="mt-val">${item.m10}</span></div>
+                        <div class="mt-box"><span class="mt-label">소수</span><span class="mt-val highlight">${item.m11}</span></div>
+                    ` : `
+                        <div class="mt-box"><span class="mt-label">자리 매칭</span><span class="mt-val highlight">${item.p1}</span></div>
+                        <div class="mt-box"><span class="mt-label">디지트 합</span><span class="mt-val highlight">${item.p2}</span></div>
+                        <div class="mt-box"><span class="mt-label">저고 비율</span><span class="mt-val">${item.p3}</span></div>
+                        <div class="mt-box"><span class="mt-label">홀짝 비율</span><span class="mt-val">${item.p4}</span></div>
+                        <div class="mt-box"><span class="mt-label">연속 패턴</span><span class="mt-val highlight">${item.p5}</span></div>
+                        <div class="mt-box"><span class="mt-label">끝3자 합</span><span class="mt-val">${item.p6}</span></div>
+                        <div class="mt-box"><span class="mt-label">평균값</span><span class="mt-val">${item.p7}</span></div>
+                        <div class="mt-box"><span class="mt-label">소수포함</span><span class="mt-val highlight">${item.p8}</span></div>
+                    `;
+
+                    card.innerHTML = `
+                        <div class="badge">
+                            <span class="badge-unit ${prize.class}">${prize.label}</span>
+                            <span class="badge-unit badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade} ${item.score}%</span>
+                        </div>
+                        <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px;">제 ${tRound}회 분석 조합</div>
+                        <div class="ball-group">${item.group ? `<div class="group-tag" style="background:var(--gold); padding:4px 8px; border-radius:8px; font-weight:900; color:#000; margin-right:10px;">${item.group}</div>`:''}${balls}</div>
+                        <div class="metrics-grid">${mHTML}</div>
+                        <div class="card-btn-group">
+                            <button class="btn-card-action" onclick="copyToClipboard([${item.n}], '${item.group||''}')">📋 복사</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                }); 
+                addMoreButton(list, savedData.length, pageStatus.store, 'store');
+            }
+            updateBatchCopyBtn('store'); 
         }
-        updateBatchCopyBtn('store'); 
-    }
     
     function resetStore() { if(confirm("비우시겠습니까?")) { localStorage.removeItem(currentMode==='lotto'?'v13_db':'v13_pension_db'); renderS(); log('🗑️ 저장소를 비웠습니다.'); } }
     window.onscroll = () => { document.getElementById("btn-top").style.display = document.documentElement.scrollTop > 300 ? "flex" : "none"; };
