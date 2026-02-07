@@ -94,7 +94,7 @@
             --primary: #0284c7; 
         }
 
-        /* [수정 1] 우주 배경 애니메이션 이식 */
+        /* 우주 배경 애니메이션 */
         body { 
             font-family: 'Pretendard', sans-serif; 
             background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); 
@@ -161,7 +161,6 @@
         .stat-value { font-size: 0.8rem; font-weight: 900; color: var(--win); font-family: 'Orbitron'; line-height: 1.2; }
         [data-theme='light'] .stat-value { color: #0284c7; }
 
-        /* [수정 2] 터미널 글래스모피즘 효과 이식 */
         .terminal { 
             background: rgba(0, 0, 0, 0.6); 
             backdrop-filter: blur(10px);
@@ -515,7 +514,31 @@
             color: var(--dim);
             font-size: 0.7rem;
             border: 1px dashed rgba(255, 255, 255, 0.1);
-            display: none; /* 현재는 숨김 처리, 광고 승인 후 이 줄만 삭제 */
+            display: none;
+        }
+
+        /* [추가] 더보기 버튼 스타일 */
+        .more-btn-container {
+            padding: 20px 0;
+            text-align: center;
+        }
+        .btn-load-more {
+            width: 90%;
+            padding: 16px;
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Orbitron', 'Pretendard';
+            letter-spacing: 1px;
+        }
+        .btn-load-more:hover {
+            background: var(--primary);
+            color: #000;
         }
     </style>
 </head>
@@ -716,7 +739,6 @@
 </div>
 
 <script>
-    /* 기존 스크립트 100% 유지 */
     const API_URLS = {
         lotto: "https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec",
         pension: "https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"
@@ -731,6 +753,9 @@
     let fixes = new Set(), excs = new Set();
     let currentStatsRange = 10;
     window.sessionData = []; 
+
+    // [추가] 페이징 관리를 위한 상태 객체
+    let pageStatus = { win: 20, history: 20, store: 20 };
 
     window.onload = async () => { 
         log("🛰️ 퀀텀 데이터베이스 접속 중..."); 
@@ -769,9 +794,11 @@
         } catch (e) { console.error("Cloud Sync Fail"); }
     }
 
+    // [수정] 실시간조합 렌더링 (더보기 기능 포함)
     async function loadGlobalTimeline() {
         const list = document.getElementById('history-list');
-        list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+        if (pageStatus.history === 20) list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
+        
         try {
             const res = await fetch(API_URLS[currentMode]);
             let data = await res.json();
@@ -781,7 +808,9 @@
                 return;
             }
             data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            const limitedData = data.slice(0, 100);
+            
+            // 페이징 데이터 슬라이싱
+            const limitedData = data.slice(0, pageStatus.history);
             limitedData.forEach(item => {
                 const dateObj = new Date(item.timestamp);
                 const dateStr = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\s/g, '');
@@ -805,6 +834,9 @@
                 `;
                 list.appendChild(card);
             });
+
+            // 더보기 버튼 추가
+            addMoreButton(list, data.length, pageStatus.history, 'history');
         } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
     }
 
@@ -880,6 +912,8 @@
 
     function switchMode(mode) {
         currentMode = mode;
+        // [수정] 모드 변경 시 페이징 상태 초기화
+        pageStatus = { win: 20, history: 20, store: 20 };
         document.getElementById('mode-lotto').classList.toggle('active', mode === 'lotto');
         document.getElementById('mode-pension').classList.toggle('active', mode === 'pension');
         document.getElementById('gen-qty').value = mode === 'lotto' ? 5 : 1;
@@ -1109,6 +1143,26 @@
         target.appendChild(card);
     }
 
+    // [추가] 공통 더보기 버튼 생성기
+    function addMoreButton(container, totalLen, currentLen, type) {
+        if (totalLen > currentLen) {
+            const wrap = document.createElement('div');
+            wrap.className = 'more-btn-container';
+            const btn = document.createElement('button');
+            btn.className = 'btn-load-more';
+            btn.innerText = `결과 20개 더보기 (${currentLen}/${totalLen})`;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                pageStatus[type] += 20;
+                if (type === 'win') renderH();
+                else if (type === 'history') loadGlobalTimeline();
+                else if (type === 'store') renderS();
+            };
+            wrap.appendChild(btn);
+            container.appendChild(wrap);
+        }
+    }
+
     function switchTab(tab, el) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active');
         ['gen-panel', 'stats-panel', 'win-panel', 'history-panel', 'store-panel'].forEach(id => {
@@ -1161,10 +1215,14 @@
         document.getElementById('stat-min-n').innerText = unappeared.length > 0 ? `${unappeared[0]}번` : '--';
     }
 
+    // [수정] 당첨결과 렌더링 (더보기 기능 포함)
     function renderH() { 
         const list = document.getElementById('win-list'); 
         list.innerHTML = ''; 
-        DB[currentMode].forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); 
+        const fullData = DB[currentMode];
+        const displayData = fullData.slice(0, pageStatus.win);
+        displayData.forEach(h => renderCard(list, { ...h, ...getMetrics(h.n) }, true)); 
+        addMoreButton(list, fullData.length, pageStatus.win, 'win');
     }
     
     function saveData() { 
@@ -1174,6 +1232,7 @@
         alert("💾 저장소 보관 완료"); updateBatchCopyBtn('store');
     }
     
+    // [수정] 저장소 렌더링 (더보기 기능 포함)
     function renderS() { 
         const sk = currentMode==='lotto'?'v13_db':'v13_pension_db'; 
         const list = document.getElementById('store-list'); 
@@ -1185,7 +1244,9 @@
             list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
         } else {
             if(batchRow) batchRow.style.display = 'flex';
-            savedData.forEach(i => renderCard(list, i, false)); 
+            const displayData = savedData.slice(0, pageStatus.store);
+            displayData.forEach(i => renderCard(list, i, false)); 
+            addMoreButton(list, savedData.length, pageStatus.store, 'store');
         }
         updateBatchCopyBtn('store'); 
     }
