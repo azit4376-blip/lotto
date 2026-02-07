@@ -540,6 +540,31 @@
             background: var(--primary);
             color: #000;
         }
+        /* 뱃지 유닛 공통 및 낙첨/대기 스타일 */
+        .badge-unit { 
+            padding: 4px 10px; 
+            border-radius: 8px; 
+            white-space: nowrap; 
+            font-size: 0.65rem; 
+            font-weight: 900; 
+        }
+
+        /* 낙첨 뱃지: 어두운 배경에 흐린 글씨로 디자인 유지 */
+        .badge-lose { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: #94a3b8; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+
+        /* 추첨 대기 뱃지 */
+        .badge-waiting { 
+            background: #334155; 
+            color: #cbd5e1; 
+        }
+
+        /* 6등, 7등 추가 색상 (연금복권용) */
+        .badge-win-6 { background: #34d399; color: #000; }
+        .badge-win-7 { background: #a7f3d0; color: #000; }
     </style>
 </head>
 <body>
@@ -744,6 +769,37 @@
         pension: "https://script.google.com/macros/s/AKfycbzzQNFIXSo7WkRpVAPkR1M-8PbpZYokVBFPlChXfK3IgCxyI2dpxj8R6cI_k5b6gXLS/exec"
     };
 
+    // [추가] 당첨 판독 엔진
+    function checkLivePrize(mode, myNums, targetRound, myGroup) {
+        const winData = DB[mode].find(d => d.r === parseInt(targetRound));
+        if(!winData) return { label: `${targetRound}회 대기`, class: 'badge-waiting' };
+
+        if(mode === 'lotto') {
+            const match = myNums.filter(n => winData.n.includes(n)).length;
+            const bonus = myNums.includes(winData.b);
+            if(match === 6) return { label: '1등 당첨!', class: 'badge-win-1' };
+            if(match === 5 && bonus) return { label: '2등 당첨!', class: 'badge-win-2' };
+            if(match === 5) return { label: '3등 당첨', class: 'badge-win-3' };
+            if(match === 4) return { label: '4등 당첨', class: 'badge-win-4' };
+            if(match === 3) return { label: '5등 당첨', class: 'badge-win-5' };
+            return { label: '낙첨', class: 'badge-lose' };
+        } else {
+            const winStr = winData.n.join('');
+            const myStr = myNums.map(n => n.toString()).join('');
+            const myG = myGroup ? myGroup.toString().replace(/[^0-9]/g,'') : '';
+            if(myG === winData.group && winStr === myStr) return { label: '1등 당첨!', class: 'badge-win-1' };
+            let mLen = 0;
+            for(let i=5; i>=0; i--) { if(winStr[i] === myStr[i]) mLen++; else break; }
+            if(mLen === 6) return { label: '2등 당첨', class: 'badge-win-2' };
+            if(mLen === 5) return { label: '3등 당첨', class: 'badge-win-3' };
+            if(mLen === 4) return { label: '4등 당첨', class: 'badge-win-4' };
+            if(mLen === 3) return { label: '5등 당첨', class: 'badge-win-5' };
+            if(mLen === 2) return { label: '6등 당첨', class: 'badge-win-6' };
+            if(mLen === 1) return { label: '7등 당첨', class: 'badge-win-7' };
+            return { label: '낙첨', class: 'badge-lose' };
+        }
+    }
+
     const LOTTO_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
     const PENSION_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRd4x0RXfEIeLkukYyrO3sU7qL4MX36JeSdfPXJjCO-Kt8bSgC6P341NC81DBTd3Yi8BS82VBvCBhte/pub?gid=0&single=true&output=csv";
     
@@ -794,51 +850,57 @@
         } catch (e) { console.error("Cloud Sync Fail"); }
     }
 
-    // [수정] 실시간조합 렌더링 (더보기 기능 포함)
     async function loadGlobalTimeline() {
-        const list = document.getElementById('history-list');
-        if (pageStatus.history === 20) list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
-        
-        try {
-            const res = await fetch(API_URLS[currentMode]);
-            let data = await res.json();
-            list.innerHTML = '';
-            if (!data || data.length === 0) {
-                list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
-                return;
-            }
-            data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            const list = document.getElementById('history-list');
+            if (pageStatus.history === 20) list.innerHTML = `<div class="ai-comment">📡 실시간 분석 타임라인 동기화 중...</div>`;
             
-            // 페이징 데이터 슬라이싱
-            const limitedData = data.slice(0, pageStatus.history);
-            limitedData.forEach(item => {
-                const dateObj = new Date(item.timestamp);
-                const dateStr = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\s/g, '');
-                const timeStr = dateObj.toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
-                const card = document.createElement('div');
-                card.className = 'history-card'; 
-                card.style.cursor = 'default';
-                const ballsHTML = nums.map((num, idx) => {
-                    const val = parseInt(num);
-                    let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
-                    return `<div class="ball ${colClass}">${num}</div>`;
-                }).join('');
-                card.innerHTML = `
-                    <span class="badge badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
-                    <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
-                        제 ${item.round}회 분석<br>
-                        <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
-                    </div>
-                    <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
-                `;
-                list.appendChild(card);
-            });
+            try {
+                const res = await fetch(API_URLS[currentMode]);
+                let data = await res.json();
+                list.innerHTML = '';
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="ai-comment">최근 생성 기록이 없습니다.</div>';
+                    return;
+                }
+                data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                const limitedData = data.slice(0, pageStatus.history);
+                limitedData.forEach(item => {
+                    const dateObj = new Date(item.timestamp);
+                    const dateStr = dateObj.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\s/g, '');
+                    const timeStr = dateObj.toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    const nums = item.numbers.split(',').map(n => n.trim().padStart(currentMode==='lotto'?2:1, '0'));
+                    
+                    // [수정] 당첨 판독 로직 연결
+                    const prize = checkLivePrize(currentMode, nums.map(Number), item.round, item.group);
 
-            // 더보기 버튼 추가
-            addMoreButton(list, data.length, pageStatus.history, 'history');
-        } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
-    }
+                    const card = document.createElement('div');
+                    card.className = 'history-card'; 
+                    card.style.cursor = 'default';
+                    const ballsHTML = nums.map((num, idx) => {
+                        const val = parseInt(num);
+                        let colClass = (currentMode === 'lotto') ? getLottoCol(val) : `b${(idx % 6) + 1}`;
+                        return `<div class="ball ${colClass}">${num}</div>`;
+                    }).join('');
+
+                    // [수정] 뱃지 두 개가 나란히 나오도록 HTML 구조 변경
+                    card.innerHTML = `
+                        <div class="badge">
+                            <span class="badge-unit ${prize.class}">${prize.label}</span>
+                            <span class="badge-unit badge-${(item.grade||'NORMAL').toLowerCase()}">${item.grade}</span>
+                        </div>
+                        <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
+                            제 ${item.round}회 분석<br>
+                            <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
+                        </div>
+                        <div class="ball-group" style="margin-bottom:0; justify-content: center;">${ballsHTML}</div>
+                    `;
+                    list.appendChild(card);
+                });
+
+                addMoreButton(list, data.length, pageStatus.history, 'history');
+            } catch (e) { list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>'; }
+        }
 
     function updateDDay() {
         const now = new Date();
