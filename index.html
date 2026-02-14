@@ -259,6 +259,16 @@
         .hm-count { font-size: 0.6rem; color: var(--dim); margin-top: 2px; }
         .heatmap-cell.active { border-color: var(--primary); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
 
+
+        .insight-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; margin-top:15px; }
+        .insight-card { background: rgba(15,23,42,0.55); border:1px solid rgba(56,189,248,0.18); border-radius:18px; padding:14px; }
+        .insight-title { font-size:0.72rem; color:var(--primary); font-weight:900; margin-bottom:8px; letter-spacing:.5px; }
+        .insight-value { font-size:0.95rem; font-weight:900; line-height:1.4; word-break:keep-all; }
+        .insight-desc { margin-top:7px; color:var(--dim); font-size:0.67rem; line-height:1.45; }
+        .insight-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+        .insight-chip { padding:5px 8px; border-radius:10px; background: rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.2); font-size:0.7rem; font-weight:800; }
+        @media (max-width:420px){ .insight-grid{grid-template-columns:1fr;} }
+
         .prize-row { display: flex; justify-content: flex-end; gap: 12px; font-size: 0.7rem; font-weight: 800; margin-bottom: 15px; margin-top: -5px; }
         .p-gold { color: var(--gold); }
         .p-blue { color: var(--primary); }
@@ -664,6 +674,32 @@
             <div class="stat-card" style="flex:1;"><span class="stat-label">🔥 최고 빈도</span><span class="stat-value" id="stat-max-n">--</span></div>
             <div class="stat-card" style="flex:1;"><span class="stat-label">❄️ 최저 빈도</span><span class="stat-value" id="stat-min-n">--</span></div>
         </div>
+
+        <div class="custom-gen-box">
+            <span class="gen-label">ADVANCED INSIGHT LAB</span>
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <div class="insight-title">🚀 모멘텀 번호</div>
+                    <div id="insight-momentum" class="insight-value">--</div>
+                    <div class="insight-desc">최근 10회 대비 50회 추세를 비교해 상승폭이 큰 번호를 탐지합니다.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">🕒 장기 미출현</div>
+                    <div id="insight-overdue" class="insight-value">--</div>
+                    <div class="insight-desc">가장 오래 나오지 않은 번호를 표시해 역추적 분석에 활용합니다.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">📐 구간 밸런스</div>
+                    <div id="insight-balance" class="insight-value">--</div>
+                    <div class="insight-desc">번호대/자리대 분포가 쏠렸는지 균형인지 실시간으로 점검합니다.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">🎯 추천 운용</div>
+                    <div id="insight-strategy" class="insight-value">--</div>
+                    <div id="insight-strategy-chips" class="insight-list"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="win-panel" class="hidden"><div id="win-list"></div></div>
@@ -987,7 +1023,7 @@
         const data = DB[currentMode][0]; if(!data) return;
         document.getElementById('target-round').innerText = (data.r + 1) + "회";
         updateInfoSection();
-        updateRecentWin(data); updateStats(); renderH();
+        updateRecentWin(data); updateStats(); renderH(); renderAdvancedInsights();
     }
 
     function updateInfoSection() {
@@ -1256,7 +1292,7 @@
             const p = document.getElementById(id); if(p) p.classList.add('hidden');
         });
         document.getElementById(tab + '-panel').classList.remove('hidden');
-        if(tab === 'stats') renderHeatmap();
+        if(tab === 'stats') { renderHeatmap(); renderAdvancedInsights(); }
         if(tab === 'win') renderH(); 
         if(tab === 'history') loadGlobalTimeline(); 
         if(tab === 'store') renderS();
@@ -1268,6 +1304,83 @@
         el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         el.classList.add('active');
         renderHeatmap();
+        renderAdvancedInsights();
+    }
+
+    function getNumberDomain() {
+        return currentMode === 'lotto' ? { start: 1, end: 45 } : { start: 0, end: 9 };
+    }
+
+    function collectFrequency(dataSlice) {
+        const counts = {};
+        dataSlice.forEach(round => {
+            round.n.forEach(num => counts[num] = (counts[num] || 0) + 1);
+            if (currentMode === 'lotto' && round.b) counts[round.b] = (counts[round.b] || 0) + 1;
+        });
+        return counts;
+    }
+
+    function renderAdvancedInsights() {
+        const data = DB[currentMode];
+        if (!data || data.length === 0) return;
+
+        const latest10 = data.slice(0, 10);
+        const latest50 = data.slice(0, 50);
+        const c10 = collectFrequency(latest10);
+        const c50 = collectFrequency(latest50);
+        const { start, end } = getNumberDomain();
+        const domain = Array.from({ length: end - start + 1 }, (_, i) => i + start);
+
+        const momentum = domain
+            .map(n => {
+                const r10 = (c10[n] || 0) / Math.max(latest10.length, 1);
+                const r50 = (c50[n] || 0) / Math.max(latest50.length, 1);
+                return { n, gain: r10 - r50 };
+            })
+            .sort((a, b) => b.gain - a.gain)
+            .slice(0, 5)
+            .map(v => `${v.n}(${v.gain > 0 ? '+' : ''}${(v.gain * 100).toFixed(1)}%)`);
+        document.getElementById('insight-momentum').innerText = momentum.join(' · ');
+
+        const overdue = domain.map(n => {
+            const idx = data.findIndex(round => round.n.includes(n) || (currentMode === 'lotto' && round.b === n));
+            return { n, gap: idx < 0 ? 999 : idx };
+        }).sort((a, b) => b.gap - a.gap).slice(0, 5)
+        .map(v => `${v.n}(${v.gap === 999 ? '기록없음' : v.gap + '회'})`);
+        document.getElementById('insight-overdue').innerText = overdue.join(' · ');
+
+        if (currentMode === 'lotto') {
+            const zones = [0, 0, 0, 0, 0];
+            latest10.forEach(round => {
+                round.n.forEach(n => zones[Math.min(4, Math.floor((n - 1) / 10))]++);
+            });
+            const spread = Math.max(...zones) - Math.min(...zones);
+            const balance = spread <= 4 ? '균형 우수' : (spread <= 8 ? '약간 편향' : '강한 편향');
+            document.getElementById('insight-balance').innerText = `1-10:${zones[0]} / 11-20:${zones[1]} / 21-30:${zones[2]} / 31-40:${zones[3]} / 41-45:${zones[4]} (${balance})`;
+        } else {
+            const posInfo = Array.from({ length: 6 }, (_, pos) => {
+                const unique = new Set(latest10.map(r => r.n[pos])).size;
+                return `${pos + 1}열:${unique}`;
+            });
+            document.getElementById('insight-balance').innerText = `자리 다양성 → ${posInfo.join(' / ')}`;
+        }
+
+        const strategyText = currentMode === 'lotto'
+            ? '강세 2개 + 미출현 1개 + 고정수 조합을 권장'
+            : '자리별 강세숫자 3개 + 역추적 숫자 3개로 분할 추천';
+        document.getElementById('insight-strategy').innerText = strategyText;
+
+        const chips = document.getElementById('insight-strategy-chips');
+        chips.innerHTML = '';
+        const labels = currentMode === 'lotto'
+            ? ['모멘텀 2수', '이월수 1수', '장기미출현 1수', '밸런스 2수']
+            : ['강세열 우선', '자리 고정/유동 혼합', '끝수 중복 1쌍 허용', '조 번호 분산'];
+        labels.forEach(txt => {
+            const chip = document.createElement('div');
+            chip.className = 'insight-chip';
+            chip.innerText = txt;
+            chips.appendChild(chip);
+        });
     }
 
     function renderHeatmap() {
