@@ -27,7 +27,7 @@
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v25.1</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v25.2</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -77,6 +77,43 @@
         </div>
 
         <div class="carry-guide" id="guide-text">강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</div>
+
+        <div class="advanced-filter-box" id="advanced-filter-box">
+            <div class="advanced-filter-head">
+                <span class="gen-label" style="margin-bottom:0;">SMART FILTER LAB</span>
+                <div class="advanced-filter-actions">
+                    <button class="mini-action-btn" onclick="applyRecommendedLottoPreset()">추천값</button>
+                    <button class="mini-action-btn danger" onclick="resetAdvancedFilters()">초기화</button>
+                </div>
+            </div>
+            <div class="option-grid">
+                <label class="option-card lotto-only">
+                    <span class="option-title">이월수 최소</span>
+                    <select id="carry-min-select" class="option-select" onchange="updateGeneratorOption('carryMin', this.value)"></select>
+                </label>
+                <label class="option-card lotto-only">
+                    <span class="option-title">이월수 최대</span>
+                    <select id="carry-max-select" class="option-select" onchange="updateGeneratorOption('carryMax', this.value)"></select>
+                </label>
+                <label class="option-card lotto-only">
+                    <span class="option-title">인접수 최소</span>
+                    <select id="adjacent-min-select" class="option-select" onchange="updateGeneratorOption('adjacentMin', this.value)"></select>
+                </label>
+                <label class="option-card lotto-only">
+                    <span class="option-title">인접수 최대</span>
+                    <select id="adjacent-max-select" class="option-select" onchange="updateGeneratorOption('adjacentMax', this.value)"></select>
+                </label>
+                <label class="option-card toggle-card">
+                    <span class="option-title">중복 조합 방지</span>
+                    <input type="checkbox" id="unique-only-toggle" class="option-toggle" onchange="updateGeneratorOption('uniqueOnly', this.checked)">
+                </label>
+                <label class="option-card toggle-card">
+                    <span class="option-title">점수순 정렬</span>
+                    <input type="checkbox" id="smart-sort-toggle" class="option-toggle" onchange="updateGeneratorOption('smartSort', this.checked)">
+                </label>
+            </div>
+            <div class="option-help" id="advanced-help-text">직전 회차 번호를 기준으로 이월수와 인접수 개수를 제한할 수 있습니다.</div>
+        </div>
         
         <div class="custom-gen-box">
             <span class="gen-label">QUANTITY SETTING</span>
@@ -93,6 +130,8 @@
                 <button class="btn-gen btn-clear-gen" onclick="clearList()">🗑️ 화면 Clear</button>
             </div>
         </div>
+
+        <div id="gen-summary" class="result-summary hidden"></div>
 
         <div id="batch-action-row" style="display:flex; gap:8px; margin-bottom:20px;">
             <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1; margin-bottom:0;">📋 전체 조합 복사</button>

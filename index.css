@@ -553,3 +553,145 @@
         .badge-win-6 { background: #34d399; color: #000; }
         .badge-win-7 { background: #a7f3d0; color: #000; }
     
+
+        .advanced-filter-box {
+            background: var(--card);
+            border-radius: 28px;
+            padding: 22px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+        [data-theme='light'] .advanced-filter-box {
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        }
+        .advanced-filter-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .advanced-filter-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .mini-action-btn {
+            background: rgba(56, 189, 248, 0.08);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+        .mini-action-btn.danger {
+            color: var(--accent);
+            border-color: rgba(244, 63, 94, 0.28);
+            background: rgba(244, 63, 94, 0.06);
+        }
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .option-card {
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 18px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        [data-theme='light'] .option-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .option-title {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+        .option-select {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            color: #fff;
+            padding: 10px 12px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            outline: none;
+        }
+        [data-theme='light'] .option-select {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+        .toggle-card {
+            justify-content: space-between;
+        }
+        .option-toggle {
+            width: 18px;
+            height: 18px;
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+        .option-help {
+            margin-top: 14px;
+            color: var(--dim);
+            font-size: 0.72rem;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+        .result-summary {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 22px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        [data-theme='light'] .result-summary {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+        }
+        .summary-title {
+            font-size: 0.76rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .summary-pill-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .summary-pill {
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255,255,255,0.06);
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+        [data-theme='light'] .summary-pill {
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+        }
+        .summary-pill strong {
+            color: var(--primary);
+        }
+        @media (max-width: 420px) {
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+            .advanced-filter-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
