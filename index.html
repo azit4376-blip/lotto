@@ -20,14 +20,14 @@
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="index.css?v=25.3.1">
 
 </head>
 <body>
 
 <div class="dashboard">
     <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v25.2</h1>
+        <h1>🌌 QUANTUM MULTI-INSIGHT v25.3</h1>
         <div class="sub-tag">Statistical Golden-Zone Navigator</div>
         
         <div class="visitor-counter">
@@ -80,37 +80,46 @@
 
         <div class="advanced-filter-box" id="advanced-filter-box">
             <div class="advanced-filter-head">
-                <span class="gen-label" style="margin-bottom:0;">SMART FILTER LAB</span>
+                <div>
+                    <span class="gen-label smart-filter-label" style="margin-bottom:0;">SMART FILTER LAB</span>
+                    <div class="smart-filter-sub">생성 품질을 다듬는 보조 필터입니다.</div>
+                </div>
                 <div class="advanced-filter-actions">
-                    <button class="mini-action-btn" onclick="applyRecommendedLottoPreset()">추천값</button>
-                    <button class="mini-action-btn danger" onclick="resetAdvancedFilters()">초기화</button>
+                    <button type="button" class="mini-action-btn" onclick="applyRecommendedLottoPreset()">추천값</button>
+                    <button type="button" class="mini-action-btn danger" onclick="resetAdvancedFilters()">초기화</button>
                 </div>
             </div>
             <div class="option-grid">
-                <label class="option-card lotto-only">
-                    <span class="option-title">이월수 최소</span>
+                <div class="option-card lotto-only">
+                    <div class="option-title">이월수 최소</div>
                     <select id="carry-min-select" class="option-select" onchange="updateGeneratorOption('carryMin', this.value)"></select>
-                </label>
-                <label class="option-card lotto-only">
-                    <span class="option-title">이월수 최대</span>
+                </div>
+                <div class="option-card lotto-only">
+                    <div class="option-title">이월수 최대</div>
                     <select id="carry-max-select" class="option-select" onchange="updateGeneratorOption('carryMax', this.value)"></select>
-                </label>
-                <label class="option-card lotto-only">
-                    <span class="option-title">인접수 최소</span>
+                </div>
+                <div class="option-card lotto-only">
+                    <div class="option-title">인접수 최소</div>
                     <select id="adjacent-min-select" class="option-select" onchange="updateGeneratorOption('adjacentMin', this.value)"></select>
-                </label>
-                <label class="option-card lotto-only">
-                    <span class="option-title">인접수 최대</span>
+                </div>
+                <div class="option-card lotto-only">
+                    <div class="option-title">인접수 최대</div>
                     <select id="adjacent-max-select" class="option-select" onchange="updateGeneratorOption('adjacentMax', this.value)"></select>
-                </label>
-                <label class="option-card toggle-card">
-                    <span class="option-title">중복 조합 방지</span>
+                </div>
+                <div class="option-card toggle-card">
+                    <div class="option-copy">
+                        <div class="option-title">중복 조합 방지</div>
+                        <div class="option-desc">같은 조합은 한 번만 생성</div>
+                    </div>
                     <input type="checkbox" id="unique-only-toggle" class="option-toggle" onchange="updateGeneratorOption('uniqueOnly', this.checked)">
-                </label>
-                <label class="option-card toggle-card">
-                    <span class="option-title">점수순 정렬</span>
+                </div>
+                <div class="option-card toggle-card">
+                    <div class="option-copy">
+                        <div class="option-title">점수순 정렬</div>
+                        <div class="option-desc">높은 점수 조합을 위로 정렬</div>
+                    </div>
                     <input type="checkbox" id="smart-sort-toggle" class="option-toggle" onchange="updateGeneratorOption('smartSort', this.checked)">
-                </label>
+                </div>
             </div>
             <div class="option-help" id="advanced-help-text">직전 회차 번호를 기준으로 이월수와 인접수 개수를 제한할 수 있습니다.</div>
         </div>
@@ -284,6 +293,6 @@
     </div>
 </div>
 
-<script src="index.js"></script>
+<script src="index.js?v=25.3.1"></script>
 </body>
 </html>
