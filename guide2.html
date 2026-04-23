@@ -5,160 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연금복권 720+ 전략 가이드 | QUANTUM MULTI-INSIGHT</title>
     <style>
-        body { 
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; 
-            line-height: 1.8; 
-            color: #334155; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            background: linear-gradient(to bottom, #f8fafc 0%, #fef3c7 100%);
-        }
-        h1 { 
-            color: #0f172a; 
-            border-bottom: 3px solid #f59e0b; 
-            padding-bottom: 15px; 
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #64748b;
-            font-size: 1rem;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-        h2 { 
-            color: #1e293b; 
-            margin-top: 40px; 
-            padding-left: 10px;
-            border-left: 4px solid #f59e0b;
-            font-size: 1.5rem;
-        }
-        h3 {
-            color: #475569;
-            margin-top: 25px;
-            font-size: 1.2rem;
-        }
-        p, li { 
-            font-size: 1rem; 
-            margin-bottom: 12px;
-        }
-        .highlight { 
-            color: #d97706; 
-            font-weight: bold; 
-            background: #fef3c7;
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-        .warning {
-            color: #dc2626;
-            font-weight: bold;
-        }
-        .info-box { 
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 20px; 
-            border-left: 5px solid #f59e0b; 
-            margin: 25px 0; 
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .tip-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            padding: 20px;
-            border-left: 5px solid #3b82f6;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .strategy-box {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            padding: 20px;
-            border-left: 5px solid #22c55e;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .prize-box {
-            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-            padding: 20px;
-            border-left: 5px solid #ec4899;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        th {
-            background: #f59e0b;
-            color: white;
-            font-weight: bold;
-        }
-        tr:hover {
-            background: #fffbeb;
-        }
-        .stat-card {
-            background: white;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .home-btn { 
-            display: inline-block; 
-            margin-top: 50px; 
-            padding: 12px 30px; 
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #fff; 
-            text-decoration: none; 
-            border-radius: 10px; 
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-            transition: all 0.3s ease;
-        }
-        .home-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245,158,11,0.4);
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        .number-example {
-            font-family: 'Courier New', monospace;
-            background: #1e293b;
-            color: #fbbf24;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 3px;
-        }
-        .group-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin: 0 5px;
-            background: #fed7aa;
-            color: #9a3412;
-        }
-    </style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+KR:wght@500;600;700&display=swap');
+:root{--bg:#f6f0e7;--surface:#fffdf9;--surface-2:#f4ede4;--ink:#1f1914;--ink-soft:#5d5144;--line:#ddd1c3;--primary:#1f2329;--accent:#9f7a52;--accent-2:#b79368;--win:#1e6c56;--warn:#9d4f4f;--shadow:0 16px 40px rgba(31,25,20,.08)}
+*{box-sizing:border-box}
+body{font-family:'Inter','Pretendard',sans-serif;line-height:1.9;color:var(--ink);max-width:980px;margin:0 auto;padding:48px 20px 72px;background:radial-gradient(circle at top left, rgba(183,147,104,.14), transparent 28%),linear-gradient(180deg,#faf6f1 0%,#f3ece3 100%)}
+h1{font-family:'Noto Serif KR',serif;color:var(--primary);font-size:clamp(2rem,3vw,2.8rem);padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:10px;letter-spacing:-.03em}
+.subtitle{color:var(--accent);font-size:1rem;margin-bottom:30px}
+h2{color:var(--primary);margin-top:42px;padding-left:14px;border-left:4px solid var(--accent);font-family:'Noto Serif KR',serif;font-size:1.5rem}
+h3{color:var(--primary);margin-top:26px;font-size:1.15rem}
+p,li{font-size:1rem;margin-bottom:12px;color:var(--ink-soft)}
+strong{color:var(--ink)}
+a{color:var(--primary);font-weight:700}
+.highlight{color:var(--accent);background:#f4ece1;padding:2px 7px;border-radius:8px;font-weight:700}
+.warning{color:var(--warn);font-weight:700}
+.info-box,.tip-box,.strategy-box,.prize-box,.stat-card,.warning-box{background:rgba(255,253,249,.9);border:1px solid rgba(221,209,195,.9);border-radius:28px;padding:24px;box-shadow:var(--shadow);margin:24px 0}
+.info-box{background:linear-gradient(180deg,rgba(255,253,249,.96),rgba(244,237,228,.95))}
+.tip-box{background:linear-gradient(180deg,rgba(255,253,249,.96),rgba(245,239,230,.95))}
+.strategy-box{background:linear-gradient(180deg,rgba(255,253,249,.96),rgba(240,245,241,.95))}
+.prize-box{background:linear-gradient(180deg,rgba(255,253,249,.96),rgba(247,239,230,.95))}
+.warning-box{border-left:5px solid var(--warn)}
+table{width:100%;border-collapse:collapse;margin:20px 0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+th,td{padding:13px 15px;text-align:left;border-bottom:1px solid #ece2d5;font-size:.96rem}
+th{background:var(--primary);color:#fff8f0;font-weight:700}
+tr:hover{background:#fcf8f2}
+ul,ol{margin-left:20px}
+.home-btn{display:inline-block;margin-top:42px;padding:14px 30px;background:var(--primary);color:#fff8f0;text-decoration:none;border-radius:999px;font-weight:700;box-shadow:var(--shadow)}
+.home-btn:hover{transform:translateY(-1px)}
+.number-example{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--primary);color:#f4ede4;padding:14px 18px;border-radius:16px;display:inline-block;font-size:1.05rem;font-weight:800;letter-spacing:2px}
+.grade-legend,.grade-strong,.grade-normal,.group-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.9rem;font-weight:700}
+.grade-legend{background:#ece3f6;color:#6f4fa6}.grade-strong{background:#f2e1d6;color:#9a5f3f}.grade-normal{background:#ebe4db;color:#67594b}.group-badge{background:#f3ece2;color:var(--accent)}
+footer{margin-top:70px;padding-top:26px;border-top:1px solid var(--line);text-align:center;color:#8a7a6b;font-size:.86rem}
+@media (max-width:640px){body{padding:32px 14px 56px} .info-box,.tip-box,.strategy-box,.prize-box,.stat-card,.warning-box{padding:18px;border-radius:22px} th,td{padding:10px 12px;font-size:.9rem}}
+
+</style>
 </head>
 <body>
 
