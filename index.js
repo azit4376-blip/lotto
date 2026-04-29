@@ -1234,6 +1234,9 @@ async function loadGlobalTimeline() {
         }
 
         data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        _historyTimelineData = data;
+        const batchRow = document.getElementById('history-batch-row');
+        if (batchRow) { batchRow.style.display = data.length ? 'flex' : 'none'; }
         const visible = data.slice(0, pageStatus.history);
         visible.forEach(item => {
             const dateObj = new Date(item.timestamp);
@@ -1243,6 +1246,8 @@ async function loadGlobalTimeline() {
             const prize = checkLivePrize(currentMode, nums.map(Number), item.round, item.group);
 
             const card = document.createElement('div');
+            const uid = `hcard-${Math.random().toString(36).slice(2, 11)}`;
+            card.id = uid;
             card.className = 'history-card';
             card.style.cursor = 'default';
             const ballsHtml = nums.map((num, idx) => {
@@ -1250,6 +1255,9 @@ async function loadGlobalTimeline() {
                 const ballClass = currentMode === 'lotto' ? getLottoCol(value) : `b${(idx % 6) + 1}`;
                 return `<div class="ball ${ballClass}">${num}</div>`;
             }).join('');
+
+            const numsArr = nums.map(Number);
+            const groupLabel = item.group || '';
 
             card.innerHTML = `
                 <div class="badge">
@@ -1260,7 +1268,12 @@ async function loadGlobalTimeline() {
                     제 ${item.round}회 분석<br>
                     <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
                 </div>
-                <div class="ball-group" style="margin-bottom:0; justify-content:center;">${ballsHtml}</div>
+                <div class="ball-group" style="margin-bottom:12px; justify-content:center;">${ballsHtml}</div>
+                <div class="card-btn-group">
+                    <button class="btn-card-action" onclick="copyToClipboard([${numsArr}], '${groupLabel}')">📋 복사</button>
+                    <button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button>
+                    <button class="btn-card-action" onclick="saveHistoryItemToStore(${JSON.stringify(numsArr)}, '${groupLabel}', ${item.round})">💾 저장소</button>
+                </div>
             `;
             list.appendChild(card);
         });
@@ -1270,6 +1283,50 @@ async function loadGlobalTimeline() {
         console.error(e);
         list.innerHTML = '<div class="ai-comment">⚠️ 데이터를 로드할 수 없습니다.</div>';
     }
+}
+
+function saveHistoryItemToStore(numsArr, group, round) {
+    const key = getStorageKey();
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+    const metrics = getMetrics(numsArr, currentMode);
+    const newItem = { n: numsArr, group: group || '', targetRound: round, ...metrics };
+    const mapKey = `${round}:${group || ''}:${numsArr.join('-')}`;
+    const map = new Map(saved.map(item => [`${item.targetRound || ''}:${item.group || ''}:${item.n.join('-')}`, item]));
+    if (map.has(mapKey)) {
+        alert('이미 저장소에 있는 조합입니다.');
+        return;
+    }
+    map.set(mapKey, newItem);
+    localStorage.setItem(key, JSON.stringify([...map.values()]));
+    alert('💾 저장소에 보관 완료!');
+    updateBatchCopyBtn('store');
+}
+
+let _historyTimelineData = [];
+
+function copyBatchHistory() {
+    if (!_historyTimelineData.length) return;
+    const text = _historyTimelineData.map(item => {
+        const nums = parseTimelineNumbers(item.numbers);
+        const group = item.group || '';
+        return `${group ? group + ' ' : ''}${formatNums(nums)}`;
+    }).join('\n');
+    navigator.clipboard.writeText(text);
+    alert('📋 복사 완료');
+}
+
+async function captureSlipHistory() {
+    if (!_historyTimelineData.length) return;
+    const fakeData = _historyTimelineData.map(item => {
+        const nums = parseTimelineNumbers(item.numbers);
+        const metrics = getMetrics(nums, currentMode);
+        return { n: nums, group: item.group || '', targetRound: item.round, ...metrics };
+    });
+    // Temporarily replace sessionData to reuse captureSlip logic
+    const backup = window.sessionData;
+    window.sessionData = fakeData;
+    await captureSlip('gen');
+    window.sessionData = backup;
 }
 
 function renderS() {

@@ -197,7 +197,13 @@
     </div>
 
     <div id="win-panel" class="hidden"><div id="win-list"></div></div>
-    <div id="history-panel" class="hidden"><div id="history-list"></div></div>
+    <div id="history-panel" class="hidden">
+        <div id="history-batch-row" style="display:none; gap:8px; margin-bottom:12px;">
+            <button id="batch-copy-history" class="btn-copy-all" onclick="copyBatchHistory()" style="flex:1; margin-bottom:0;">📋 전체 복사</button>
+            <button id="batch-slip-history" class="btn-copy-all" onclick="captureSlipHistory()" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold); margin-bottom:0;">📸 슬립 저장</button>
+        </div>
+        <div id="history-list"></div>
+    </div>
     
     <div id="store-panel" class="hidden">
         <div id="store-batch-row">
