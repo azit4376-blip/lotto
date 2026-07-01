@@ -865,7 +865,7 @@ function updateRecentWin(latest) {
 
     if (currentMode === 'lotto') {
         row.innerHTML = latest.n.map(num => `<div class="ball-s ${getLottoCol(num)}">${num}</div>`).join('')
-            + `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span>`
+            + `<span class="plus-separator">+</span>`
             + `<div class="ball-s ${getLottoCol(latest.b)}">${latest.b}</div>`;
     } else {
         row.innerHTML = `<div class="group-tag">${latest.group}</div>`
@@ -956,9 +956,9 @@ function renderCard(target, data, isHistoryCard) {
             <span class="badge-unit badge-${grade.toLowerCase()}">${grade} ${score}%</span>
         </div>
         ${isHistoryCard ? `
-            <div style="text-align:left; margin-bottom:10px;">
-                <div style="color:var(--gold); font-weight:900; font-size:1rem;">제 ${data.r}회 결과</div>
-                <div style="color:var(--dim); font-size:0.7rem; margin-top:4px;">추첨일: ${data.date}</div>
+            <div class="card-meta-block">
+                <div class="card-meta-title">제 ${data.r}회 결과</div>
+                <div class="card-meta-sub">추첨일: ${data.date}</div>
             </div>
             <div class="prize-row">
                 <span class="p-gold">1등: ${currentMode === 'lotto' ? (data.r1m || '--') : '월 700만원'}</span>
@@ -971,7 +971,7 @@ function renderCard(target, data, isHistoryCard) {
         <div class="ball-group">
             ${data.group ? `<div class="group-tag">${data.group}</div>` : ''}
             ${balls}
-            ${isHistoryCard && currentMode === 'lotto' && data.b ? `<span style="align-self:center; font-weight:900; margin:0 5px;">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>` : ''}
+            ${isHistoryCard && currentMode === 'lotto' && data.b ? `<span class="plus-separator">+</span><div class="ball ${getLottoCol(data.b)}">${data.b}</div>` : ''}
         </div>
         <div class="metrics-grid">${metricsHtml}</div>
         ${!isHistoryCard ? `
@@ -1146,10 +1146,10 @@ function renderHeatmap() {
         cell.className = 'heatmap-cell';
         if (count > 0) {
             cell.classList.add('active');
-            cell.style.backgroundColor = `rgba(56, 189, 248, ${0.1 + ratio * 0.6})`;
-            cell.style.borderColor = `rgba(56, 189, 248, ${0.3 + ratio * 0.7})`;
+            cell.style.backgroundColor = `rgba(15, 118, 110, ${0.08 + ratio * 0.24})`;
+            cell.style.borderColor = `rgba(15, 118, 110, ${0.25 + ratio * 0.45})`;
         }
-        cell.innerHTML = `<span class="hm-num" style="color:${ratio > 0.7 ? '#fff' : 'var(--text)'}">${i}</span><span class="hm-count">${count}회</span>`;
+        cell.innerHTML = `<span class="hm-num">${i}</span><span class="hm-count">${count}회</span>`;
         grid.appendChild(cell);
     }
 
@@ -1271,11 +1271,11 @@ async function loadGlobalTimeline() {
                     <span class="badge-unit ${prize.class}">${prize.label}</span>
                     <span class="badge-unit badge-${(item.grade || 'NORMAL').toLowerCase()}">${item.grade || 'NORMAL'}</span>
                 </div>
-                <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px; line-height:1.4;">
-                    제 ${item.round}회 분석<br>
-                    <span style="color:var(--dim); font-size:0.65rem;">${dateStr} ${timeStr}</span>
+                <div class="card-meta-block">
+                    <div class="card-meta-title">제 ${item.round}회 분석</div>
+                    <div class="card-meta-sub">${dateStr} ${timeStr}</div>
                 </div>
-                <div class="ball-group" style="margin-bottom:12px; justify-content:center;">${ballsHtml}</div>
+                <div class="ball-group">${ballsHtml}</div>
                 <div class="card-btn-group">
                     <button class="btn-card-action" onclick="copyToClipboard([${numsArr}], '${groupLabel}')">📋 복사</button>
                     <button class="btn-card-action" onclick="captureCard('${uid}')">📸 이미지 저장</button>
@@ -1403,7 +1403,10 @@ function renderS() {
                 <span class="badge-unit ${prize.class}">${prize.label}</span>
                 <span class="badge-unit badge-${(item.grade || 'NORMAL').toLowerCase()}">${item.grade || 'NORMAL'} ${item.score || '--'}%</span>
             </div>
-            <div style="font-size:0.75rem; font-weight:800; color:var(--gold); margin-bottom:12px;">제 ${targetRound}회 분석 조합</div>
+            <div class="card-meta-block">
+                <div class="card-meta-title">제 ${targetRound}회 분석 조합</div>
+                <div class="card-meta-sub">저장된 참고 조합</div>
+            </div>
             <div class="ball-group">${item.group ? `<div class="group-tag">${item.group}</div>` : ''}${balls}</div>
             <div class="metrics-grid">${metrics}</div>
             <div class="card-btn-group">
