@@ -90,6 +90,11 @@ function saveTheme(theme) {
     } catch (_) {}
 }
 
+function scrollToGenerator() {
+    const target = document.getElementById('gen-panel');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function populateQuantitySelect() {
     const qtySelect = document.getElementById('gen-qty');
     if (!qtySelect) return;
@@ -851,10 +856,12 @@ function updateRecentWin(latest) {
     const roundLabel = document.getElementById('recent-round-label');
     const dateLabel = document.getElementById('recent-date-label');
     const row = document.getElementById('recent-balls-row');
+    const heroRound = document.getElementById('hero-round');
     if (!roundLabel || !dateLabel || !row) return;
 
     roundLabel.innerText = `제 ${latest.r}회 당첨 결과`;
     dateLabel.innerText = latest.date;
+    if (heroRound) heroRound.innerText = `제 ${Number(latest.r) + 1}회 참고`;
 
     if (currentMode === 'lotto') {
         row.innerHTML = latest.n.map(num => `<div class="ball-s ${getLottoCol(num)}">${num}</div>`).join('')

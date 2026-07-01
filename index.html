@@ -3,40 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM MULTI-INSIGHT</title>
+    <title>QUANTUM LOTTO Lab | 로또 6/45·연금 720+ 통계 분석</title>
     
     <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg" />
-    <meta name="description" content="QUANTUM MULTI-INSIGHT - AI 신경망 알고리즘 기반 로또 6/45 및 연금복권 720+ 정밀 분석 시스템. 11대 지표를 통해 최적의 골든존 조합을 도출합니다.">
-    <meta name="keywords" content="로또분석, 로또번호생성기, 연금복권720, 연금복권분석, AI로또, 퀀텀로또, 로또통계, 복권예상번호">
+    <meta name="description" content="QUANTUM LOTTO Lab - 역대 당첨번호, 최근 흐름, 구간 밸런스, 시뮬레이션을 함께 보는 무료 로또 6/45·연금복권 720+ 참고 조합 분석 도구입니다.">
+    <meta name="keywords" content="로또분석, 로또번호생성기, 로또통계, 연금복권720, 복권예상번호, 무료로또번호">
     <meta name="author" content="QUANTUM LOTTO">
     <link rel="canonical" href="https://azit4376-blip.github.io/lotto/">
     
     <meta property="og:type" content="website">
-    <meta property="og:title" content="QUANTUM MULTI-INSIGHT">
-    <meta property="og:description" content="데이터 기반의 정밀 로또/연금복권 분석 솔루션. 최적의 확률 밸런스를 확인하세요.">
+    <meta property="og:title" content="QUANTUM LOTTO Lab">
+    <meta property="og:description" content="감이 아닌 데이터로 보는 로또 6/45·연금복권 720+ 참고 조합 분석 도구.">
     <meta property="og:url" content="https://azit4376-blip.github.io/lotto/">
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
 
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-        <link rel="stylesheet" href="index.css?v=25.3.1">
+        <link rel="stylesheet" href="index.css?v=26.7.1">
 
 </head>
 <body>
 
 <div class="dashboard">
-    <div class="main-header">
-        <h1>🌌 QUANTUM MULTI-INSIGHT v25.3</h1>
-        <div class="sub-tag">Statistical Golden-Zone Navigator</div>
-        
-        <div class="visitor-counter">
-            <div class="v-stat">SYSTEM VISITOR ANALYTICS</div>
-            <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;">
-                <img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Fazit4376-blip.github.io%2Flotto%2F?color=gray&label=HITS&size=small" alt="hits" class="hits-img" />
+    <header class="brand-hero">
+        <nav class="brand-nav" aria-label="주요 메뉴">
+            <a class="brand-mark" href="https://azit4376-blip.github.io/lotto/" aria-label="QUANTUM LOTTO Lab 홈">
+                <span class="brand-dot">Q</span>
+                <span>QUANTUM LOTTO</span>
             </a>
-        </div>
-    </div>
+            <div class="brand-nav-actions">
+                <button type="button" class="nav-icon-btn" onclick="toggleTheme()" title="테마 전환">◐</button>
+            </div>
+        </nav>
+
+        <section class="hero-grid" aria-label="서비스 요약">
+            <div class="hero-copy">
+                <p class="hero-eyebrow">Statistical Reference Service</p>
+                <h1>이번 주 조합, 감보다 데이터로</h1>
+                <p class="hero-lead">역대 당첨번호와 최근 흐름을 함께 계산해 로또 6/45와 연금복권 720+ 참고 조합을 빠르게 정리합니다.</p>
+                <div class="hero-actions">
+                    <button type="button" class="hero-primary" onclick="scrollToGenerator()">무료 조합 생성</button>
+                </div>
+                <div class="hero-note">만 19세 이상 이용 대상 · 동행복권 공식 서비스 아님 · 복권 판매 및 구매 대행 아님</div>
+            </div>
+
+            <aside class="hero-panel" aria-label="분석 요약">
+                <div class="hero-panel-top">
+                    <span>이번 회차 분석</span>
+                    <strong id="hero-round">동기화 중</strong>
+                </div>
+                <div class="factor-score">
+                    <span>14</span>
+                    <div>
+                        <b>통계 팩터</b>
+                        <small>빈도·미출현·밸런스·시뮬레이션</small>
+                    </div>
+                </div>
+                <div class="mini-pipeline">
+                    <span>번호 스코어링</span>
+                    <span>구조 검증</span>
+                    <span>후보 선별</span>
+                </div>
+                <div class="visitor-counter">
+                    <div class="v-stat">VISITOR ANALYTICS</div>
+                    <a href="https://myhits.vercel.app" target="_blank" style="text-decoration:none;">
+                        <img src="https://myhits.vercel.app/api/hit/https%3A%2F%2Fazit4376-blip.github.io%2Flotto%2F?color=gray&label=HITS&size=small" alt="hits" class="hits-img" />
+                    </a>
+                </div>
+            </aside>
+        </section>
+
+    </header>
 
     <div class="ads-placeholder">ADVERTISEMENT ZONE</div>
 
@@ -57,6 +95,30 @@
         <div class="stat-card"><span class="stat-label" id="cold-label">❄️ COLD</span><span class="stat-value" id="cold-v">--</span></div>
         <div class="stat-card"><span class="stat-label">🎯 분석 회차</span><span class="stat-value" id="target-round">--회</span></div>
     </div>
+
+    <section class="analysis-layer" aria-label="분석 파이프라인">
+        <div class="layer-head">
+            <span>Core Analysis Layer</span>
+            <h2>14개 지표를 3단계로 압축</h2>
+        </div>
+        <div class="layer-grid">
+            <article>
+                <span>01</span>
+                <h3>번호 스코어링</h3>
+                <p>출현 빈도, 최근 10·30·50회 흐름, 미출현 간격을 번호별 점수로 환산합니다.</p>
+            </article>
+            <article>
+                <span>02</span>
+                <h3>밸런스 검증</h3>
+                <p>구간, 홀짝, 합계, 연속수, 끝수 쏠림을 함께 확인해 어색한 조합을 줄입니다.</p>
+            </article>
+            <article>
+                <span>03</span>
+                <h3>시뮬레이션 선별</h3>
+                <p>동반출현, 모멘텀, 엔트로피 조건을 통과한 후보를 Normal·Strong·Legend로 나눕니다.</p>
+            </article>
+        </div>
+    </section>
 
     <div id="shared-terminal-container"><div class="terminal" id="term"></div></div>
 
@@ -251,7 +313,7 @@
                 <div class="donation-sub">혹시 이번 회차에 당첨되셨나요? 😊</div>
                 
                 <div class="qr-container">
-                    <img src="https://github.com/azit4376-blip/lotto/blob/main/qrcode.png?raw=true" alt="Support QR" class="qr-img">
+                    <img src="qrcode.png" alt="Support QR" class="qr-img">
                 </div>
                 
                 <div class="donation-msg">
@@ -299,6 +361,6 @@
     </div>
 </div>
 
-<script src="index.js?v=25.3.1"></script>
+<script src="index.js?v=26.7.1"></script>
 </body>
 </html>
