@@ -3,803 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>연금복권 720+ 전략 가이드 | QUANTUM MULTI-INSIGHT</title>
-    <style>
-        body { 
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; 
-            line-height: 1.8; 
-            color: #334155; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            background: linear-gradient(to bottom, #f8fafc 0%, #fef3c7 100%);
-        }
-        h1 { 
-            color: #0f172a; 
-            border-bottom: 3px solid #f59e0b; 
-            padding-bottom: 15px; 
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #64748b;
-            font-size: 1rem;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-        h2 { 
-            color: #1e293b; 
-            margin-top: 40px; 
-            padding-left: 10px;
-            border-left: 4px solid #f59e0b;
-            font-size: 1.5rem;
-        }
-        h3 {
-            color: #475569;
-            margin-top: 25px;
-            font-size: 1.2rem;
-        }
-        p, li { 
-            font-size: 1rem; 
-            margin-bottom: 12px;
-        }
-        .highlight { 
-            color: #d97706; 
-            font-weight: bold; 
-            background: #fef3c7;
-            padding: 2px 6px;
-            border-radius: 3px;
-        }
-        .warning {
-            color: #dc2626;
-            font-weight: bold;
-        }
-        .info-box { 
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 20px; 
-            border-left: 5px solid #f59e0b; 
-            margin: 25px 0; 
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .tip-box {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            padding: 20px;
-            border-left: 5px solid #3b82f6;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .strategy-box {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            padding: 20px;
-            border-left: 5px solid #22c55e;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .prize-box {
-            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-            padding: 20px;
-            border-left: 5px solid #ec4899;
-            margin: 25px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        th {
-            background: #f59e0b;
-            color: white;
-            font-weight: bold;
-        }
-        tr:hover {
-            background: #fffbeb;
-        }
-        .stat-card {
-            background: white;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .home-btn { 
-            display: inline-block; 
-            margin-top: 50px; 
-            padding: 12px 30px; 
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #fff; 
-            text-decoration: none; 
-            border-radius: 10px; 
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(245,158,11,0.3);
-            transition: all 0.3s ease;
-        }
-        .home-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(245,158,11,0.4);
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        .number-example {
-            font-family: 'Courier New', monospace;
-            background: #1e293b;
-            color: #fbbf24;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 3px;
-        }
-        .group-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin: 0 5px;
-            background: #fed7aa;
-            color: #9a3412;
-        }
-    </style>
+    <title>연금복권 720+ 분석 가이드 | QUANTUM LOTTO Lab</title>
+    <meta name="description" content="연금복권 720+의 조와 6자리 번호 구조, 뒤자리 일치 방식, 자리별 통계와 참고 조합 사용법을 안내합니다.">
+    <link rel="canonical" href="https://azit4376-blip.github.io/lotto/guide2.html">
+    <link rel="stylesheet" href="documents.css?v=27.0.0">
 </head>
 <body>
+    <header class="document-topbar">
+        <a class="document-brand" href="index.html"><span>Q</span> QUANTUM LOTTO</a>
+        <a class="document-home" href="index.html">분석 화면으로</a>
+    </header>
 
-    <h1>🎫 연금복권 720+ 정밀 전략 가이드</h1>
-    <p class="subtitle">로또 대비 1.6배 높은 당첨 확률 & 월 700만원 20년 수령 시스템</p>
+    <main class="document-shell">
+        <section class="doc-hero">
+            <p class="doc-eyebrow">Pension lottery 720+ guide</p>
+            <h1>조와 여섯 자리를<br>분리해서 읽으세요</h1>
+            <p class="doc-lead">연금복권 720+는 로또 6/45와 번호 구조와 당첨 판정 방식이 다릅니다. 자리별 과거 분포를 참고하되, 각 유효 번호의 추첨 확률은 같다는 원칙을 먼저 확인하세요.</p>
+            <div class="doc-meta"><span>조 + 6자리</span><span>자리별 지표</span><span>브라우저 저장</span></div>
+        </section>
 
-    <div class="info-box">
-        <strong>🎯 연금복권 720+의 핵심 특징</strong><br>
-        <ul style="margin-top: 10px; margin-bottom: 0;">
-            <li><strong>당첨 확률:</strong> 1등 1/500만 (로또 6/45 대비 <span class="highlight">약 1.6배 유리</span>)</li>
-            <li><strong>안정적 수령:</strong> 월 700만원씩 20년간 총 16.8억원 (세전)</li>
-            <li><strong>조별 시스템:</strong> 1~5조 각각 독립 추첨 → <span class="highlight">동일 번호 세트 구매 가능</span></li>
-            <li><strong>보너스 번호:</strong> 6자리 일치 시 2등(월 100만원 10년) 자동 당첨</li>
-        </ul>
-    </div>
+        <div class="doc-layout">
+            <nav class="doc-toc" aria-label="문서 목차">
+                <strong>CONTENTS</strong>
+                <a href="#basics">기본 구조</a>
+                <a href="#matching">당첨 판정</a>
+                <a href="#workflow">사용 순서</a>
+                <a href="#metrics">지표 읽기</a>
+                <a href="#example">예시 결과</a>
+                <a href="#faq">자주 묻는 질문</a>
+                <a href="#responsible">책임 있는 이용</a>
+            </nav>
 
-    <h2>💰 1. 당첨 등급 및 상금 구조</h2>
-    
-    <div class="prize-box">
-        <h3 style="margin-top: 0; color: #be185d;">💎 등급별 상세 안내</h3>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>등급</th>
-                    <th>일치 조건</th>
-                    <th>당첨금</th>
-                    <th>확률</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="background: #fef3c7;">
-                    <td><strong>1등</strong></td>
-                    <td>조 번호, 6자리 번호 모두 일치</td>
-                    <td>월 700만원 x 20년<br>(총 16.8억)</td>
-                    <td>1 / 5,000,000</td>
-                </tr>
-                <tr style="background: #fce7f3;">
-                    <td><strong>2등</strong></td>
-                    <td>1등과 조가 다르고 6자리 번호 모두 일치
-                    <td>월 100만원 x 10년<br>(총 1.2억)</td>
-                    <td>1/1,250,000</td>
-                </tr>
-                <tr>
-                    <td><strong>3등</strong></td>
-                    <td>각조 뒤 5자리 번호 일치</td>
-                    <td>100만원 (일시금)</td>
-                    <td>1/111,111</td>
-                </tr>
-                <tr>
-                    <td><strong>4등</strong></td>
-                    <td>각조 뒤 4자리 번호 일치</td>
-                    <td>10만원 (일시금)</td>
-                    <td>1/11,111
-</td>
-                </tr>
-                <tr>
-                    <td><strong>5등</strong></td>
-                    <td>각조 뒤 3자리 번호 일치</td>
-                    <td>5만원 (일시금)</td>
-                    <td>1/1,111
-</td>
-                </tr>
-                <tr>
-                    <td><strong>6등</strong></td>
-                    <td>각조 뒤 2자리 번호 일치</td>
-                    <td>5천원 (일시금)</td>
-                    <td>1/111</td>
-                </tr>
-                <tr>
-                    <td><strong>7등</strong></td>
-                    <td>각조 뒤 1자리 번호 일치</td>
-                    <td>1천원 (일시금)</td>
-                    <td>1/11</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p style="margin-top: 20px;"><strong>🔥 핵심 인사이트:</strong></p>
-        <ul>
-            <li>6자리만 맞춰도 <span class="highlight">2등 자동 진입</span> (조 불일치 시)</li>
-            <li>1등과 2등의 실질적 차이는 '조 일치 여부'뿐</li>
-            <li>세트 구매(1~5조 동일 번호) 시 <span class="highlight">1등+2등 동시 당첨 가능</span></li>
-        </ul>
-    </div>
+            <div class="doc-content">
+                <section class="doc-section" id="basics">
+                    <p class="section-kicker">01 · Basics</p>
+                    <h2>연금복권 720+ 기본 구조</h2>
+                    <p>공식 안내상 번호 범위는 1조 000000부터 5조 999999까지입니다. 한 게임 가격은 1,000원이며, 1등 당첨 확률은 5,000,000분의 1입니다.</p>
+                    <div class="fact-grid">
+                        <div class="fact-card"><strong>1–5조</strong><span>조 번호 범위</span></div>
+                        <div class="fact-card"><strong>000000–999999</strong><span>각 조의 여섯 자리</span></div>
+                        <div class="fact-card"><strong>1 / 5,000,000</strong><span>1등 당첨 확률</span></div>
+                    </div>
+                    <div class="callout"><strong>번호 0도 유효합니다.</strong><br>여섯 자리는 각각 0부터 9까지 올 수 있습니다. 앞자리가 0인 경우도 생략하지 않고 반드시 여섯 자리로 읽어야 합니다.</div>
+                    <div class="doc-source-list">
+                        <a href="https://www.dhlottery.co.kr/pt720/intro" target="_blank" rel="noopener noreferrer">동행복권 연금복권 720+ 공식 안내 ↗</a>
+                    </div>
+                </section>
 
-    <h2>🎲 2. 세트 구매 전략 (핵심 공략법)</h2>
-    
-    <div class="strategy-box">
-        <h3 style="margin-top: 0; color: #166534;">💡 세트 구매란?</h3>
-        <p>동일한 6자리 번호를 <strong>1조부터 5조까지 모두 선택</strong>하여 구매하는 방식입니다.</p>
-        
-        <p><strong>예시:</strong></p>
-        <div class="number-example">
-            1조 - 3 4 7 2 9 1<br>
-            2조 - 3 4 7 2 9 1<br>
-            3조 - 3 4 7 2 9 1<br>
-            4조 - 3 4 7 2 9 1<br>
-            5조 - 3 4 7 2 9 1
+                <section class="doc-section" id="matching">
+                    <p class="section-kicker">02 · Matching</p>
+                    <h2>뒤자리부터 일치 여부를 확인합니다</h2>
+                    <p>1등은 조와 여섯 자리가 모두 일치해야 합니다. 그 밖의 등위는 공식 기준에 따라 조 또는 오른쪽 끝자리의 연속 일치 여부로 판정됩니다. 사이트 표시는 편의를 위한 것이므로 최종 결과는 공식 당첨 결과에서 확인해야 합니다.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead><tr><th>확인 순서</th><th>확인 대상</th><th>주의할 점</th></tr></thead>
+                            <tbody>
+                                <tr><td>1</td><td>해당 회차가 맞는지 확인</td><td>저장 조합의 목표 회차와 공식 추첨 회차를 맞춥니다.</td></tr>
+                                <tr><td>2</td><td>오른쪽 끝자리부터 비교</td><td>왼쪽이 아니라 가장 오른쪽 숫자부터 연속 일치를 봅니다.</td></tr>
+                                <tr><td>3</td><td>조 번호 확인</td><td>1등 여부는 조 번호까지 포함해 확인합니다.</td></tr>
+                                <tr><td>4</td><td>공식 결과로 최종 검증</td><td>데이터 갱신 지연이 있을 수 있으므로 동행복권 결과를 우선합니다.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="doc-source-list">
+                        <a href="https://www.dhlottery.co.kr/pt720/result" target="_blank" rel="noopener noreferrer">공식 당첨 결과 확인 ↗</a>
+                    </div>
+                </section>
+
+                <section class="doc-section" id="workflow">
+                    <p class="section-kicker">03 · Workflow</p>
+                    <h2>모드를 바꾼 뒤 조건을 설정합니다</h2>
+                    <div class="step-grid">
+                        <div class="step-card"><span class="step-number">01</span><h3>연금복권 모드</h3><p>메인 화면 상단에서 연금복권 720+를 선택합니다.</p></div>
+                        <div class="step-card"><span class="step-number">02</span><h3>숫자 조건</h3><p>포함하거나 제외할 숫자를 정하고 필요한 게임 수를 선택합니다.</p></div>
+                        <div class="step-card"><span class="step-number">03</span><h3>자리 구조 검토</h3><p>조 번호와 여섯 자리, 반복수와 자리 분포를 함께 확인합니다.</p></div>
+                    </div>
+                    <p>연금복권 모드에서는 중복 조합 방지와 점수순 정렬을 유지할 수 있습니다. 생성되는 조 번호는 1조부터 5조 사이에서 정해지며, 여섯 자리 각 숫자는 0부터 9 범위입니다.</p>
+                </section>
+
+                <section class="doc-section" id="metrics">
+                    <p class="section-kicker">04 · Metrics</p>
+                    <h2>자리별 통계는 설명 도구입니다</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card"><h3>자리별 빈도</h3><p>백만·십만·만·천·백·십·일의 각 위치에서 숫자 0–9가 과거에 나온 횟수를 봅니다.</p></div>
+                        <div class="feature-card"><h3>숫자 합계</h3><p>여섯 자리 숫자를 더해 전체 구성이 낮은 숫자나 높은 숫자에 몰렸는지 요약합니다.</p></div>
+                        <div class="feature-card"><h3>반복 숫자</h3><p>같은 숫자가 여러 자리에 반복되는 정도를 보여줍니다. 반복 자체는 유효한 번호입니다.</p></div>
+                        <div class="feature-card"><h3>끝자리 흐름</h3><p>최근 회차의 오른쪽 자리 분포를 정리합니다. 다음 숫자를 예측하는 신호는 아닙니다.</p></div>
+                    </div>
+                    <div class="callout safe">각 자리는 매 추첨에서 새롭게 결정됩니다. 특정 자리에 최근 많이 나오거나 오래 안 나온 숫자가 있어도 다음 회차에서 그 숫자가 유리해지는 것은 아닙니다.</div>
+                </section>
+
+                <section class="doc-section" id="example">
+                    <p class="section-kicker">05 · Example</p>
+                    <h2>예시는 앞의 0까지 그대로 읽습니다</h2>
+                    <div class="ball-row" aria-label="3조 0 4 1 7 2 8">
+                        <span class="ball-chip">3조</span><span class="ball-chip">0</span><span class="ball-chip">4</span><span class="ball-chip">1</span><span class="ball-chip">7</span><span class="ball-chip">2</span><span class="ball-chip">8</span>
+                    </div>
+                    <p>위 예시는 “3조 041728”로 읽습니다. 복사·저장할 때 조와 여섯 자리가 모두 포함됐는지 확인하세요. “41728”처럼 앞의 0을 빼면 다른 표기가 됩니다.</p>
+                </section>
+
+                <section class="doc-section" id="faq">
+                    <p class="section-kicker">06 · FAQ</p>
+                    <h2>자주 묻는 질문</h2>
+                    <div class="faq-list">
+                        <details><summary>조 번호도 통계로 예측할 수 있나요?</summary><p>과거 분포는 요약할 수 있지만 다음 회차의 조를 예측하거나 특정 조가 유리하다고 판단할 근거는 되지 않습니다.</p></details>
+                        <details><summary>같은 숫자가 반복되면 나쁜 번호인가요?</summary><p>아닙니다. 000000부터 999999까지 모두 유효한 범위이므로 반복 숫자도 정상적인 번호입니다.</p></details>
+                        <details><summary>사이트의 당첨 표시는 확정 결과인가요?</summary><p>편의를 위한 대조 결과입니다. 당첨 여부와 지급 관련 판단은 동행복권 공식 결과 및 실물 복권을 기준으로 하세요.</p></details>
+                        <details><summary>저장 조합은 계정에 보관되나요?</summary><p>로그인이 없는 정적 사이트이므로 닉네임별 저장 조합은 현재 브라우저 localStorage에만 남습니다. 닉네임은 계정이나 비밀번호가 아니며, 브라우저 데이터 삭제 시 복구되지 않을 수 있습니다.</p></details>
+                    </div>
+                </section>
+
+                <section class="doc-section" id="responsible">
+                    <p class="section-kicker">07 · Responsible play</p>
+                    <h2>정기 지급형 상품도 복권입니다</h2>
+                    <p>지급 방식과 관계없이 구매금액을 잃을 수 있는 확률형 상품입니다. 생활에 영향을 주지 않는 고정 예산 안에서 여가로만 이용하고, 손실을 만회하려는 추가 구매는 피하세요.</p>
+                    <div class="doc-source-list">
+                        <a href="https://www.kcgp.or.kr/portal/main/contents.do?menuNo=200062" target="_blank" rel="noopener noreferrer">도박문제 상담 1336 ↗</a>
+                    </div>
+                </section>
+            </div>
         </div>
-        
-        <h3 style="color: #166534;">🎯 세트 구매의 장점</h3>
-        <ol>
-            <li><strong>1등 확률 5배 증가:</strong> 5개 조 모두 커버 → 1/100만 확률로 상승</li>
-            <li><strong>1등+2등 동시 당첨:</strong> 6자리+보너스 일치 시
-                <ul>
-                    <li>당첨 조: 1등 (월 700만원 x 20년)</li>
-                    <li>나머지 4개 조: 2등 (월 100만원 x 10년 x 4 = 총 4.8억)</li>
-                    <li><strong>총 수령액: 약 21.6억원!</strong></li>
-                </ul>
-            </li>
-            <li><strong>3등+4등 동시 당첨:</strong> 6자리 일치 시 (보너스 불일치)
-                <ul>
-                    <li>당첨 조: 3등 (100만원)</li>
-                    <li>나머지 4개 조: 4등 (10만원 x 4 = 40만원)</li>
-                    <li>총 140만원 당첨</li>
-                </ul>
-            </li>
-        </ol>
-        
-        <h3 style="color: #166534;">💸 비용 대비 효과</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>구매 방식</th>
-                    <th>비용</th>
-                    <th>1등 확률</th>
-                    <th>예상 수익률</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>일반 구매 (1장)</td>
-                    <td>1,000원</td>
-                    <td>1 / 5,000,000</td>
-                    <td>기준</td>
-                </tr>
-                <tr style="background: #dcfce7;">
-                    <td><strong>세트 구매 (5장)</strong></td>
-                    <td><strong>5,000원</strong></td>
-                    <td><strong>5 / 5,000,000 = 1 / 1,000,000</strong></td>
-                    <td><strong>5배 효율 + 복합 당첨 보너스</strong></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p><strong>⚠️ 주의사항:</strong></p>
-        <ul>
-            <li>세트 구매는 <span class="warning">5배의 비용</span>이 소요됩니다</li>
-            <li>동일 번호가 당첨되지 않으면 전액 손실</li>
-            <li>예산에 맞춰 <span class="highlight">주력 번호 1~2개만 세트 구매</span> 권장</li>
-        </ul>
-    </div>
-
-    <h2>🔢 3. 조(Group) 선택 전략</h2>
-    
-    <h3>3.1 조별 당첨 확률은 동일한가?</h3>
-    <div class="stat-card">
-        <p><strong>통계적 사실:</strong> 1~5조는 이론적으로 <span class="highlight">완전히 동일한 확률</span>을 가집니다.</p>
-        
-        <p>하지만 실제 당첨자들의 <strong>심리적 패턴</strong>은 다음과 같습니다:</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>조 번호</th>
-                    <th>선택 비율</th>
-                    <th>심리적 특성</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1조</td>
-                    <td>약 22%</td>
-                    <td>"첫 번째가 행운"</td>
-                </tr>
-                <tr>
-                    <td>2조</td>
-                    <td>약 18%</td>
-                    <td>보통, 무난한 선택</td>
-                </tr>
-                <tr style="background: #fef3c7;">
-                    <td><strong>3조</strong></td>
-                    <td><strong>약 24%</strong></td>
-                    <td><strong>"중간이 안전" (최다 선택)</strong></td>
-                </tr>
-                <tr>
-                    <td>4조</td>
-                    <td>약 19%</td>
-                    <td>보통, 무난한 선택</td>
-                </tr>
-                <tr>
-                    <td>5조</td>
-                    <td>약 17%</td>
-                    <td>"마지막이 특별"</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p><strong>💡 전략적 선택:</strong></p>
-        <ul>
-            <li><strong>초보자:</strong> 세트 구매로 조 리스크 제거</li>
-            <li><strong>고정조 파:</strong> 자신의 행운 번호(생일 등)를 조 번호로 고정</li>
-            <li><strong>분산 투자:</strong> 여러 번호를 다양한 조에 분배</li>
-        </ul>
-    </div>
-
-    <h3>3.2 고정조 vs 랜덤조</h3>
-    <div class="tip-box">
-        <p><strong>고정조 전략:</strong> 매회 동일한 조 번호로만 구매</p>
-        <ul>
-            <li><strong>장점:</strong> 번호 흐름 패턴 추적 가능, 심리적 일관성</li>
-            <li><strong>단점:</strong> 타 조 당첨 시 기회 상실</li>
-        </ul>
-        
-        <p><strong>랜덤조 전략:</strong> 매회 다른 조 번호로 구매</p>
-        <ul>
-            <li><strong>장점:</strong> 전체 조 커버 가능, 유연한 대응</li>
-            <li><strong>단점:</strong> 일관된 분석 어려움</li>
-        </ul>
-        
-        <p><strong>🎯 추천:</strong> <span class="highlight">세트 구매</span>로 양쪽 장점 모두 취득</p>
-    </div>
-
-    <h2>📊 4. 6자리 번호 정밀 분석 (8대 지표)</h2>
-    
-    <h3>4.1 자리별 매칭 분석</h3>
-    <div class="stat-card">
-        <p><strong>분석 방법:</strong> 최근 10회 당첨번호의 각 자리 숫자(0~9)를 추적합니다.</p>
-        
-        <p><strong>예시:</strong></p>
-        <div class="number-example">생성 번호: 3 4 7 2 9 1</div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>자리</th>
-                    <th>생성 숫자</th>
-                    <th>최근 10회 출현 횟수</th>
-                    <th>평가</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1자리</td>
-                    <td>3</td>
-                    <td>2회</td>
-                    <td>보통</td>
-                </tr>
-                <tr style="background: #dcfce7;">
-                    <td>2자리</td>
-                    <td>4</td>
-                    <td>4회</td>
-                    <td><strong>HOT 🔥</strong></td>
-                </tr>
-                <tr>
-                    <td>3자리</td>
-                    <td>7</td>
-                    <td>1회</td>
-                    <td>COLD</td>
-                </tr>
-                <tr>
-                    <td>4자리</td>
-                    <td>2</td>
-                    <td>3회</td>
-                    <td>보통</td>
-                </tr>
-                <tr>
-                    <td>5자리</td>
-                    <td>9</td>
-                    <td>0회</td>
-                    <td><strong>미출현 ❄️</strong></td>
-                </tr>
-                <tr style="background: #dcfce7;">
-                    <td>6자리</td>
-                    <td>1</td>
-                    <td>5회</td>
-                    <td><strong>HOT 🔥</strong></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p><strong>💡 인사이트:</strong> 각 자리는 <span class="highlight">독립적으로 분석</span>되어야 합니다. 2자리에서 4가 HOT라고 해서 다른 자리의 4도 HOT인 것은 아닙니다.</p>
-    </div>
-
-    <h3>4.2 디지트 합 (Digit Sum) 분석</h3>
-    <div class="stat-card">
-        <p><strong>정의:</strong> 6개 숫자의 총합</p>
-        
-        <p><strong>통계적 분포:</strong></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>디지트 합 구간</th>
-                    <th>출현 빈도</th>
-                    <th>평가</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>0~15</td>
-                    <td>약 18%</td>
-                    <td>저합군</td>
-                </tr>
-                <tr style="background: #fef3c7;">
-                    <td><strong>16~30</strong></td>
-                    <td><strong>약 42%</strong></td>
-                    <td><strong>최적 구간 ⭐</strong></td>
-                </tr>
-                <tr>
-                    <td>31~40</td>
-                    <td>약 28%</td>
-                    <td>중고합군</td>
-                </tr>
-                <tr>
-                    <td>41~54</td>
-                    <td>약 12%</td>
-                    <td>극고합군</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>번호 [0, 0, 0, 0, 0, 0] → 디지트 합 = 0 (극단)</li>
-            <li>번호 [3, 4, 7, 2, 9, 1] → 디지트 합 = 26 (최적 ✅)</li>
-            <li>번호 [9, 9, 9, 9, 9, 9] → 디지트 합 = 54 (극단)</li>
-        </ul>
-        
-        <p><strong>🎯 전략:</strong> 디지트 합 16~30 구간을 목표로 번호를 조정하세요.</p>
-    </div>
-
-    <h3>4.3 저고(低高) 비율 분석</h3>
-    <div class="stat-card">
-        <p><strong>구간 정의:</strong></p>
-        <ul>
-            <li><strong>저번호:</strong> 0~4 (5개)</li>
-            <li><strong>고번호:</strong> 5~9 (5개)</li>
-        </ul>
-        
-        <p><strong>이상적 비율:</strong> <span class="highlight">3:3 또는 4:2</span> (전체의 약 68%)</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[0, 1, 2, 3, 4, 5] → 저:고 = 5:1 (편중)</li>
-            <li>[2, 4, 5, 7, 8, 9] → 저:고 = 2:4 (양호 ✅)</li>
-            <li>[1, 3, 5, 6, 8, 9] → 저:고 = 2:4 (양호 ✅)</li>
-        </ul>
-    </div>
-
-    <h3>4.4 홀짝 비율 분석</h3>
-    <div class="stat-card">
-        <p>로또 6/45와 동일한 원리로, <span class="highlight">3:3 비율</span>이 가장 이상적입니다.</p>
-        
-        <p><strong>주의:</strong> 연금복권은 0을 포함하므로, 0은 <strong>짝수</strong>로 처리합니다.</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[0, 2, 4, 6, 8, 1] → 홀:짝 = 1:5 (불균형)</li>
-            <li>[1, 3, 5, 2, 4, 6] → 홀:짝 = 3:3 (최적 ✅)</li>
-        </ul>
-    </div>
-
-    <h3>4.5 연속 패턴 분석</h3>
-    <div class="stat-card">
-        <p><strong>정의:</strong> 인접한 두 숫자가 연속되는 경우 (예: 3-4, 7-8)</p>
-        
-        <p><strong>통계:</strong> 연속 패턴 <span class="highlight">0~1개</span>가 전체의 약 75%</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[1, 3, 5, 7, 9, 2] → 연속 0개 ✅</li>
-            <li>[<strong>3, 4</strong>, 7, 2, 9, 1] → 연속 1개 ✅</li>
-            <li>[<strong>2, 3, 4</strong>, 7, 9, 1] → 연속 2개 (주의)</li>
-        </ul>
-    </div>
-
-    <h3>4.6 끝3자리 합 분석</h3>
-    <div class="stat-card">
-        <p><strong>정의:</strong> 뒤 3자리 숫자의 합계</p>
-        
-        <p><strong>최적 구간:</strong> 8~18 (전체의 약 58%)</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[3, 4, 7, <strong>2, 9, 1</strong>] → 끝3자 합 = 2+9+1 = 12 ✅</li>
-            <li>[5, 2, 1, <strong>0, 0, 0</strong>] → 끝3자 합 = 0 (극단)</li>
-        </ul>
-    </div>
-
-    <h3>4.7 평균값 분석</h3>
-    <div class="stat-card">
-        <p><strong>계산:</strong> (6개 숫자 합) ÷ 6</p>
-        
-        <p><strong>최적 범위:</strong> 3.5~5.5 (전체의 약 52%)</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[3, 4, 7, 2, 9, 1] → 평균 = 26 ÷ 6 = 4.33 ✅</li>
-            <li>[0, 0, 0, 9, 9, 9] → 평균 = 27 ÷ 6 = 4.5 (극단 패턴)</li>
-        </ul>
-    </div>
-
-    <h3>4.8 소수 포함 개수</h3>
-    <div class="stat-card">
-        <p><strong>0~9 내 소수:</strong> 2, 3, 5, 7 (총 4개)</p>
-        
-        <p><strong>최적 개수:</strong> <span class="highlight">1~2개</span> (전체의 약 64%)</p>
-        
-        <p><strong>예시:</strong></p>
-        <ul>
-            <li>[0, 1, 4, 6, 8, 9] → 소수 0개</li>
-            <li>[<strong>2, 3</strong>, 1, 4, 6, 8] → 소수 2개 ✅</li>
-            <li>[<strong>2, 3, 5, 7</strong>, 1, 4] → 소수 4개 (과다)</li>
-        </ul>
-    </div>
-
-    <h2>🎁 5. 보너스 번호 공략법</h2>
-    
-    <div class="prize-box">
-        <h3 style="margin-top: 0; color: #be185d;">🎯 보너스 번호의 중요성</h3>
-        <p>보너스 번호는 <span class="highlight">1등과 2등을 가르는 결정적 요소</span>입니다.</p>
-        
-        <p><strong>보너스 번호 특성:</strong></p>
-        <ul>
-            <li>0~9 중 1개 추출</li>
-            <li>6자리 번호와 <strong>독립적으로</strong> 추첨</li>
-            <li>6자리에 이미 포함된 숫자도 보너스로 재등장 가능</li>
-        </ul>
-        
-        <h3 style="color: #be185d;">📊 보너스 번호 통계 분석</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>보너스 번호</th>
-                    <th>최근 20회 출현 횟수</th>
-                    <th>평가</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>0</td>
-                    <td>3회</td>
-                    <td>보통</td>
-                </tr>
-                <tr style="background: #dcfce7;">
-                    <td>1</td>
-                    <td>5회</td>
-                    <td><strong>HOT 🔥</strong></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2회</td>
-                    <td>COLD</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>1회</td>
-                    <td>COLD</td>
-                </tr>
-                <tr style="background: #dcfce7;">
-                    <td>4</td>
-                    <td>4회</td>
-                    <td><strong>HOT 🔥</strong></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>2회</td>
-                    <td>COLD</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>0회</td>
-                    <td><strong>미출현 ❄️</strong></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>1회</td>
-                    <td>COLD</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>3회</td>
-                    <td>보통</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>2회</td>
-                    <td>COLD</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <h3 style="color: #be185d;">💡 미출현 숫자 전이 전략</h3>
-        <p>QUANTUM 엔진은 최근 회차에서 <span class="highlight">보너스로 등장하지 않은 숫자</span>의 전이 확률을 계산합니다.</p>
-        
-        <p><strong>통계적 원리:</strong></p>
-        <ul>
-            <li>보너스 번호는 0~9가 <strong>균등 분포</strong>를 이루려는 경향</li>
-            <li>10회 이상 미출현 숫자는 <span class="highlight">회귀 압력</span> 증가</li>
-            <li>직전 회차 보너스 번호의 재등장 확률은 약 8% (낮음)</li>
-        </ul>
-        
-        <p><strong>🎯 실전 팁:</strong></p>
-        <ol>
-            <li>최근 10회 보너스 번호 히스토리 확인</li>
-            <li>미출현 또는 1회 출현 숫자 2~3개 선정</li>
-            <li>해당 숫자를 <span class="highlight">6자리 번호에 포함</span>시켜 보너스 매칭 확률 극대화</li>
-        </ol>
-        
-        <p><strong>예시 전략:</strong></p>
-        <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
-            <p><strong>상황:</strong> 최근 10회 보너스 번호에서 6, 7이 미출현</p>
-            <p><strong>전략:</strong> 6과 7을 6자리 번호에 반드시 포함</p>
-            <div class="number-example">추천 번호: 3 6 7 2 9 1</div>
-            <p style="margin-top: 10px;"><strong>효과:</strong> 6 또는 7이 보너스로 등장 시 즉시 매칭 → <span class="highlight">2등 이상 확정</span></p>
-        </div>
-    </div>
-
-    <h2>🎮 6. 실전 생성 워크플로우</h2>
-    
-    <h3>6.1 초보자용 3단계 전략</h3>
-    <div class="strategy-box">
-        <ol>
-            <li><strong>STEP 1:</strong> <span class="highlight">일반 생성 20게임</span> 클릭</li>
-            <li><strong>STEP 2:</strong> 마음에 드는 조합 3~5개 선택</li>
-            <li><strong>STEP 3:</strong> 선택한 조합을 각각 <span class="highlight">세트 구매 (1~5조)</span></li>
-        </ol>
-        
-        <p><strong>💸 예산:</strong> 5,000원 x 3개 = 15,000원</p>
-        <p><strong>🎯 기대효과:</strong> 3개 번호 각각 1/100만 확률 → 총 커버리지 약 3/100만</p>
-    </div>
-
-    <h3>6.2 고급자용 5단계 전략</h3>
-    <div class="strategy-box">
-        <ol>
-            <li><strong>STEP 1:</strong> 최근 10회 보너스 번호에서 미출현 숫자 2개 파악 (예: 6, 7)</li>
-            <li><strong>STEP 2:</strong> 각 자리별 HOT 숫자 3개씩 선정 (총 18개 후보)</li>
-            <li><strong>STEP 3:</strong> 6, 7을 반드시 포함하면서 디지트 합 16~30 범위 조합 10개 생성</li>
-            <li><strong>STEP 4:</strong> 홀짝비율 3:3, 저고비율 3:3 조건 추가 필터링 → 최종 5개 선별</li>
-            <li><strong>STEP 5:</strong> 5개 조합 각각 <span class="highlight">세트 구매</span> 또는 주력 2개만 세트 구매</li>
-        </ol>
-        
-        <p><strong>💸 예산:</strong></p>
-        <ul>
-            <li>전체 세트: 5,000원 x 5개 = 25,000원</li>
-            <li>부분 세트: 5,000원 x 2개 + 1,000원 x 3개 = 13,000원</li>
-        </ul>
-    </div>
-
-    <h2>📱 7. 시스템 활용 팁</h2>
-    
-    <div class="tip-box">
-        <h3 style="margin-top: 0;">💡 유용한 기능들</h3>
-        <ul>
-            <li><strong>📋 조합 복사:</strong> 개별 번호 클립보드 복사 → 메모장 백업</li>
-            <li><strong>📸 슬립 저장:</strong> 5개씩 영수증 형식 이미지로 저장 → 매장에서 편리하게 마킹</li>
-            <li><strong>💾 보관하기:</strong> 마음에 드는 조합 저장소에 영구 보관</li>
-            <li><strong>🌐 실시간조합:</strong> 전국 사용자들의 생성 트렌드 확인</li>
-        </ul>
-    </div>
-
-    <h2>🧠 8. ADVANCED INSIGHT LAB 활용법</h2>
-
-<div class="strategy-box">
-    <h3 style="margin-top:0;">연금복권용 확장 기능</h3>
-    <ul>
-        <li><strong>자리별 모멘텀:</strong> 최근 10회 대비 50회 추세 상승 숫자를 포착합니다.</li>
-        <li><strong>장기 미출현:</strong> 끝자리 기준 미등장 숫자를 빠르게 확인합니다.</li>
-        <li><strong>자리 다양성 분석:</strong> 1~6열의 숫자 편중을 점검해 분산도를 확보합니다.</li>
-        <li><strong>추천 운용 칩:</strong> 강세열/유동열 혼합 전략을 한 번에 제공합니다.</li>
-    </ul>
-    <p style="margin-bottom:0;"><strong>TIP:</strong> 기존 Google Sheet 동기화 + 실시간 조합 기능은 그대로 유지됩니다.</p>
-</div>
-
-<h2>🚨 9. 주의사항 및 면책</h2>
-    
-    <div class="warning" style="background: #fee2e2; padding: 20px; border-radius: 8px; border-left: 5px solid #dc2626;">
-        <h3 style="color: #991b1b; margin-top: 0;">⚠️ 필독 사항</h3>
-        <ul>
-            <li><strong>통계는 보장이 아닙니다:</strong> 모든 분석은 과거 데이터 기반이며, 미래 당첨을 보장하지 않습니다.</li>
-            <li><strong>세트 구매 리스크:</strong> 5배 비용 투입 시 당첨 실패 시 손실도 5배입니다.</li>
-            <li><strong>책임 있는 구매:</strong> 예산 범위 내에서 즐기는 취미로 접근하세요.</li>
-            <li><strong>공식 확인 필수:</strong> 당첨번호는 반드시 공식 사이트에서 재확인하세요.</li>
-        </ul>
-        
-        <p style="margin-bottom: 0;"><strong>본 시스템은 통계 분석 도구이며, 당첨을 보장하거나 권유하지 않습니다.</strong></p>
-    </div>
-
-    <h2>💼 10. FAQ - 자주 묻는 질문</h2>
-    
-    <div class="stat-card">
-        <p><strong>Q1. 세트 구매 시 정말 1등+2등 동시 당첨이 가능한가요?</strong></p>
-        <p>A. 네, 가능합니다. 6자리+보너스가 일치하면, 조가 일치한 1장은 1등, 나머지 4장은 2등에 당첨됩니다. 실제 사례가 여러 차례 있습니다.</p>
-    </div>
-
-    <div class="stat-card">
-        <p><strong>Q2. 보너스 번호 미출현 전략은 정말 효과가 있나요?</strong></p>
-        <p>A. 통계적으로 10회 이상 미출현 숫자는 다음 회차에 등장할 가능성이 상대적으로 높습니다. 하지만 절대적 보장은 없으며, 참고 지표로만 활용하세요.</p>
-    </div>
-
-    <div class="stat-card">
-        <p><strong>Q3. 디지트 합 16~30이 왜 최적인가요?</strong></p>
-        <p>A. 역대 당첨번호의 약 42%가 이 구간에 분포하기 때문입니다. 극단값(0~15, 41~54)은 출현 빈도가 낮습니다.</p>
-    </div>
-
-    <div class="stat-card">
-        <p><strong>Q4. 연금복권이 로또보다 정말 유리한가요?</strong></p>
-        <p>A. 1등 확률은 1/500만 vs 1/814만으로 연금복권이 약 1.6배 유리합니다. 또한 세트 구매 시 복합 당첨 가능성도 장점입니다.</p>
-    </div>
-
-    <div class="stat-card">
-        <p><strong>Q5. 자리별 HOT 숫자를 모두 조합하면 최고인가요?</strong></p>
-        <p>A. 아니요. 각 자리별 HOT를 조합해도 전체 밸런스(홀짝, 저고, 디지트 합 등)가 무너지면 오히려 불리합니다. 종합 지표를 함께 고려하세요.</p>
-    </div>
-
-    <h2>🔗 11. 추가 리소스</h2>
-    
-    <div class="info-box">
-        <p><strong>📌 관련 페이지:</strong></p>
-        <ul>
-            <li><a href="guide1.html" style="color: #f59e0b; font-weight: bold;">로또 6/45 분석 가이드</a></li>
-            <li><a href="index.html#tab-results" style="color: #f59e0b;">🏆 당첨결과 조회</a></li>
-            <li><a href="privacy.html" style="color: #f59e0b;">개인정보처리방침</a></li>
-        </ul>
-        
-        <p style="margin-top: 20px;"><strong>💬 피드백 및 문의:</strong></p>
-        <p>이메일: <a href="mailto:azit4376@gmail.com" style="color: #f59e0b;">azit4376@gmail.com</a></p>
-    </div>
-
-    <div style="text-align: center; margin-top: 50px; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">
-            <strong>월 700만원 당첨 후 커피 한 잔 쏘세요! ☕</strong><br>
-            하단 QR코드로 후원 가능합니다 😊
-        </p>
-        <a href="index.html" class="home-btn">🏠 메인으로 돌아가기</a>
-    </div>
-
-    <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 0.85rem;">
-        <p>마지막 업데이트: 2026년 2월 14일</p>
-        <p>© 2026 QUANTUM MULTI-INSIGHT. ALL RIGHTS RESERVED.</p>
-    </footer>
-
+        <p class="doc-footnote">QUANTUM LOTTO Lab · 통계적 참고 정보 · 공식 당첨 결과를 최종 기준으로 확인하세요.</p>
+    </main>
+    <script src="documents.js?v=27.0.0"></script>
 </body>
 </html>

@@ -9,6 +9,7 @@ const PENSION_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRd4x0R
 const STORAGE_KEYS = {
     theme: 'quantum_theme_v252',
     settings: 'quantum_generator_settings_v252',
+    nickname: 'quantum_nickname_v27',
     lottoStore: 'v13_db',
     pensionStore: 'v13_pension_db'
 };
@@ -36,10 +37,12 @@ let excs = new Set();
 let currentStatsRange = 10;
 let pageStatus = { win: 20, history: 20, store: 20 };
 let generatorSettings = loadGeneratorSettings();
+let activeNickname = '';
 window.sessionData = [];
 
 window.onload = async () => {
-    log('🛰️ 퀀텀 데이터베이스 접속 중...');
+    log('공개 당첨 데이터 연결 중...');
+    restoreNickname();
     populateQuantitySelect();
     populateAdvancedSelects();
     bindInputEvents();
@@ -94,6 +97,130 @@ function scrollToGenerator() {
     const target = document.getElementById('gen-panel');
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+function sanitizeNickname(value) {
+    const normalized = String(value || '')
+        .normalize('NFKC')
+        .replace(/[\u0000-\u001f\u007f]/g, '')
+        .replace(/[<>&"'`]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return Array.from(normalized).slice(0, 12).join('');
+}
+
+function nicknameStorageSuffix() {
+    if (!activeNickname) return '';
+    return encodeURIComponent(activeNickname.normalize('NFKC').toLocaleLowerCase('ko-KR'));
+}
+
+function restoreNickname() {
+    try {
+        activeNickname = sanitizeNickname(localStorage.getItem(STORAGE_KEYS.nickname) || '');
+    } catch (_) {
+        activeNickname = '';
+    }
+    renderNicknameProfile();
+}
+
+function renderNicknameProfile() {
+    const input = document.getElementById('nickname-input');
+    const avatar = document.getElementById('nickname-avatar');
+    const title = document.getElementById('nickname-title');
+    const status = document.getElementById('nickname-status');
+    const reset = document.getElementById('nickname-reset');
+    const storeTab = document.getElementById('store-tab');
+    if (input) input.value = activeNickname;
+    if (avatar) avatar.textContent = activeNickname ? Array.from(activeNickname)[0].toLocaleUpperCase('ko-KR') : 'Q';
+    if (title) title.textContent = activeNickname ? `${activeNickname}님의 분석 공간` : '내 분석 공간';
+    if (status) {
+        status.textContent = activeNickname
+            ? '이 닉네임의 저장 조합을 현재 브라우저에서 불러왔습니다.'
+            : '닉네임을 적용하면 저장 조합을 이 브라우저에서 별도로 관리합니다.';
+    }
+    if (reset) reset.classList.toggle('hidden', !activeNickname);
+    if (storeTab) {
+        storeTab.textContent = activeNickname ? '닉네임 저장소' : '내 저장소';
+        storeTab.title = activeNickname ? `${activeNickname}님의 저장소` : '내 저장소';
+    }
+}
+
+function saveNickname() {
+    const input = document.getElementById('nickname-input');
+    if (!input) return;
+    const nickname = sanitizeNickname(input.value);
+    if (!nickname) {
+        input.value = '';
+        input.focus();
+        alert('닉네임을 1자 이상 입력해 주세요.');
+        return;
+    }
+
+    activeNickname = nickname;
+    try {
+        localStorage.setItem(STORAGE_KEYS.nickname, activeNickname);
+    } catch (_) {
+        alert('브라우저 저장 기능을 사용할 수 없습니다.');
+        return;
+    }
+    window.sessionData = [];
+    pageStatus.store = 20;
+    renderNicknameProfile();
+    renderS();
+    log(`👤 [${activeNickname}] 로컬 분석 공간을 불러왔습니다.`);
+}
+
+function clearNickname() {
+    activeNickname = '';
+    try {
+        localStorage.removeItem(STORAGE_KEYS.nickname);
+    } catch (_) {}
+    window.sessionData = [];
+    pageStatus.store = 20;
+    renderNicknameProfile();
+    renderS();
+    log('👤 기본 분석 공간으로 전환했습니다.');
+}
+
+function openNicknameStore() {
+    const storeTab = document.getElementById('store-tab');
+    if (!storeTab) return;
+    switchTab('store', storeTab);
+    storeTab.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function openDocument(url, title) {
+    const dialog = document.getElementById('document-dialog');
+    const frame = document.getElementById('document-frame');
+    const heading = document.getElementById('document-title');
+    if (!dialog || !frame || !heading || typeof dialog.showModal !== 'function') return true;
+
+    heading.textContent = title;
+    frame.title = title;
+    frame.src = url;
+    if (!dialog.open) dialog.showModal();
+    document.body.classList.add('document-open');
+    return false;
+}
+
+function closeDocument() {
+    const dialog = document.getElementById('document-dialog');
+    if (dialog && dialog.open) dialog.close();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dialog = document.getElementById('document-dialog');
+    const frame = document.getElementById('document-frame');
+    if (!dialog) return;
+
+    dialog.addEventListener('click', event => {
+        if (event.target === dialog) closeDocument();
+    });
+
+    dialog.addEventListener('close', () => {
+        document.body.classList.remove('document-open');
+        if (frame) frame.src = 'about:blank';
+    });
+});
 
 function populateQuantitySelect() {
     const qtySelect = document.getElementById('gen-qty');
@@ -302,7 +429,9 @@ function toggleTheme() {
 }
 
 function getStorageKey(mode = currentMode) {
-    return mode === 'lotto' ? STORAGE_KEYS.lottoStore : STORAGE_KEYS.pensionStore;
+    const baseKey = mode === 'lotto' ? STORAGE_KEYS.lottoStore : STORAGE_KEYS.pensionStore;
+    const suffix = nicknameStorageSuffix();
+    return suffix ? `${baseKey}:profile:${suffix}` : baseKey;
 }
 
 function getLottoCarryNumbers() {
@@ -826,7 +955,7 @@ function updateInfoSection() {
     if (!title || !content) return;
 
     if (currentMode === 'lotto') {
-        title.innerHTML = '🎰 LOTTO 6/45 당첨 및 수령 안내';
+        title.innerHTML = '로또 6/45 당첨 기준';
         content.innerHTML = `
             <table class="info-table">
                 <tr><td>1등</td><td>당첨번호 <span class="info-emphasis">6개</span> 숫자 일치</td></tr>
@@ -834,19 +963,17 @@ function updateInfoSection() {
                 <tr><td>3등</td><td>당첨번호 <span class="info-emphasis">5개</span> 숫자 일치</td></tr>
                 <tr><td>4등</td><td>당첨번호 <span class="info-emphasis">4개</span> 숫자 일치</td></tr>
                 <tr><td>5등</td><td>당첨번호 <span class="info-emphasis">3개</span> 숫자 일치</td></tr>
-                <tr><td>추첨일시</td><td>매주 <span class="info-emphasis">토요일</span> 오후 8시 35분경 (MBC)</td></tr>
-                <tr><td>지급기한</td><td>지급개시일로부터 <span class="info-emphasis">1년</span> (휴일 익영업일)</td></tr>
+                <tr><td>공식 확인</td><td><a href="https://www.dhlottery.co.kr/lt645/intro" target="_blank" rel="noopener noreferrer">동행복권 안내</a>를 최종 기준으로 확인</td></tr>
             </table>
         `;
     } else {
-        title.innerHTML = '🎫 PENSION 720+ 당첨 및 수령 안내';
+        title.innerHTML = '연금복권 720+ 당첨 기준';
         content.innerHTML = `
             <table class="info-table">
                 <tr><td>1등</td><td>조 + <span class="info-emphasis">6자리</span> 일치</td></tr>
                 <tr><td>2등</td><td>조 불일치 + <span class="info-emphasis">6자리</span> 일치</td></tr>
                 <tr><td>3~7등</td><td>각 등수별 뒤자리 조건 충족</td></tr>
-                <tr><td>추첨일시</td><td>매주 <span class="info-emphasis">목요일</span> 오후 7시 05분경 (MBC)</td></tr>
-                <tr><td>지급기한</td><td>지급개시일로부터 <span class="info-emphasis">1년</span> (휴일 익영업일)</td></tr>
+                <tr><td>공식 확인</td><td><a href="https://www.dhlottery.co.kr/pt720/result" target="_blank" rel="noopener noreferrer">동행복권 결과</a>를 최종 기준으로 확인</td></tr>
             </table>
         `;
     }
@@ -1004,13 +1131,24 @@ function addMoreButton(container, totalLen, currentLen, type) {
 }
 
 function switchTab(tab, el) {
-    document.querySelectorAll('.tab').forEach(node => node.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(node => {
+        node.classList.remove('active');
+        node.setAttribute('aria-selected', 'false');
+    });
     el.classList.add('active');
+    el.setAttribute('aria-selected', 'true');
     ['gen-panel', 'stats-panel', 'win-panel', 'history-panel', 'store-panel'].forEach(id => {
         const panel = document.getElementById(id);
-        if (panel) panel.classList.add('hidden');
+        if (panel) {
+            panel.classList.add('hidden');
+            panel.setAttribute('aria-hidden', 'true');
+        }
     });
-    document.getElementById(`${tab}-panel`).classList.remove('hidden');
+    const activePanel = document.getElementById(`${tab}-panel`);
+    if (activePanel) {
+        activePanel.classList.remove('hidden');
+        activePanel.setAttribute('aria-hidden', 'false');
+    }
 
     if (tab === 'stats') {
         renderHeatmap();
@@ -1181,7 +1319,7 @@ function saveData() {
     });
     const merged = [...map.values()];
     localStorage.setItem(key, JSON.stringify(merged));
-    alert('💾 저장소 보관 완료');
+    alert(activeNickname ? `💾 ${activeNickname}님의 저장소에 보관했습니다.` : '💾 저장소에 보관했습니다.');
     updateBatchCopyBtn('store');
     log(`💾 ${window.sessionData.length}건을 저장소에 반영했습니다.`);
 }
@@ -1347,7 +1485,11 @@ function renderS() {
 
     if (!saved.length) {
         batchRow.style.display = 'none';
-        list.innerHTML = '<div class="ai-comment" style="text-align:center;">📂 보관된 조합이 없습니다.</div>';
+        const empty = document.createElement('div');
+        empty.className = 'ai-comment';
+        empty.style.textAlign = 'center';
+        empty.textContent = activeNickname ? `📂 ${activeNickname}님의 보관 조합이 없습니다.` : '📂 보관된 조합이 없습니다.';
+        list.appendChild(empty);
         updateBatchCopyBtn('store');
         return;
     }
@@ -1405,7 +1547,7 @@ function renderS() {
             </div>
             <div class="card-meta-block">
                 <div class="card-meta-title">제 ${targetRound}회 분석 조합</div>
-                <div class="card-meta-sub">저장된 참고 조합</div>
+                <div class="card-meta-sub">${activeNickname ? `${activeNickname}님의 저장 조합` : '저장된 참고 조합'}</div>
             </div>
             <div class="ball-group">${item.group ? `<div class="group-tag">${item.group}</div>` : ''}${balls}</div>
             <div class="metrics-grid">${metrics}</div>
@@ -1422,7 +1564,8 @@ function renderS() {
 }
 
 function resetStore() {
-    if (!confirm('비우시겠습니까?')) return;
+    const owner = activeNickname ? `${activeNickname}님의 저장소` : '현재 저장소';
+    if (!confirm(`${owner}를 비우시겠습니까?`)) return;
     localStorage.removeItem(getStorageKey());
     renderS();
     log('🗑️ 저장소를 비웠습니다.');
@@ -1521,7 +1664,7 @@ async function captureSlip(type) {
     slipTitle.innerText = watermarkText;
     slipDrawDate.innerText = drawDateStr;
     slipTime.innerText = combinedDateStr;
-    slipTrx.innerText = `TRX : QT-${uid}`;
+    slipTrx.innerText = activeNickname ? `${activeNickname} · QT-${uid}` : `TRX : QT-${uid}`;
 
     const latest = DB[currentMode][0];
     const roundNum = latest ? latest.r + 1 : '0000';
