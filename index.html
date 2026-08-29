@@ -3,418 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUANTUM LOTTO Lab | 데이터로 정리하는 무료 복권 분석 도구</title>
-    
-    <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg" />
-    <meta name="description" content="로또 6/45와 연금복권 720+의 공개 당첨 데이터를 바탕으로 번호 흐름, 구간 균형, 조합 지표를 한곳에서 확인하는 무료 통계 도구입니다.">
-    <meta name="keywords" content="로또분석, 로또번호생성기, 로또통계, 연금복권720, 복권예상번호, 무료로또번호">
-    <meta name="author" content="QUANTUM LOTTO">
+    <title>MIX645 | 전략형 로또 조합 생성기</title>
+    <meta name="description" content="1~10번 전략과 원하는 조합 수만 선택해 로또 6/45 참고 조합을 만들고, 대상 회차·전략·조합을 저장해 당첨 결과까지 확인하는 무료 생성기입니다.">
+    <meta name="keywords" content="로또조합, 로또번호생성기, 로또혼합형, 로또6/45, 로또번호추천">
+    <meta name="author" content="MIX645">
+    <meta name="google-site-verification" content="u36-FtkXCnHJ3qi2akqjFoLQ2M7pudNXb6r19_hKcMg">
     <link rel="canonical" href="https://azit4376-blip.github.io/lotto/">
-    
     <meta property="og:type" content="website">
-    <meta property="og:title" content="QUANTUM LOTTO Lab">
-    <meta property="og:description" content="감이 아닌 데이터로 보는 로또 6/45·연금복권 720+ 참고 조합 분석 도구.">
+    <meta property="og:title" content="MIX645 전략형 로또 조합 생성기">
+    <meta property="og:description" content="전략 번호와 조합 수만 선택하는 간단한 로또 6/45 조합 생성기.">
     <meta property="og:url" content="https://azit4376-blip.github.io/lotto/">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌌</text></svg>">
-
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-    <link rel="stylesheet" href="index.css?v=27.0.0">
-
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23152533%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2244%22 fill=%22%235ee0bd%22>645</text></svg>">
+    <link rel="stylesheet" href="index.css?v=31.0.0">
 </head>
 <body>
+<a class="skip-link" href="#generator">조합 생성기로 바로가기</a>
 
-<div class="dashboard">
-    <header class="brand-hero">
-        <nav class="brand-nav" aria-label="주요 메뉴">
-            <a class="brand-mark" href="./" aria-label="QUANTUM LOTTO Lab 홈">
-                <span class="brand-dot">Q</span>
-                <span>QUANTUM LOTTO <small>DATA LAB</small></span>
-            </a>
-            <div class="brand-nav-actions">
-                <a class="nav-text-link" href="#analysis-tools">분석 도구</a>
-                <a class="nav-text-link" href="guide1.html" onclick="return openDocument('guide1.html', '로또 6/45 가이드')">이용 가이드</a>
-                <button type="button" class="nav-icon-btn" onclick="toggleTheme()" title="테마 전환" aria-label="화면 테마 전환">◐</button>
-            </div>
+<header class="site-header">
+    <div class="header-inner">
+        <a class="brand" href="./" aria-label="MIX645 홈">
+            <span class="brand-symbol">645</span>
+            <span class="brand-copy"><strong>MIX645</strong><small>LOTTO COMBINATION LAB</small></span>
+        </a>
+        <nav class="top-nav" aria-label="주요 메뉴">
+            <a href="#generator">조합 생성</a>
+            <a href="guide1.html" onclick="return openDocument('guide1.html', '사용 가이드')">사용 가이드</a>
         </nav>
-
-        <section class="hero-grid" aria-label="서비스 요약">
-            <div class="hero-copy">
-                <p class="hero-eyebrow">Free statistical lottery workspace</p>
-                <h1>번호를 예측하지 않고,<br>선택을 더 체계적으로</h1>
-                <p class="hero-lead">공개된 역대 당첨 데이터에서 빈도와 균형 지표를 계산해 로또 6/45·연금복권 720+ 참고 조합을 정돈합니다.</p>
-                <div class="hero-actions">
-                    <button type="button" class="hero-primary" onclick="scrollToGenerator()">무료 분석 시작</button>
-                    <a class="hero-secondary" href="guide1.html" onclick="return openDocument('guide1.html', '로또 6/45 가이드')">분석 기준 보기</a>
-                </div>
-                <div class="hero-note">로그인 없음 · 전 기능 무료 · 생성 조합은 내 브라우저에만 저장</div>
-            </div>
-
-            <aside class="hero-panel" aria-label="분석 요약">
-                <div class="hero-panel-top">
-                    <span>현재 분석 기준</span>
-                    <strong id="hero-round">동기화 중</strong>
-                </div>
-                <div class="factor-score">
-                    <span>✓</span>
-                    <div>
-                        <b>검증 가능한 분석 지표</b>
-                        <small>빈도·미출현·구간 균형·조합 구조</small>
-                    </div>
-                </div>
-                <div class="mini-pipeline">
-                    <span><b>01</b> 공개 데이터 동기화</span>
-                    <span><b>02</b> 조합 균형 검토</span>
-                    <span><b>03</b> 참고 후보 정리</span>
-                </div>
-                <div class="hero-trust-row" aria-label="서비스 특성">
-                    <span>무료</span><span>무가입</span><span>로컬 저장</span>
-                </div>
-            </aside>
-        </section>
-
-    </header>
-
-    <div class="dday-ticker" id="dday-display">추첨 데이터 동기화 중...</div>
-
-    <div class="mode-switch" id="analysis-tools" aria-label="복권 유형 선택">
-        <button id="mode-lotto" class="mode-btn active" onclick="switchMode('lotto')">로또 6/45</button>
-        <button id="mode-pension" class="mode-btn" onclick="switchMode('pension')">연금복권 720+</button>
     </div>
+</header>
 
-    <section class="nickname-workspace" aria-labelledby="nickname-title">
-        <div class="nickname-profile">
-            <span id="nickname-avatar" class="nickname-avatar" aria-hidden="true">Q</span>
+<main class="page-shell">
+    <section class="generator" id="generator" aria-labelledby="generator-title">
+        <header class="generator-heading">
             <div>
-                <p class="nickname-kicker">Local profile</p>
-                <h2 id="nickname-title">내 분석 공간</h2>
-                <p id="nickname-status">닉네임을 적용하면 저장 조합을 이 브라우저에서 별도로 관리합니다.</p>
+                <p class="eyebrow">LOTTO 6/45 · STRATEGY GENERATOR</p>
+                <h1 id="generator-title">전략과 수량만 선택하세요.</h1>
+                <p>10가지 데이터 전략 중 하나와 원하는 조합 수를 선택하면 공통 균형 기준을 적용한 로또 6/45 참고 조합을 생성합니다.</p>
             </div>
-        </div>
-        <form class="nickname-form" onsubmit="saveNickname(); return false;">
-            <label class="sr-only" for="nickname-input">닉네임</label>
-            <input id="nickname-input" type="text" maxlength="12" autocomplete="nickname" placeholder="닉네임 1~12자" aria-describedby="nickname-privacy-note" required>
-            <button type="submit" class="nickname-save">닉네임 적용</button>
-            <button type="button" class="nickname-lookup" onclick="openNicknameStore()">내 조합 보기</button>
-            <button id="nickname-reset" type="button" class="nickname-reset hidden" onclick="clearNickname()">기본 공간</button>
-        </form>
-        <p id="nickname-privacy-note" class="nickname-privacy-note">서버·GitHub에는 저장하지 않습니다. 같은 브라우저에서만 다시 조회할 수 있습니다.</p>
-    </section>
-
-    <div id="recent-win-display" class="recent-summary">
-        <div class="recent-meta"><span id="recent-round-label">📡 SYNCING CLOUD DATA...</span><span id="recent-date-label">----.--.--</span></div>
-        <div id="recent-balls-row" class="recent-balls"></div>
-    </div>
-
-    <div class="stats-container">
-        <div class="stat-card"><span class="stat-label" id="hot-label">최근 강세 번호</span><span class="stat-value" id="hot-v">--</span></div>
-        <div class="stat-card"><span class="stat-label" id="cold-label">최근 미출현 번호</span><span class="stat-value" id="cold-v">--</span></div>
-        <div class="stat-card"><span class="stat-label">분석 대상 회차</span><span class="stat-value" id="target-round">--회</span></div>
-    </div>
-
-    <section class="analysis-layer" aria-label="분석 파이프라인">
-        <div class="layer-head">
-            <span>Analysis methodology</span>
-            <h2>공개 데이터를 세 단계로 정리합니다</h2>
-        </div>
-        <div class="layer-grid">
-            <article>
-                <span>01</span>
-                <h3>흐름 요약</h3>
-                <p>최근 10·30·50회 빈도와 미출현 간격을 같은 기준으로 비교합니다.</p>
-            </article>
-            <article>
-                <span>02</span>
-                <h3>구조 점검</h3>
-                <p>구간, 홀짝, 합계, 연속수, 끝수 분포를 확인해 조합의 형태를 설명합니다.</p>
-            </article>
-            <article>
-                <span>03</span>
-                <h3>후보 정리</h3>
-                <p>선택한 조건을 통과한 조합을 균형 등급별로 정리합니다. 등급은 당첨 확률을 의미하지 않습니다.</p>
-            </article>
-        </div>
-    </section>
-
-    <details class="sync-console" id="shared-terminal-container">
-        <summary>데이터 동기화 상태 보기</summary>
-        <div class="terminal" id="term"></div>
-    </details>
-
-    <div class="nav-tabs" role="tablist" aria-label="분석 메뉴">
-        <button type="button" class="tab active" role="tab" aria-selected="true" aria-controls="gen-panel" onclick="switchTab('gen', this)">조합 생성</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="stats-panel" onclick="switchTab('stats', this)">패턴 통계</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="win-panel" onclick="switchTab('win', this)">당첨 결과</button>
-        <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="history-panel" onclick="switchTab('history', this)">공개 타임라인</button>
-        <button id="store-tab" type="button" class="tab" role="tab" aria-selected="false" aria-controls="store-panel" onclick="switchTab('store', this)">내 저장소</button>
-    </div>
-
-    <div id="gen-panel" role="tabpanel" aria-hidden="false">
-        <div class="filter-section">
-            <div class="section-heading"><span>01</span><div><h2>번호 조건 설정</h2><p>포함할 번호와 제외할 번호를 먼저 정합니다.</p></div></div>
-            <div class="input-group"><input type="text" id="fix-in" class="input-main" placeholder="고정수 (콤마구분)" aria-label="고정 번호 입력"><button class="btn-add" onclick="addFilter('fix')">추가</button></div>
-            <div id="fix-chips" class="chip-group"></div>
-            <div class="input-group"><input type="text" id="exc-in" class="input-main" placeholder="제외수 (콤마구분)" aria-label="제외 번호 입력"><button class="btn-add" onclick="addFilter('exc')">추가</button></div>
-            <div id="exc-chips" class="chip-group"></div>
-        </div>
-
-        <div class="carry-guide" id="guide-text">강조된 번호는 전회차 당첨번호인 <b>'이월수'</b> 입니다.</div>
-
-        <div class="advanced-filter-box" id="advanced-filter-box">
-            <div class="advanced-filter-head">
-                <div>
-                    <span class="gen-label smart-filter-label" style="margin-bottom:0;">02 · BALANCE FILTER</span>
-                    <div class="smart-filter-sub">조합 형태를 정돈하는 선택 항목입니다.</div>
-                </div>
-                <div class="advanced-filter-actions">
-                    <button type="button" class="mini-action-btn" onclick="applyRecommendedLottoPreset()">추천값</button>
-                    <button type="button" class="mini-action-btn danger" onclick="resetAdvancedFilters()">초기화</button>
-                </div>
+            <div class="data-chip" id="data-chip" aria-live="polite">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span id="data-status">최신 데이터 확인 중</span>
             </div>
-            <div class="option-grid">
-                <div class="option-card lotto-only">
-                    <div class="option-title">이월수 최소</div>
-                    <select id="carry-min-select" class="option-select" onchange="updateGeneratorOption('carryMin', this.value)"></select>
-                </div>
-                <div class="option-card lotto-only">
-                    <div class="option-title">이월수 최대</div>
-                    <select id="carry-max-select" class="option-select" onchange="updateGeneratorOption('carryMax', this.value)"></select>
-                </div>
-                <div class="option-card lotto-only">
-                    <div class="option-title">인접수 최소</div>
-                    <select id="adjacent-min-select" class="option-select" onchange="updateGeneratorOption('adjacentMin', this.value)"></select>
-                </div>
-                <div class="option-card lotto-only">
-                    <div class="option-title">인접수 최대</div>
-                    <select id="adjacent-max-select" class="option-select" onchange="updateGeneratorOption('adjacentMax', this.value)"></select>
-                </div>
-                <div class="option-card toggle-card">
-                    <div class="option-copy">
-                        <div class="option-title">중복 조합 방지</div>
-                        <div class="option-desc">같은 조합은 한 번만 생성</div>
-                    </div>
-                    <input type="checkbox" id="unique-only-toggle" class="option-toggle" onchange="updateGeneratorOption('uniqueOnly', this.checked)">
-                </div>
-                <div class="option-card toggle-card">
-                    <div class="option-copy">
-                        <div class="option-title">점수순 정렬</div>
-                        <div class="option-desc">높은 점수 조합을 위로 정렬</div>
-                    </div>
-                    <input type="checkbox" id="smart-sort-toggle" class="option-toggle" onchange="updateGeneratorOption('smartSort', this.checked)">
-                </div>
-            </div>
-            <div class="option-help" id="advanced-help-text">직전 회차 번호를 기준으로 이월수와 인접수 개수를 제한할 수 있습니다.</div>
-        </div>
-        
-        <div class="custom-gen-box">
-            <span class="gen-label">03 · 생성 수량과 균형 기준</span>
-            <div style="display:flex; align-items:center;">
-                <select id="gen-qty" class="input-qty" style="appearance: none; -webkit-appearance: none; cursor: pointer;"></select>
-                <button class="btn-gen btn-primary" style="flex:1; background:var(--primary); color:#000; border:none; height:48px; border-radius:12px; font-weight:900;" onclick="triggerGen()">무작위 조합 생성</button>
-            </div>
-            <div class="gen-btn-row">
-                <button class="btn-gen btn-normal" onclick="triggerGradeGen('NORMAL')">기본 균형</button>
-                <button class="btn-gen btn-strong" onclick="triggerGradeGen('STRONG')">강화 균형</button>
-                <button class="btn-gen btn-legend" onclick="triggerGradeGen('LEGEND')">정밀 균형</button>
-                
-                <button class="btn-gen btn-save-inline" onclick="saveData()">조합 보관하기</button>
-                <button class="btn-gen btn-clear-gen" onclick="clearList()">결과 지우기</button>
-            </div>
-        </div>
-
-        <div id="gen-summary" class="result-summary hidden"></div>
-
-        <div id="batch-action-row" style="display:flex; gap:8px; margin-bottom:20px;">
-            <button id="batch-copy-gen" class="btn-copy-all hidden" onclick="copyBatch('gen')" style="flex:1; margin-bottom:0;">전체 조합 복사</button>
-            <button id="batch-slip-gen" class="btn-copy-all hidden" onclick="captureSlip('gen')" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold); margin-bottom:0;">조합 이미지 저장</button>
-        </div>
-        <div id="res-list"></div>
-    </div>
-
-    <div id="stats-panel" class="hidden" role="tabpanel" aria-hidden="true">
-        <div class="filter-section" style="text-align:center;">
-            <span class="gen-label">통계 조회 범위</span>
-            <div class="gen-btn-row">
-                <button class="btn-gen active" onclick="updateStatsRange(10, this)">최근 10회</button>
-                <button class="btn-gen" onclick="updateStatsRange(30, this)">최근 30회</button>
-                <button class="btn-gen" onclick="updateStatsRange(50, this)">최근 50회</button>
-            </div>
-        </div>
-        
-        <div class="custom-gen-box">
-            <span class="gen-label">번호별 출현 빈도</span>
-            <div id="heatmap-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 15px;"></div>
-        </div>
-
-        <div id="stats-summary" style="display:flex; gap:10px;">
-            <div class="stat-card" style="flex:1;"><span class="stat-label">🔥 최고 빈도</span><span class="stat-value" id="stat-max-n">--</span></div>
-            <div class="stat-card" style="flex:1;"><span class="stat-label">❄️ 최저 빈도</span><span class="stat-value" id="stat-min-n">--</span></div>
-        </div>
-
-        <div class="custom-gen-box">
-            <span class="gen-label">흐름 요약 지표</span>
-            <div class="insight-grid">
-                <div class="insight-card">
-                    <div class="insight-title">🚀 모멘텀 번호</div>
-                    <div id="insight-momentum" class="insight-value">--</div>
-                    <div class="insight-desc">최근 10회 대비 50회 추세를 비교해 상승폭이 큰 번호를 탐지합니다.</div>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-title">🕒 장기 미출현</div>
-                    <div id="insight-overdue" class="insight-value">--</div>
-                    <div class="insight-desc">가장 오래 나오지 않은 번호를 표시해 역추적 분석에 활용합니다.</div>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-title">📐 구간 밸런스</div>
-                    <div id="insight-balance" class="insight-value">--</div>
-                    <div class="insight-desc">번호대/자리대 분포가 쏠렸는지 균형인지 실시간으로 점검합니다.</div>
-                </div>
-                <div class="insight-card">
-                    <div class="insight-title">🎯 추천 운용</div>
-                    <div id="insight-strategy" class="insight-value">--</div>
-                    <div id="insight-strategy-chips" class="insight-list"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="win-panel" class="hidden" role="tabpanel" aria-hidden="true"><div id="win-list"></div></div>
-    <div id="history-panel" class="hidden" role="tabpanel" aria-hidden="true">
-        <div id="history-batch-row" style="display:none; gap:8px; margin-bottom:12px;">
-            <button id="batch-copy-history" class="btn-copy-all" onclick="copyBatchHistory()" style="flex:1; margin-bottom:0;">📋 전체 복사</button>
-            <button id="batch-slip-history" class="btn-copy-all" onclick="captureSlipHistory()" style="flex:1; background:rgba(251,191,36,0.1); border-color:var(--gold); color:var(--gold); margin-bottom:0;">📸 슬립 저장</button>
-        </div>
-        <div id="history-list"></div>
-    </div>
-    
-    <div id="store-panel" class="hidden" role="tabpanel" aria-hidden="true">
-        <div id="store-batch-row">
-            <button id="batch-copy-store" class="btn-copy-all" onclick="copyBatch('store')">📋 전체 복사</button>
-            <button id="batch-slip-store" class="btn-copy-all" onclick="captureSlip('store')">📸 슬립 저장</button>
-            <button class="btn-clear-store" onclick="resetStore()">🗑️ 비우기</button>
-        </div>
-        <div id="store-list"></div>
-    </div>
-
-    <button id="btn-top" class="btn-top" type="button" onclick="window.scrollTo({ top:0, behavior:'smooth' })" aria-label="페이지 맨 위로">↑</button>
-
-    <footer class="footer">
-        <section class="methodology-panel" aria-labelledby="methodology-title">
-            <div class="footer-section-heading">
-                <div>
-                    <p class="footer-eyebrow">Transparent methodology</p>
-                    <h2 id="methodology-title">계산 기준을 숨기지 않습니다</h2>
-                </div>
-                <a class="footer-inline-link" href="guide1.html" onclick="return openDocument('guide1.html', '로또 6/45 가이드')">지표 자세히 보기 →</a>
-            </div>
-            <div class="methodology-grid">
-                <article>
-                    <span>01</span>
-                    <h3>공개 데이터 동기화</h3>
-                    <p>역대 당첨 결과를 불러오고 회차·번호 형식을 확인합니다.</p>
-                </article>
-                <article>
-                    <span>02</span>
-                    <h3>구조 지표 계산</h3>
-                    <p>빈도, 미출현 간격, 홀짝·저고 비율, 합계와 AC값을 계산합니다.</p>
-                </article>
-                <article>
-                    <span>03</span>
-                    <h3>참고 조합 정리</h3>
-                    <p>사용자가 선택한 조건 안에서 조합을 만들고 결과 근거를 함께 표시합니다.</p>
-                </article>
-            </div>
-            <p class="methodology-note">모든 유효 조합의 1등 당첨 확률은 동일합니다. 등급과 지표는 조합의 구조적 특징을 설명할 뿐, 당첨 가능성을 높이거나 보장하지 않습니다.</p>
-        </section>
-
-        <section id="info-panel" class="live-info-panel" aria-live="polite">
-            <div id="info-title" class="live-info-title">로또 6/45 당첨 정보 안내</div>
-            <div id="info-content" class="live-info-content"></div>
-        </section>
-
-        <section class="footer-utility-grid">
-            <article class="responsible-card">
-                <p class="footer-eyebrow">Responsible play</p>
-                <h2>복권은 여가로, 정한 한도 안에서</h2>
-                <p>이 사이트는 동행복권의 공식 서비스가 아니며 복권을 판매하거나 구매를 대행하지 않습니다. 만 19세 이상만 이용해 주세요.</p>
-                <a href="https://www.kcgp.or.kr/portal/main/contents.do?menuNo=200062" target="_blank" rel="noopener noreferrer">도박문제 상담 1336 안내 →</a>
-            </article>
-
-            <article class="support-card">
-                <div>
-                    <p class="footer-eyebrow">Optional support</p>
-                    <h2>무료 도구 운영 응원하기</h2>
-                    <p>후원은 완전히 선택 사항이며 분석 결과나 기능 제공에 영향을 주지 않습니다.</p>
-                </div>
-                <img src="qrcode.png" alt="카카오페이 자율 후원 QR 코드" class="support-qr">
-            </article>
-        </section>
-
-        <section class="footer-directory" aria-label="서비스 문서">
-            <div class="footer-brand-block">
-                <span class="footer-brand-mark">Q</span>
-                <div>
-                    <strong>QUANTUM LOTTO</strong>
-                    <p>데이터를 읽기 쉽게 정리하는 무료 복권 통계 도구</p>
-                </div>
-            </div>
-            <nav class="footer-document-links" aria-label="문서 바로가기">
-                <a href="about.html" onclick="return openDocument('about.html', '서비스 소개')">서비스 소개</a>
-                <a href="guide1.html" onclick="return openDocument('guide1.html', '로또 6/45 가이드')">로또 가이드</a>
-                <a href="guide2.html" onclick="return openDocument('guide2.html', '연금복권 720+ 가이드')">연금복권 가이드</a>
-                <a href="terms.html" onclick="return openDocument('terms.html', '서비스 이용약관')">이용약관</a>
-                <a href="privacy.html" onclick="return openDocument('privacy.html', '개인정보처리방침')">개인정보처리방침</a>
-                <a href="mailto:azit4376@gmail.com">문의</a>
-            </nav>
-        </section>
-        <div class="footer-bottom">
-            <span>© 2026 QUANTUM LOTTO Lab</span>
-            <span>무료 · 무가입 · 브라우저 저장</span>
-        </div>
-    </footer>
-</div>
-
-<dialog id="document-dialog" class="document-dialog" aria-labelledby="document-title">
-    <div class="document-frame-shell">
-        <header class="document-frame-header">
-            <div>
-                <span class="document-frame-eyebrow">QUANTUM LOTTO · DOCUMENT</span>
-                <h2 id="document-title">서비스 문서</h2>
-            </div>
-            <button type="button" class="document-close" onclick="closeDocument()" aria-label="문서 닫기">닫기 <span aria-hidden="true">×</span></button>
         </header>
-        <iframe id="document-frame" class="document-frame" title="서비스 문서" loading="lazy"></iframe>
+
+        <div class="latest-draw" id="latest-draw" aria-live="polite">
+            <div class="latest-copy">
+                <span>최근 당첨 결과</span>
+                <strong id="latest-round">불러오는 중</strong>
+                <small id="latest-date">잠시만 기다려 주세요</small>
+            </div>
+            <div class="latest-balls" id="latest-balls" aria-label="최근 당첨번호"></div>
+        </div>
+
+        <div class="generator-grid">
+            <form class="control-panel" id="generator-form">
+                <fieldset class="control-group">
+                    <legend><span>1</span> 전략 선택</legend>
+                    <label class="select-wrap" for="strategy-select">
+                        <select id="strategy-select" aria-describedby="strategy-description">
+                            <option value="1">1번 · 균형형 전략</option>
+                            <option value="2">2번 · 최근 10주 빈도 전략</option>
+                            <option value="3">3번 · 최근 20~50주 추세 전략</option>
+                            <option value="4">4번 · 장기 누적 빈도 전략</option>
+                            <option value="5">5번 · 미출현·저출현 반등 전략</option>
+                            <option value="6">6번 · 핫넘버 중심 전략</option>
+                            <option value="7">7번 · 콜드넘버 중심 전략</option>
+                            <option value="8" selected>8번 · 혼합형 전략</option>
+                            <option value="9">9번 · 계절·월별 패턴 전략</option>
+                            <option value="10">10번 · 고위험 랜덤 분산 전략</option>
+                        </select>
+                    </label>
+                    <p class="strategy-description" id="strategy-description"></p>
+                </fieldset>
+
+                <fieldset class="control-group">
+                    <legend><span>2</span> 조합 수</legend>
+                    <div class="quantity-row">
+                        <button type="button" class="quantity-button" id="quantity-minus" aria-label="조합 수 1개 줄이기">−</button>
+                        <label for="quantity-input"><input id="quantity-input" type="number" min="1" max="30" value="15" inputmode="numeric"><small>조합</small></label>
+                        <button type="button" class="quantity-button" id="quantity-plus" aria-label="조합 수 1개 늘리기">+</button>
+                    </div>
+                    <div class="quantity-presets" aria-label="조합 수 빠른 선택">
+                        <button type="button" data-quantity="5">5</button>
+                        <button type="button" data-quantity="10">10</button>
+                        <button type="button" data-quantity="15" class="active">15</button>
+                        <button type="button" data-quantity="20">20</button>
+                        <button type="button" data-quantity="25">25</button>
+                        <button type="button" data-quantity="30">30</button>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="generate-button" id="generate-button" disabled>
+                    <span id="generate-button-label">8번 혼합형 15조합 만들기</span>
+                    <span aria-hidden="true">→</span>
+                </button>
+                <p class="form-note">번호 생성과 검증은 이 브라우저에서 처리합니다. 회원가입과 개인정보 입력은 필요하지 않습니다.</p>
+            </form>
+
+            <aside class="strategy-card" aria-labelledby="selected-strategy-name">
+                <div class="strategy-card-top"><span>SELECTED STRATEGY</span><strong id="selected-strategy-number">08</strong></div>
+                <h2 id="selected-strategy-name">혼합형 전략</h2>
+                <p id="selected-strategy-summary"></p>
+                <div class="criteria-list" aria-label="공통 검증 기준">
+                    <span>홀짝 2:4~4:2</span>
+                    <span>저고 2:4~4:2</span>
+                    <span>합계 90~200</span>
+                    <span>구간 쏠림 제한</span>
+                    <span>끝수 최대 2개</span>
+                    <span>연속수 최대 1쌍</span>
+                </div>
+                <div class="strategy-card-note"><strong>알아두세요</strong><p>전략은 과거 데이터를 참고해 번호 선택 가중치를 바꾸는 방식입니다. 어떤 전략도 당첨 확률을 보장하지 않습니다.</p></div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="results hidden" id="results" aria-labelledby="results-title">
+        <header class="results-header">
+            <div>
+                <p class="eyebrow">GENERATED COMBINATIONS</p>
+                <h2 id="results-title">생성 결과</h2>
+                <p id="results-subtitle"></p>
+            </div>
+            <div class="result-actions">
+                <button type="button" id="save-button" class="save" disabled>스프레드시트 저장</button>
+                <button type="button" id="copy-all-button">엑셀용 전체 복사</button>
+                <button type="button" id="download-button">TXT 다운로드</button>
+                <button type="button" id="regenerate-button" class="primary">다시 만들기</button>
+            </div>
+        </header>
+
+        <div class="result-summary" id="result-summary"></div>
+        <div class="save-status" id="save-status" role="status" aria-live="polite"></div>
+        <div class="combination-list" id="combination-list"></div>
+        <p class="data-notice" id="data-notice"></p>
+    </section>
+
+    <section class="saved-history" id="saved-history" aria-labelledby="saved-history-title">
+        <header class="history-header">
+            <div>
+                <p class="eyebrow">SAVED &amp; PRIZE CHECK</p>
+                <h2 id="saved-history-title">저장·당첨 기록</h2>
+                <p>스프레드시트에 저장된 최근 조합을 대상 회차 당첨번호와 자동으로 대조합니다.</p>
+            </div>
+            <button type="button" id="refresh-history-button">기록 새로고침</button>
+        </header>
+        <div class="history-summary" id="history-summary"></div>
+        <div class="history-list" id="history-list"><p class="history-empty">저장 기록을 불러오는 중입니다.</p></div>
+        <p class="history-note">저장 기록은 개인정보 없이 공개 공유됩니다. 당첨 조합을 먼저 표시하고 나머지는 최신순으로 합계 30건까지 보여줍니다.</p>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-title">
+        <div class="section-title">
+            <p class="eyebrow">HOW IT WORKS</p>
+            <h2 id="how-title">세 단계로 끝납니다</h2>
+        </div>
+        <div class="step-list">
+            <article><span>01</span><h3>전략 선택</h3><p>1~10번 중 데이터 반영 방식에 맞는 전략을 선택합니다.</p></article>
+            <article><span>02</span><h3>수량 선택</h3><p>1~30조합 안에서 원하는 수량을 정합니다. 기본값은 15조합입니다.</p></article>
+            <article><span>03</span><h3>복사 또는 저장</h3><p>결과를 엑셀용 탭 형식으로 복사하거나 TXT 파일로 저장합니다.</p></article>
+        </div>
+    </section>
+
+    <section class="support-panel" aria-labelledby="support-title">
+        <div>
+            <p class="eyebrow">OPTIONAL SUPPORT</p>
+            <h2 id="support-title">서비스 운영을 응원해 주세요</h2>
+            <p>MIX645는 무료로 운영됩니다. 카카오페이 QR 후원은 선택 사항이며, 후원 여부는 기능·생성 결과·전략 가중치에 어떠한 영향도 주지 않습니다.</p>
+        </div>
+        <figure>
+            <img src="qrcode.png" alt="MIX645 카카오페이 후원 QR코드" width="150" height="150" loading="lazy">
+            <figcaption>카카오페이로 스캔</figcaption>
+        </figure>
+    </section>
+
+    <aside class="responsible-note">
+        <div><span>19+</span><strong>복권은 정한 여가 예산 안에서 이용하세요.</strong></div>
+        <p>로또는 무작위 추첨이므로 당첨을 보장하지 않으며, 생성 조합은 통계와 조합 균형을 참고한 재미·전략용 정보입니다. 공식 결과와 구매 기준은 동행복권에서 확인하세요.</p>
+    </aside>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-brand"><span>645</span><div><strong>MIX645</strong><p>간단한 전략형 로또 조합 생성기</p></div></div>
+        <nav aria-label="서비스 문서">
+            <a href="about.html" onclick="return openDocument('about.html', '서비스 소개')">서비스 소개</a>
+            <a href="guide1.html" onclick="return openDocument('guide1.html', '사용 가이드')">사용 가이드</a>
+            <a href="terms.html" onclick="return openDocument('terms.html', '이용약관')">이용약관</a>
+            <a href="privacy.html" onclick="return openDocument('privacy.html', '개인정보처리방침')">개인정보처리방침</a>
+            <a href="mailto:azit4376@gmail.com">문의</a>
+        </nav>
+    </div>
+    <div class="footer-bottom"><span>© 2026 MIX645</span><span>동행복권 비공식 · 복권 판매 및 구매 대행 없음</span></div>
+</footer>
+
+<dialog class="document-dialog" id="document-dialog" aria-labelledby="document-title">
+    <div class="document-shell">
+        <header><div><span>MIX645 · DOCUMENT</span><h2 id="document-title">서비스 문서</h2></div><button type="button" id="document-close">닫기 <b aria-hidden="true">×</b></button></header>
+        <iframe id="document-frame" title="서비스 문서" loading="lazy"></iframe>
     </div>
 </dialog>
 
-    <div id="slip-render-zone">
-        <div class="watermark-layer" id="slip-watermark">
-        </div>
-
-        <div class="slip-header-wrap">
-            <h2 class="slip-main-title" id="slip-title">QUANTUM MULTI</h2>
-            <span class="slip-sub-title">QUANTUM &nbsp; ANALYSIS &nbsp; SYSTEM</span>
-        </div>
-        <div class="slip-meta-info" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; border-bottom: 1px dashed #333; padding-bottom: 18px;">
-            <div style="width: 100%; display: flex; justify-content: space-between; align-items: baseline;">
-                <span id="slip-round" style="font-size: 1.25rem; font-weight: 900; color: #000;">제 &nbsp; ---- &nbsp; 회</span>
-                <span id="slip-draw-date" style="color: #f43f5e; font-weight: 900; font-size: 1rem;">추첨일 : 2026.00.00 (토)</span>
-            </div>
-            
-            <div style="width: 100%; display: flex; justify-content: space-between; border-top: 1px dashed #eee; padding-top: 10px;">
-                <span id="slip-time" style="font-size: 0.9rem; color: #333; font-family: 'Roboto Mono', monospace; font-weight: 800; letter-spacing: 0px; white-space: nowrap;">조합일 : 2026.01.01 00:00:00</span>
-                <span id="slip-trx" style="font-size: 0.9rem; color: #333; font-family: 'Roboto Mono', monospace; font-weight: 800; letter-spacing: 0px; white-space: nowrap;">TRX:QT-XXXXXXXX</span>
-            </div>
-        </div>
-        <div id="slip-list-target"></div>
-        <div class="slip-footer-wrap">
-            <div class="slip-price-tag" id="slip-price">금액 ₩ 0,000</div>
-            <div class="slip-site-url">azit4376-blip.github.io/lotto/</div>
-            <div class="slip-verify">STATISTICAL REFERENCE ONLY · NO WIN GUARANTEE</div>
-        </div>
-    </div>
-
-<script src="index.js?v=27.0.0"></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="index.js?v=31.0.0"></script>
 </body>
 </html>

@@ -1,13 +1,13 @@
 :root {
     color-scheme: light;
-    --ink: #101828;
-    --muted: #5e6c7e;
+    --ink: #152533;
+    --muted: #667985;
     --teal: #0f766e;
     --teal-dark: #0a5c56;
     --amber: #f4b942;
     --paper: #ffffff;
-    --canvas: #f3f6f8;
-    --line: #dce4eb;
+    --canvas: #f2f6f7;
+    --line: #dbe4e8;
     --soft: #f7f9fb;
 }
 
@@ -67,8 +67,10 @@ select {
     height: 30px;
     place-items: center;
     border-radius: 8px;
-    background: var(--teal);
-    color: #ffffff;
+    background: var(--ink);
+    color: #5ee0bd;
+    font-size: 0.56rem;
+    letter-spacing: -0.03em;
 }
 
 .document-home {
@@ -97,7 +99,7 @@ select {
     border-radius: 18px;
     background:
         radial-gradient(circle at 86% 15%, rgba(244, 185, 66, 0.28), transparent 27%),
-        linear-gradient(135deg, #101828 0%, #123f3b 100%);
+        linear-gradient(135deg, #152533 0%, #123f3b 100%);
     color: #ffffff;
 }
 
