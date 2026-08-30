@@ -86,14 +86,19 @@ try {
 } catch {
     errors.push("JSON-LD 구조화 데이터 문법 오류");
 }
-if (!mainCode.includes("SAVE_API_URL") || !mainCode.includes("grade: strategyLabel")) errors.push("전략 포함 스프레드시트 저장 연결 누락");
+if (!mainCode.includes("SAVE_API_URL") || !mainCode.includes("grade: strategyLabel")) errors.push("전략 포함 생성 기록 저장 연결 누락");
 const loadHistorySection = mainCode.match(/async function loadHistory\(\)[\s\S]*?\n}\n\nfunction initialize/)?.[0] || "";
 if (/generateCurrent\s*\(/.test(loadHistorySection)) errors.push("첫 접속 시 조합 자동 생성이 남아 있음");
 
 const privacy = readFileSync(join(root, "privacy.html"), "utf8");
-for (const term of ["회원가입 없음", "localStorage", "GitHub Pages", "Google Sheets", "Google Apps Script", "공개", "azit4376@gmail.com"]) {
+for (const term of ["회원가입 없음", "localStorage", "GitHub Pages", "외부 생성 기록 서비스", "공개", "azit4376@gmail.com"]) {
     if (!privacy.includes(term)) errors.push(`개인정보처리방침 설명 누락: ${term}`);
 }
+for (const page of pages) {
+    const content = readFileSync(join(root, page), "utf8");
+    if (/스프레드시트|Google Sheets|Google Apps Script/i.test(content)) errors.push(`기술 저장 수단이 사용자 문구에 노출됨: ${page}`);
+}
+if (mainCode.includes("스프레드시트")) errors.push("기술 저장 수단이 화면 메시지에 노출됨: index.js");
 
 const sitemap = readFileSync(join(root, "sitemap.xml"), "utf8");
 for (const page of pages.slice(1)) {

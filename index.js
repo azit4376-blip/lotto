@@ -551,8 +551,8 @@ function renderResults() {
     state.dom["data-notice"].textContent = state.dataMode === "live"
         ? `최근 ${state.history.length.toLocaleString("ko-KR")}개 회차 데이터를 번호 선택 가중치에 참고했습니다. 과거 출현 기록은 미래 결과를 예측하지 않습니다.`
         : "최신 데이터를 확인하지 못했으므로 일반적인 조합 균형 기준으로 생성했습니다. 인터넷 연결 후 다시 만들면 과거 회차 가중치가 반영됩니다.";
-    if (state.dataMode === "live" && targetRound) setSaveStatus(`${targetRound}회 대상 · ${state.strategy}번 전략으로 스프레드시트에 저장할 준비가 됐습니다.`);
-    else setSaveStatus("최신 회차를 확인할 수 없어 현재 조합은 스프레드시트에 저장하지 않습니다.", "error");
+    if (state.dataMode === "live" && targetRound) setSaveStatus(`${targetRound}회 대상 · ${state.strategy}번 전략의 생성 기록을 저장할 준비가 됐습니다.`);
+    else setSaveStatus("최신 회차를 확인할 수 없어 현재 조합은 저장하지 않습니다.", "error");
     state.dom.results.classList.remove("hidden");
 }
 
@@ -566,7 +566,7 @@ function setSaveStatus(message, status = "") {
 
     const alreadySaved = state.combinations.length && state.lastSavedKey === currentBatchKey();
     button.disabled = state.saving || alreadySaved || state.dataMode !== "live" || !state.combinations.length;
-    button.textContent = state.saving ? "저장 중..." : alreadySaved ? "저장됨" : "스프레드시트 저장";
+    button.textContent = state.saving ? "저장 중..." : alreadySaved ? "저장됨" : "기록 저장";
 }
 
 function buildSavePayload() {
@@ -609,7 +609,7 @@ async function saveCurrentBatch({ silent = false } = {}) {
     }
 
     state.saving = true;
-    setSaveStatus(`${getTargetRound()}회 대상 조합을 스프레드시트에 저장하는 중입니다.`);
+    setSaveStatus(`${getTargetRound()}회 대상 조합의 생성 기록을 저장하는 중입니다.`);
     try {
         await fetch(SAVE_API_URL, {
             method: "POST",
@@ -618,18 +618,18 @@ async function saveCurrentBatch({ silent = false } = {}) {
         });
         state.lastSavedKey = batchKey;
         setSaveStatus(`${getTargetRound()}회 대상 · ${state.strategy}번 전략 · ${state.combinations.length}조합의 저장 요청을 보냈습니다.`, "saved");
-        if (!silent) showToast(`${state.combinations.length}조합을 스프레드시트에 저장했습니다.`);
+        if (!silent) showToast(`${state.combinations.length}조합을 저장했습니다.`);
 
         window.setTimeout(async () => {
             await loadSavedHistory({ showLoading: false });
             if (currentBatchIsRecorded()) {
-                setSaveStatus(`스프레드시트 저장 확인 · ${getTargetRound()}회 대상 · ${state.strategy}번 전략 · ${state.combinations.length}조합`, "saved");
+                setSaveStatus(`기록 저장 확인 · ${getTargetRound()}회 대상 · ${state.strategy}번 전략 · ${state.combinations.length}조합`, "saved");
             }
         }, 1400);
         return true;
     } catch (error) {
         console.error("MIX645 save error:", error);
-        setSaveStatus("스프레드시트에 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.", "error");
+        setSaveStatus("생성 기록을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.", "error");
         if (!silent) showToast("저장하지 못했습니다.");
         return false;
     } finally {
@@ -695,7 +695,7 @@ async function loadSavedHistory({ showLoading = true } = {}) {
         refreshButton.disabled = true;
         refreshButton.textContent = "불러오는 중...";
     }
-    if (showLoading) state.dom["history-list"].innerHTML = '<p class="history-empty">스프레드시트 저장 기록을 불러오는 중입니다.</p>';
+    if (showLoading) state.dom["history-list"].innerHTML = '<p class="history-empty">저장 기록을 불러오는 중입니다.</p>';
 
     try {
         const separator = SAVE_API_URL.includes("?") ? "&" : "?";

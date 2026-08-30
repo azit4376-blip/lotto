@@ -50,7 +50,7 @@
                         <div class="feature-card"><h3>자동 균형 검증</h3><p>홀짝, 저고, 합계, 구간, 끝수, 연속수와 조합 간 겹침을 자동 확인합니다.</p></div>
                         <div class="feature-card"><h3>최근 회차 참고</h3><p>공개 회차 데이터를 불러오면 최근 당첨번호 과다 중복과 전략별 빈도를 참고합니다.</p></div>
                         <div class="feature-card"><h3>엑셀용 복사</h3><p>생성 결과를 탭으로 구분된 6열 형식으로 한 번에 복사합니다.</p></div>
-                        <div class="feature-card"><h3>저장·당첨 확인</h3><p>대상 회차, 사용 전략과 조합을 스프레드시트에 기록하고 추첨 뒤 등수를 대조합니다.</p></div>
+                        <div class="feature-card"><h3>저장·당첨 확인</h3><p>대상 회차, 사용 전략과 조합을 기록하고 추첨 뒤 등수를 대조합니다.</p></div>
                     </div>
                 </section>
 
@@ -58,12 +58,12 @@
                     <p class="section-kicker">03 · Process</p>
                     <h2>데이터와 생성 과정</h2>
                     <div class="step-grid">
-                        <div class="step-card"><span class="step-number">01</span><h3>회차 불러오기</h3><p>게시된 Google Sheets CSV에서 과거 당첨 이력을 읽습니다.</p></div>
+                        <div class="step-card"><span class="step-number">01</span><h3>회차 불러오기</h3><p>공개된 과거 당첨 이력에서 최신 회차와 번호를 확인합니다.</p></div>
                         <div class="step-card"><span class="step-number">02</span><h3>후보 선택</h3><p>선택한 전략에 따라 번호별 가중치를 달리해 6개 후보를 뽑습니다.</p></div>
                         <div class="step-card"><span class="step-number">03</span><h3>검증·저장</h3><p>기준을 통과한 조합만 표시하고 대상 회차와 전략을 함께 기록합니다.</p></div>
                     </div>
-                    <p>생성과 검증은 현재 브라우저에서 실행됩니다. 사용자가 조합 만들기 버튼을 누르면 대상 회차, 전략명과 생성 번호가 기존 Google Apps Script를 통해 공개 저장 기록에 추가됩니다. 이름, 닉네임이나 연락처는 저장하지 않습니다.</p>
-                    <p>외부 당첨 데이터가 일시적으로 연결되지 않아도 일반 균형 기준으로 생성기를 이용할 수 있으며, 이 경우 결과를 잘못된 회차에 연결하지 않도록 스프레드시트 저장은 중지합니다.</p>
+                    <p>생성과 검증은 현재 브라우저에서 실행됩니다. 사용자가 조합 만들기 버튼을 누르면 대상 회차, 전략명과 생성 번호가 공개 저장 기록에 추가됩니다. 이름, 닉네임이나 연락처는 저장하지 않습니다.</p>
+                    <p>외부 당첨 데이터가 일시적으로 연결되지 않아도 일반 균형 기준으로 생성기를 이용할 수 있으며, 이 경우 결과를 잘못된 회차에 연결하지 않도록 기록 저장은 중지합니다.</p>
                 </section>
 
                 <section class="doc-section" id="principles">
