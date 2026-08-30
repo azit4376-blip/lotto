@@ -71,6 +71,7 @@ if (/myhits|fonts\.googleapis\.com|html2canvas|kakao/i.test(mainCode + readFileS
 }
 
 if (!index.includes('src="qrcode.png"')) errors.push("카카오페이 QR 이미지 연결 누락");
+if (!index.includes('href="https://is.gd/kkcpay"') || !index.includes('aria-label="카카오페이 송금 페이지 열기"')) errors.push("카카오페이 QR 송금 링크 누락");
 if (!index.includes('property="og:image" content="https://azit4376-blip.github.io/lotto/og.png')) errors.push("공유 이미지 Open Graph 연결 누락");
 if (!index.includes('name="twitter:card" content="summary_large_image"')) errors.push("대형 SNS 공유 카드 설정 누락");
 if (/property="og:image"[^>]+qrcode/i.test(index)) errors.push("QR 코드가 공유 이미지로 설정됨");

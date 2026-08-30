@@ -1085,6 +1085,16 @@ a {
     gap: 5px;
 }
 
+.support-qr-link {
+    display: block;
+    border-radius: 14px;
+}
+
+.support-qr-link:focus-visible {
+    outline: 3px solid rgba(29, 135, 111, 0.32);
+    outline-offset: 4px;
+}
+
 .support-panel img {
     display: block;
     width: 118px;
@@ -1095,6 +1105,12 @@ a {
     border-radius: 14px;
     background: #fff;
     box-shadow: 0 9px 25px rgba(21, 37, 51, 0.08);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.support-qr-link:hover img {
+    transform: translateY(-2px);
+    box-shadow: 0 13px 30px rgba(21, 37, 51, 0.14);
 }
 
 .support-panel figcaption {
