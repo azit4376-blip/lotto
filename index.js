@@ -322,9 +322,9 @@ function validateCombination(numbers, options = {}) {
     return true;
 }
 
-function generateCombinations({ strategy = 8, count = 15, history = [] } = {}) {
+function generateCombinations({ strategy = 8, count = 5, history = [] } = {}) {
     const safeStrategy = clamp(Math.trunc(Number(strategy) || 8), 1, 10);
-    const safeCount = clamp(Math.trunc(Number(count) || 15), 1, 30);
+    const safeCount = clamp(Math.trunc(Number(count) || 5), 1, 30);
     const stats = buildStats(history);
     const latestNumbers = history[0]?.numbers || [];
     const usage = Array(46).fill(0);
@@ -886,7 +886,7 @@ function initialize() {
     cacheDom();
     bindEvents();
     updateStrategyView();
-    updateQuantity(15);
+    updateQuantity(5);
     loadHistory();
 }
 
