@@ -91,7 +91,7 @@ const loadHistorySection = mainCode.match(/async function loadHistory\(\)[\s\S]*
 if (/generateCurrent\s*\(/.test(loadHistorySection)) errors.push("첫 접속 시 조합 자동 생성이 남아 있음");
 
 const privacy = readFileSync(join(root, "privacy.html"), "utf8");
-for (const term of ["회원가입 없음", "localStorage", "GitHub Pages", "외부 생성 기록 서비스", "공개", "azit4376@gmail.com"]) {
+for (const term of ["회원가입 없음", "localStorage", "GitHub Pages", "서비스 운영 환경", "공개", "azit4376@gmail.com"]) {
     if (!privacy.includes(term)) errors.push(`개인정보처리방침 설명 누락: ${term}`);
 }
 for (const page of pages) {
