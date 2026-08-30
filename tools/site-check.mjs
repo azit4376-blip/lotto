@@ -6,7 +6,7 @@ import { createRequire } from "node:module";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const pages = ["index.html", "about.html", "guide1.html", "terms.html", "privacy.html"];
-const required = [...pages, "index.css", "index.js", "documents.css", "documents.js", "qrcode.png", "README.md", "robots.txt", "sitemap.xml"];
+const required = [...pages, "index.css", "index.js", "documents.css", "documents.js", "qrcode.png", "og.png", "README.md", "robots.txt", "sitemap.xml"];
 const errors = [];
 
 for (const file of required) {
@@ -71,6 +71,21 @@ if (/myhits|fonts\.googleapis\.com|html2canvas|kakao/i.test(mainCode + readFileS
 }
 
 if (!index.includes('src="qrcode.png"')) errors.push("카카오페이 QR 이미지 연결 누락");
+if (!index.includes('property="og:image" content="https://azit4376-blip.github.io/lotto/og.png')) errors.push("공유 이미지 Open Graph 연결 누락");
+if (!index.includes('name="twitter:card" content="summary_large_image"')) errors.push("대형 SNS 공유 카드 설정 누락");
+if (/property="og:image"[^>]+qrcode/i.test(index)) errors.push("QR 코드가 공유 이미지로 설정됨");
+if (!/<h1[^>]*>MIX645 전략형 로또 조합 생성기<\/h1>/.test(index)) errors.push("MIX645 대표 제목 누락");
+if (!/<meta name="keywords" content="[^"]*MIX645[^"]*mix645/.test(index)) errors.push("MIX645 대소문자 검색어 메타데이터 누락");
+if (!index.includes('name="robots" content="index, follow, max-image-preview:large')) errors.push("검색로봇 색인 설정 누락");
+const structuredDataText = index.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
+try {
+    const structuredData = JSON.parse(structuredDataText || "");
+    const graph = structuredData["@graph"] || [];
+    if (!graph.some((item) => item["@type"] === "WebSite" && item.name === "MIX645" && item.alternateName?.includes("mix645"))) errors.push("mix645 WebSite 별칭 구조화 데이터 누락");
+    if (!graph.some((item) => item["@type"] === "WebApplication" && item.name === "MIX645" && item.alternateName === "mix645")) errors.push("mix645 WebApplication 별칭 구조화 데이터 누락");
+} catch {
+    errors.push("JSON-LD 구조화 데이터 문법 오류");
+}
 if (!mainCode.includes("SAVE_API_URL") || !mainCode.includes("grade: strategyLabel")) errors.push("전략 포함 스프레드시트 저장 연결 누락");
 const loadHistorySection = mainCode.match(/async function loadHistory\(\)[\s\S]*?\n}\n\nfunction initialize/)?.[0] || "";
 if (/generateCurrent\s*\(/.test(loadHistorySection)) errors.push("첫 접속 시 조합 자동 생성이 남아 있음");
@@ -85,6 +100,17 @@ for (const page of pages.slice(1)) {
     if (!sitemap.includes(page)) errors.push(`sitemap 누락: ${page}`);
 }
 if (sitemap.includes("guide2.html")) errors.push("sitemap에 폐기한 연금복권 가이드 잔존");
+if (!sitemap.includes("<lastmod>2026-08-30</lastmod>")) errors.push("sitemap 최신 수정일 누락");
+
+const ogImage = readFileSync(join(root, "og.png"));
+if (ogImage.length < 24 || ogImage.toString("hex", 0, 8) !== "89504e470d0a1a0a") {
+    errors.push("og.png가 정상 PNG 파일이 아님");
+} else {
+    const width = ogImage.readUInt32BE(16);
+    const height = ogImage.readUInt32BE(20);
+    const ratio = width / height;
+    if (width < 1200 || height < 630 || ratio < 1.85 || ratio > 1.95) errors.push(`공유 이미지 크기·비율 부적합: ${width}x${height}`);
+}
 
 try {
     execFileSync(process.execPath, ["--check", join(root, "index.js")], { stdio: "pipe" });
