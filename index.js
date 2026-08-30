@@ -60,7 +60,7 @@ const state = {
     history: [],
     combinations: [],
     strategy: 8,
-    quantity: 15,
+    quantity: 5,
     dataMode: "loading",
     savedRecords: [],
     lastSavedKey: "",

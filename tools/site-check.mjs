@@ -76,6 +76,7 @@ if (!index.includes('property="og:image" content="https://azit4376-blip.github.i
 if (!index.includes('name="twitter:card" content="summary_large_image"')) errors.push("대형 SNS 공유 카드 설정 누락");
 if (/property="og:image"[^>]+qrcode/i.test(index)) errors.push("QR 코드가 공유 이미지로 설정됨");
 if (!/<h1[^>]*>MIX645 전략형 로또 조합 생성기<\/h1>/.test(index)) errors.push("MIX645 대표 제목 누락");
+if (!index.includes('id="quantity-input" type="number" min="1" max="30" value="5"') || !index.includes('data-quantity="5" class="active"') || !mainCode.includes("quantity: 5")) errors.push("8번 전략·5조합 기본 설정 누락");
 if (!/<meta name="keywords" content="[^"]*MIX645[^"]*mix645/.test(index)) errors.push("MIX645 대소문자 검색어 메타데이터 누락");
 if (!index.includes('name="robots" content="index, follow, max-image-preview:large')) errors.push("검색로봇 색인 설정 누락");
 const structuredDataText = index.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];

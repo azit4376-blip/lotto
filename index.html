@@ -140,13 +140,13 @@
                     <legend><span>2</span> 조합 수</legend>
                     <div class="quantity-row">
                         <button type="button" class="quantity-button" id="quantity-minus" aria-label="조합 수 1개 줄이기">−</button>
-                        <label for="quantity-input"><input id="quantity-input" type="number" min="1" max="30" value="15" inputmode="numeric"><small>조합</small></label>
+                        <label for="quantity-input"><input id="quantity-input" type="number" min="1" max="30" value="5" inputmode="numeric"><small>조합</small></label>
                         <button type="button" class="quantity-button" id="quantity-plus" aria-label="조합 수 1개 늘리기">+</button>
                     </div>
                     <div class="quantity-presets" aria-label="조합 수 빠른 선택">
-                        <button type="button" data-quantity="5">5</button>
+                        <button type="button" data-quantity="5" class="active">5</button>
                         <button type="button" data-quantity="10">10</button>
-                        <button type="button" data-quantity="15" class="active">15</button>
+                        <button type="button" data-quantity="15">15</button>
                         <button type="button" data-quantity="20">20</button>
                         <button type="button" data-quantity="25">25</button>
                         <button type="button" data-quantity="30">30</button>
@@ -154,7 +154,7 @@
                 </fieldset>
 
                 <button type="submit" class="generate-button" id="generate-button" disabled>
-                    <span id="generate-button-label">8번 혼합형 15조합 만들기</span>
+                    <span id="generate-button-label">8번 혼합형 5조합 만들기</span>
                     <span aria-hidden="true">→</span>
                 </button>
                 <p class="form-note">번호 생성과 검증은 이 브라우저에서 처리합니다. 회원가입과 개인정보 입력은 필요하지 않습니다.</p>
@@ -219,7 +219,7 @@
         </div>
         <div class="step-list">
             <article><span>01</span><h3>전략 선택</h3><p>1~10번 중 데이터 반영 방식에 맞는 전략을 선택합니다.</p></article>
-            <article><span>02</span><h3>수량 선택</h3><p>1~30조합 안에서 원하는 수량을 정합니다. 기본값은 15조합입니다.</p></article>
+            <article><span>02</span><h3>수량 선택</h3><p>1~30조합 안에서 원하는 수량을 정합니다. 기본값은 5조합입니다.</p></article>
             <article><span>03</span><h3>복사 또는 저장</h3><p>결과를 엑셀용 탭 형식으로 복사하거나 TXT 파일로 저장합니다.</p></article>
         </div>
     </section>
@@ -266,6 +266,6 @@
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="index.js?v=31.0.1"></script>
+<script src="index.js?v=31.0.2"></script>
 </body>
 </html>
