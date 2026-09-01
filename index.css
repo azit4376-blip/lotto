@@ -930,6 +930,74 @@ a {
     margin-bottom: 12px;
 }
 
+.history-groups {
+    display: grid;
+    gap: 16px;
+}
+
+.history-group {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: #f8fafb;
+}
+
+.history-group.is-winning {
+    border-color: #ead59f;
+    background: linear-gradient(135deg, #fffaf0, #ffffff 58%);
+}
+
+.history-group-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 14px;
+}
+
+.history-group-kicker {
+    margin: 0 0 3px;
+    color: var(--teal-dark);
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+}
+
+.history-group.is-winning .history-group-kicker {
+    color: #9a6b07;
+}
+
+.history-group-header h3 {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+}
+
+.history-group-header p:last-child {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.history-group-count {
+    display: inline-flex;
+    min-height: 30px;
+    flex: 0 0 auto;
+    align-items: center;
+    padding: 0 10px;
+    color: var(--teal-dark);
+    border: 1px solid #b9ddd4;
+    border-radius: 99px;
+    background: #edf9f6;
+    font-size: 11px;
+}
+
+.history-group-count.winner {
+    color: #835c05;
+    border-color: #e5c46f;
+    background: #fff4cc;
+}
+
 .history-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1046,6 +1114,27 @@ a {
 
 .history-card-foot strong {
     color: var(--ink-2);
+}
+
+.history-more {
+    display: flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    margin: 14px auto 0;
+    padding: 0 18px;
+    color: var(--ink-2);
+    border: 1px solid var(--line-dark);
+    border-radius: 10px;
+    background: #fff;
+    font-size: 10px;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.history-more:hover {
+    color: var(--teal-dark);
+    border-color: var(--teal);
 }
 
 .history-note {
@@ -1480,6 +1569,18 @@ a {
 
     .history-summary {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .history-group {
+        padding: 15px;
+    }
+
+    .history-group-header {
+        display: block;
+    }
+
+    .history-group-count {
+        margin-top: 10px;
     }
 
     .combination-card {

@@ -2,6 +2,7 @@
 
 const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRlGZv0VLyDVm6SviCjdd08hZpXWXHiPzcgXAurWBqGjsOOq1CPoRr1LRBzlnR80KDVa_ECBl96pAxJ/pub?output=csv";
 const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbxFjCoZUcfTYRmPiWjJL3Q4_5S5Dzq8TNRPI0_73VYrRJ1QuoHryi6I4qOE-7wxbH--/exec";
+const HISTORY_PAGE_SIZE = 20;
 
 const STRATEGIES = Object.freeze({
     1: {
@@ -63,6 +64,8 @@ const state = {
     quantity: 5,
     dataMode: "loading",
     savedRecords: [],
+    currentHistoryVisible: HISTORY_PAGE_SIZE,
+    winningHistoryVisible: HISTORY_PAGE_SIZE,
     lastSavedKey: "",
     saving: false,
     dom: {}
@@ -451,7 +454,8 @@ function cacheDom() {
         "selected-strategy-number", "selected-strategy-name", "selected-strategy-summary",
         "results", "results-subtitle", "save-button", "save-status", "copy-all-button", "download-button",
         "regenerate-button", "result-summary", "combination-list", "data-notice", "saved-history",
-        "refresh-history-button", "history-summary", "history-list",
+        "refresh-history-button", "history-summary", "current-history-title", "current-history-count",
+        "current-history-list", "current-history-more", "winning-history-count", "winning-history-list", "winning-history-more",
         "document-dialog", "document-title", "document-close", "document-frame", "toast"
     ];
     ids.forEach((id) => { state.dom[id] = document.getElementById(id); });
@@ -650,43 +654,75 @@ function formatSavedTimestamp(value) {
     });
 }
 
+function partitionSavedHistory(records, currentRound, history) {
+    const activeRound = Number(currentRound) || Math.max(0, ...records.map((record) => record.round));
+    const evaluated = records.map((record) => ({ record, prize: evaluatePrize(record.numbers, record.round, history) }));
+    return {
+        activeRound,
+        evaluated,
+        current: evaluated.filter(({ record }) => record.round === activeRound),
+        winners: evaluated.filter(({ record, prize }) => record.round < activeRound && prize.status === "winner")
+    };
+}
+
+function historyCardMarkup({ record, prize }) {
+    const strategyLabel = escapeHtml(strategyLabelForRecord(record));
+    const detail = prize.matches === null
+        ? "당첨번호 발표 전"
+        : `당첨번호 ${prize.matches}개 일치${prize.bonus ? " · 보너스 일치" : ""}`;
+    return `<article class="history-card${prize.status === "winner" ? " is-winner" : ""}">
+        <div class="history-card-head">
+            <div class="history-card-title">
+                <strong>${record.round}회 · ${strategyLabel}</strong>
+                <span>${escapeHtml(formatSavedTimestamp(record.timestamp))}</span>
+            </div>
+            <span class="prize-badge ${prize.status}">${escapeHtml(prize.label)}</span>
+        </div>
+        <div class="history-balls" aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")}">${ballsMarkup(record.numbers)}</div>
+        <div class="history-card-foot"><span>${escapeHtml(detail)}</span><strong>${record.round}회 대상</strong></div>
+    </article>`;
+}
+
+function renderHistoryGroup(records, listId, moreId, visibleCount, emptyMessage) {
+    const visible = records.slice(0, visibleCount);
+    state.dom[listId].innerHTML = visible.length
+        ? visible.map(historyCardMarkup).join("")
+        : `<p class="history-empty">${escapeHtml(emptyMessage)}</p>`;
+
+    const moreButton = state.dom[moreId];
+    moreButton.classList.toggle("hidden", visible.length >= records.length);
+    moreButton.textContent = `${Math.min(HISTORY_PAGE_SIZE, records.length - visible.length)}개 더보기 · ${visible.length}/${records.length}`;
+}
+
 function renderSavedHistory() {
-    const allEvaluated = state.savedRecords.map((record) => ({ record, prize: evaluatePrize(record.numbers, record.round) }));
-    const winningRecords = allEvaluated.filter(({ prize }) => prize.status === "winner");
-    const otherRecords = allEvaluated.filter(({ prize }) => prize.status !== "winner");
-    const evaluated = [...winningRecords, ...otherRecords].slice(0, 30);
-    const waiting = allEvaluated.filter(({ prize }) => prize.status === "waiting").length;
-    const checked = allEvaluated.length - waiting;
+    const grouped = partitionSavedHistory(state.savedRecords, getTargetRound(), state.history);
+    const roundLabel = grouped.activeRound ? `${grouped.activeRound}회` : "확인 중";
 
     state.dom["history-summary"].innerHTML = [
-        ["저장 기록", `${allEvaluated.length}건`],
-        ["당첨 조합", `${winningRecords.length}건`],
-        ["결과 대기", `${waiting}건`],
-        ["결과 확인", `${checked}건`]
+        ["현재 대상 회차", roundLabel],
+        ["저장 조합", `${grouped.current.length}건`],
+        ["이전 회차 당첨", `${grouped.winners.length}건`],
+        ["확인한 기록", `${grouped.evaluated.length}건`]
     ].map(([label, value]) => `<div class="summary-item"><span>${label}</span><strong>${value}</strong></div>`).join("");
 
-    if (!evaluated.length) {
-        state.dom["history-list"].innerHTML = '<p class="history-empty">아직 저장된 로또 조합이 없습니다.</p>';
-        return;
-    }
+    state.dom["current-history-title"].textContent = grouped.activeRound ? `${grouped.activeRound}회 저장 기록` : "현재 회차 저장 기록";
+    state.dom["current-history-count"].textContent = `${grouped.current.length}건`;
+    state.dom["winning-history-count"].textContent = `${grouped.winners.length}건`;
 
-    state.dom["history-list"].innerHTML = evaluated.map(({ record, prize }) => {
-        const strategyLabel = escapeHtml(strategyLabelForRecord(record));
-        const detail = prize.matches === null
-            ? "당첨번호 발표 전"
-            : `당첨번호 ${prize.matches}개 일치${prize.bonus ? " · 보너스 일치" : ""}`;
-        return `<article class="history-card${prize.status === "winner" ? " is-winner" : ""}">
-            <div class="history-card-head">
-                <div class="history-card-title">
-                    <strong>${record.round}회 · ${strategyLabel}</strong>
-                    <span>${escapeHtml(formatSavedTimestamp(record.timestamp))}</span>
-                </div>
-                <span class="prize-badge ${prize.status}">${escapeHtml(prize.label)}</span>
-            </div>
-            <div class="history-balls" aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")}">${ballsMarkup(record.numbers)}</div>
-            <div class="history-card-foot"><span>${escapeHtml(detail)}</span><strong>${record.round}회 대상</strong></div>
-        </article>`;
-    }).join("");
+    renderHistoryGroup(
+        grouped.current,
+        "current-history-list",
+        "current-history-more",
+        state.currentHistoryVisible,
+        grouped.activeRound ? `${grouped.activeRound}회에 저장된 조합이 없습니다.` : "현재 회차를 확인하지 못했습니다."
+    );
+    renderHistoryGroup(
+        grouped.winners,
+        "winning-history-list",
+        "winning-history-more",
+        state.winningHistoryVisible,
+        "아직 확인된 당첨 조합이 없습니다."
+    );
 }
 
 async function loadSavedHistory({ showLoading = true } = {}) {
@@ -695,7 +731,12 @@ async function loadSavedHistory({ showLoading = true } = {}) {
         refreshButton.disabled = true;
         refreshButton.textContent = "불러오는 중...";
     }
-    if (showLoading) state.dom["history-list"].innerHTML = '<p class="history-empty">저장 기록을 불러오는 중입니다.</p>';
+    if (showLoading) {
+        state.currentHistoryVisible = HISTORY_PAGE_SIZE;
+        state.winningHistoryVisible = HISTORY_PAGE_SIZE;
+        state.dom["current-history-list"].innerHTML = '<p class="history-empty">저장 기록을 불러오는 중입니다.</p>';
+        state.dom["winning-history-list"].innerHTML = '<p class="history-empty">당첨 기록을 확인하는 중입니다.</p>';
+    }
 
     try {
         const separator = SAVE_API_URL.includes("?") ? "&" : "?";
@@ -712,7 +753,10 @@ async function loadSavedHistory({ showLoading = true } = {}) {
     } catch (error) {
         console.error("MIX645 history error:", error);
         state.dom["history-summary"].innerHTML = "";
-        state.dom["history-list"].innerHTML = '<p class="history-empty">저장 기록을 불러오지 못했습니다. 조합 생성 기능은 정상적으로 이용할 수 있습니다.</p>';
+        state.dom["current-history-list"].innerHTML = '<p class="history-empty">저장 기록을 불러오지 못했습니다. 조합 생성 기능은 정상적으로 이용할 수 있습니다.</p>';
+        state.dom["winning-history-list"].innerHTML = '<p class="history-empty">당첨 기록을 불러오지 못했습니다.</p>';
+        state.dom["current-history-more"].classList.add("hidden");
+        state.dom["winning-history-more"].classList.add("hidden");
         return [];
     } finally {
         if (refreshButton) {
@@ -842,6 +886,14 @@ function bindEvents() {
     state.dom["download-button"].addEventListener("click", downloadTxt);
     state.dom["regenerate-button"].addEventListener("click", () => generateCurrent({ scroll: false }));
     state.dom["refresh-history-button"].addEventListener("click", () => loadSavedHistory());
+    state.dom["current-history-more"].addEventListener("click", () => {
+        state.currentHistoryVisible += HISTORY_PAGE_SIZE;
+        renderSavedHistory();
+    });
+    state.dom["winning-history-more"].addEventListener("click", () => {
+        state.winningHistoryVisible += HISTORY_PAGE_SIZE;
+        renderSavedHistory();
+    });
     state.dom["combination-list"].addEventListener("click", async (event) => {
         const button = event.target.closest("[data-copy-index]");
         if (!button) return;
@@ -907,6 +959,8 @@ if (typeof module !== "undefined" && module.exports) {
         parseSavedNumbers,
         normalizeSavedRecord,
         evaluatePrize,
+        partitionSavedHistory,
+        HISTORY_PAGE_SIZE,
         combinationsAsTsv,
         combinationsAsTxt
     };

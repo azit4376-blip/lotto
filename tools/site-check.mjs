@@ -57,7 +57,8 @@ for (const [file, title] of [
 for (const id of [
     "generator-form", "strategy-select", "quantity-input", "generate-button",
     "results", "save-button", "save-status", "combination-list", "saved-history",
-    "history-summary", "history-list", "document-dialog", "document-frame"
+    "history-summary", "current-history-list", "current-history-more",
+    "winning-history-list", "winning-history-more", "document-dialog", "document-frame"
 ]) {
     if (!index.includes(`id="${id}"`)) errors.push(`메인 필수 요소 누락: ${id}`);
 }
@@ -89,6 +90,7 @@ try {
     errors.push("JSON-LD 구조화 데이터 문법 오류");
 }
 if (!mainCode.includes("SAVE_API_URL") || !mainCode.includes("grade: strategyLabel")) errors.push("전략 포함 생성 기록 저장 연결 누락");
+if (!mainCode.includes("HISTORY_PAGE_SIZE = 20") || !mainCode.includes("partitionSavedHistory")) errors.push("회차별 기록 분리 또는 20건 더보기 누락");
 const loadHistorySection = mainCode.match(/async function loadHistory\(\)[\s\S]*?\n}\n\nfunction initialize/)?.[0] || "";
 if (/generateCurrent\s*\(/.test(loadHistorySection)) errors.push("첫 접속 시 조합 자동 생성이 남아 있음");
 
@@ -168,6 +170,15 @@ try {
     }
     const saved = generator.normalizeSavedRecord({ round: "1238", numbers: "5, 9, 10, 12, 22, 30", grade: "8번 혼합형 전략" });
     if (!saved || saved.numbers.length !== 6 || saved.round !== 1238) throw new Error("저장 기록 파싱 오류");
+    const grouped = generator.partitionSavedHistory([
+        generator.normalizeSavedRecord({ round: 101, numbers: "8, 12, 18, 24, 31, 42" }),
+        generator.normalizeSavedRecord({ round: 100, numbers: "1, 2, 3, 4, 5, 6" }),
+        generator.normalizeSavedRecord({ round: 100, numbers: "8, 12, 18, 24, 31, 42" })
+    ], 101, winningHistory);
+    if (grouped.current.length !== 1 || grouped.winners.length !== 1 || grouped.winners[0].prize.rank !== 1) {
+        throw new Error("현재 회차 저장·이전 회차 당첨 기록 분리 오류");
+    }
+    if (generator.HISTORY_PAGE_SIZE !== 20) throw new Error("기록 더보기 단위 오류");
 } catch (error) {
     errors.push(`생성 알고리즘 검사 실패: ${error.message}`);
 }

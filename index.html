@@ -74,7 +74,7 @@
     }
     </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23152533%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2244%22 fill=%22%235ee0bd%22>645</text></svg>">
-    <link rel="stylesheet" href="index.css?v=31.0.1">
+    <link rel="stylesheet" href="index.css?v=31.1.0">
 </head>
 <body>
 <a class="skip-link" href="#generator">조합 생성기로 바로가기</a>
@@ -201,15 +201,40 @@
     <section class="saved-history" id="saved-history" aria-labelledby="saved-history-title">
         <header class="history-header">
             <div>
-                <p class="eyebrow">SAVED &amp; PRIZE CHECK</p>
-                <h2 id="saved-history-title">저장·당첨 기록</h2>
-                <p>저장된 최근 조합을 대상 회차 당첨번호와 자동으로 대조합니다.</p>
+                <p class="eyebrow">SAVED COMBINATIONS &amp; WINNERS</p>
+                <h2 id="saved-history-title">저장 기록과 당첨 기록</h2>
+                <p>현재 회차의 저장 조합과 이전 회차의 당첨 조합을 구분해 확인합니다.</p>
             </div>
             <button type="button" id="refresh-history-button">기록 새로고침</button>
         </header>
         <div class="history-summary" id="history-summary"></div>
-        <div class="history-list" id="history-list"><p class="history-empty">저장 기록을 불러오는 중입니다.</p></div>
-        <p class="history-note">저장 기록은 개인정보 없이 공개 공유됩니다. 당첨 조합을 먼저 표시하고 나머지는 최신순으로 합계 30건까지 보여줍니다.</p>
+        <div class="history-groups">
+            <section class="history-group" aria-labelledby="current-history-title">
+                <header class="history-group-header">
+                    <div>
+                        <p class="history-group-kicker">CURRENT ROUND</p>
+                        <h3 id="current-history-title">현재 회차 저장 기록</h3>
+                        <p>당첨번호가 발표되기 전까지 해당 회차의 저장 조합을 모두 모아 보여줍니다.</p>
+                    </div>
+                    <strong class="history-group-count" id="current-history-count">0건</strong>
+                </header>
+                <div class="history-list" id="current-history-list" aria-live="polite"><p class="history-empty">저장 기록을 불러오는 중입니다.</p></div>
+                <button type="button" class="history-more hidden" id="current-history-more">20개 더보기</button>
+            </section>
+            <section class="history-group is-winning" aria-labelledby="winning-history-title">
+                <header class="history-group-header">
+                    <div>
+                        <p class="history-group-kicker">PRIZE HISTORY</p>
+                        <h3 id="winning-history-title">당첨 기록</h3>
+                        <p>결과가 발표된 이전 회차 가운데 1~5등에 해당하는 조합만 표시합니다.</p>
+                    </div>
+                    <strong class="history-group-count winner" id="winning-history-count">0건</strong>
+                </header>
+                <div class="history-list" id="winning-history-list" aria-live="polite"><p class="history-empty">당첨 기록을 확인하는 중입니다.</p></div>
+                <button type="button" class="history-more hidden" id="winning-history-more">20개 더보기</button>
+            </section>
+        </div>
+        <p class="history-note">각 목록은 최신순으로 20건부터 표시되며, 더보기 버튼을 누르면 20건씩 추가됩니다. 저장 기록은 개인정보 없이 공개 공유됩니다.</p>
     </section>
 
     <section class="how-it-works" aria-labelledby="how-title">
@@ -266,6 +291,6 @@
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="index.js?v=31.0.2"></script>
+<script src="index.js?v=31.1.0"></script>
 </body>
 </html>
