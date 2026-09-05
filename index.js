@@ -464,7 +464,7 @@ function mobileSlipSelfCheck() {
         === "MSG_ESLIP{10645}{(1,M:021119233844)}{}99|";
 }
 
-function mobileSlipPng(payload) {
+function mobileSlipPng(payload, games = [], firstGameNumber = 0, caption = "") {
     if (typeof globalThis.qrcode !== "function") {
         throw new Error("QR 생성 프로그램을 불러오지 못했습니다. 인터넷 연결 후 다시 시도해 주세요.");
     }
@@ -477,13 +477,17 @@ function mobileSlipPng(payload) {
     const margin = 4;
     const cellSize = Math.max(6, Math.floor(680 / (moduleCount + margin * 2)));
     const imageSize = (moduleCount + margin * 2) * cellSize;
+    const columns = games.length > 10 ? 2 : 1;
+    const rows = games.length ? Math.ceil(games.length / columns) : 0;
+    const lineHeight = 28;
+    const detailsHeight = games.length ? 84 + rows * lineHeight : 0;
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d", { alpha: false });
     canvas.width = imageSize;
-    canvas.height = imageSize;
+    canvas.height = imageSize + detailsHeight;
     context.imageSmoothingEnabled = false;
     context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, imageSize, imageSize);
+    context.fillRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "#05070a";
 
     for (let row = 0; row < moduleCount; row += 1) {
@@ -499,6 +503,33 @@ function mobileSlipPng(payload) {
         }
     }
 
+    if (games.length) {
+        const padding = 24;
+        const listTop = imageSize + 66;
+        const columnWidth = (imageSize - padding * 2) / columns;
+        context.fillStyle = "#152533";
+        context.font = `800 ${Math.max(15, Math.round(imageSize / 40))}px "Malgun Gothic", sans-serif`;
+        context.textBaseline = "middle";
+        context.fillText(caption || "MIX645 모바일 슬립", padding, imageSize + 28);
+        context.strokeStyle = "#d8e2e5";
+        context.beginPath();
+        context.moveTo(padding, imageSize + 50);
+        context.lineTo(imageSize - padding, imageSize + 50);
+        context.stroke();
+        context.font = `700 ${Math.max(14, Math.round(imageSize / 45))}px Consolas, monospace`;
+
+        games.forEach((numbers, index) => {
+            const column = Math.floor(index / rows);
+            const row = index % rows;
+            const gameNumber = String(firstGameNumber + index + 1).padStart(2, "0");
+            context.fillText(
+                `${gameNumber}  ${numbers.map(formatNumber).join(" ")}`,
+                padding + column * columnWidth,
+                listTop + row * lineHeight
+            );
+        });
+    }
+
     return canvas.toDataURL("image/png");
 }
 
@@ -508,10 +539,17 @@ function renderQrPage() {
 
     const targetRound = getTargetRound();
     const totalGames = state.qrPages.reduce((total, page) => total + page.length, 0);
-    const dataUrl = mobileSlipPng(buildMobileSlipPayload(games));
     const pageNumber = state.qrPage + 1;
     const pageCount = state.qrPages.length;
     const firstGameNumber = state.qrPage * 20;
+    const payload = buildMobileSlipPayload(games);
+    const dataUrl = mobileSlipPng(payload);
+    const downloadDataUrl = mobileSlipPng(
+        payload,
+        games,
+        firstGameNumber,
+        `MIX645 · ${targetRound ? `${targetRound}회 · ` : ""}QR ${pageNumber}/${pageCount} · ${games.length}조합`
+    );
 
     state.dom["qr-image"].src = dataUrl;
     state.dom["qr-image"].alt = `판매점용 모바일 슬립 QR ${pageNumber}/${pageCount}`;
@@ -525,7 +563,7 @@ function renderQrPage() {
     `).join("");
     state.dom["qr-prev"].disabled = state.qrPage === 0;
     state.dom["qr-next"].disabled = state.qrPage === pageCount - 1;
-    state.dom["qr-download"].href = dataUrl;
+    state.dom["qr-download"].href = downloadDataUrl;
     state.dom["qr-download"].download = `mix645-mobile-slip-${targetRound || "lotto"}-${pageNumber}.png`;
 }
 
@@ -953,7 +991,10 @@ function historyCardMarkup({ record, prize }, selectable = false) {
     const selectionKey = savedRecordSelectionKey(record);
     const selected = selectable && state.selectedSavedRecordKeys.has(selectionKey);
     const selection = selectable
-        ? `<label class="history-select"><input type="checkbox" data-saved-select="${escapeHtml(selectionKey)}"${selected ? " checked" : ""} aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")} 선택"><span>작업에 포함</span></label>`
+        ? `<label class="history-select"><input type="checkbox" data-saved-select="${escapeHtml(selectionKey)}"${selected ? " checked" : ""} aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")} 선택"><span>조합 선택</span></label>`
+        : "";
+    const copyButton = selectable
+        ? `<button type="button" class="history-copy" data-saved-copy="${escapeHtml(selectionKey)}" aria-label="${record.round}회 저장 조합 복사">복사</button>`
         : "";
     return `<article class="history-card${prize.status === "winner" ? " is-winner" : ""}${selectable ? " selectable" : ""}${selected ? " selected" : ""}">
         ${selection}
@@ -962,7 +1003,7 @@ function historyCardMarkup({ record, prize }, selectable = false) {
                 <strong>${record.round}회 · ${strategyLabel}</strong>
                 <span>${escapeHtml(formatSavedTimestamp(record.timestamp))}</span>
             </div>
-            <span class="prize-badge ${prize.status}">${escapeHtml(prize.label)}</span>
+            <div class="history-card-actions"><span class="prize-badge ${prize.status}">${escapeHtml(prize.label)}</span>${copyButton}</div>
         </div>
         <div class="history-balls" aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")}">${ballsMarkup(record.numbers)}</div>
         <div class="history-card-foot"><span>${escapeHtml(detail)}</span><strong>${record.round}회 대상</strong></div>
@@ -1268,14 +1309,20 @@ function bindEvents() {
     });
     state.dom["combination-list"].addEventListener("click", async (event) => {
         const button = event.target.closest("[data-copy-index]");
-        if (!button) return;
-        const numbers = state.combinations[Number(button.dataset.copyIndex)];
-        try {
-            await copyText(numbers.map(formatNumber).join("\t"));
-            showToast(`${Number(button.dataset.copyIndex) + 1}번 조합을 복사했습니다.`);
-        } catch {
-            showToast("복사하지 못했습니다.");
+        if (button) {
+            const numbers = state.combinations[Number(button.dataset.copyIndex)];
+            try {
+                await copyText(numbers.map(formatNumber).join("\t"));
+                showToast(`${Number(button.dataset.copyIndex) + 1}번 조합을 복사했습니다.`);
+            } catch {
+                showToast("복사하지 못했습니다.");
+            }
+            return;
         }
+
+        const card = event.target.closest(".combination-card");
+        if (!card || event.target.closest(".combo-select")) return;
+        card.querySelector("[data-select-index]")?.click();
     });
     state.dom["combination-list"].addEventListener("change", (event) => {
         const checkbox = event.target.closest("[data-select-index]");
@@ -1294,6 +1341,26 @@ function bindEvents() {
         else state.selectedSavedRecordKeys.delete(key);
         checkbox.closest(".history-card")?.classList.toggle("selected", checkbox.checked);
         updateSavedSelectionUi();
+    });
+    state.dom["current-history-list"].addEventListener("click", async (event) => {
+        const copyButton = event.target.closest("[data-saved-copy]");
+        if (copyButton) {
+            const record = currentRoundSavedRecords().find(
+                (item) => savedRecordSelectionKey(item) === copyButton.dataset.savedCopy
+            );
+            if (!record) return;
+            try {
+                await copyText(record.numbers.map(formatNumber).join("\t"));
+                showToast(`${record.round}회 저장 조합을 복사했습니다.`);
+            } catch {
+                showToast("복사하지 못했습니다.");
+            }
+            return;
+        }
+
+        const card = event.target.closest(".history-card.selectable");
+        if (!card || event.target.closest(".history-select")) return;
+        card.querySelector("[data-saved-select]")?.click();
     });
     state.dom["qr-close"].addEventListener("click", closeQrDialog);
     state.dom["qr-prev"].addEventListener("click", () => {
