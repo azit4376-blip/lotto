@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIX645 | 전략형 로또 조합 생성기</title>
-    <meta name="description" content="1~10번 전략과 원하는 조합 수만 선택해 로또 6/45 참고 조합을 만들고, 대상 회차·전략·조합을 저장해 당첨 결과까지 확인하는 무료 생성기입니다.">
+    <meta name="description" content="1~10번 전략과 원하는 조합 수를 선택해 로또 6/45 참고 조합을 만들고, 판매점용 모바일 슬립 QR과 당첨 결과까지 확인하는 무료 생성기입니다.">
     <meta name="keywords" content="MIX645, mix645, 로또조합, 로또번호생성기, 로또혼합형, 로또6/45, 로또번호추천">
     <meta name="author" content="MIX645">
     <meta name="application-name" content="MIX645">
@@ -67,14 +67,15 @@
             "1~10번 로또 데이터 전략",
             "1~30개 조합 생성",
             "조합 균형 자동 검증",
-            "저장 조합 당첨 결과 대조"
+            "저장 조합 당첨 결과 대조",
+            "판매점용 모바일 슬립 QR 생성"
           ]
         }
       ]
     }
     </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23152533%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2244%22 fill=%22%235ee0bd%22>645</text></svg>">
-    <link rel="stylesheet" href="index.css?v=32.0.0">
+    <link rel="stylesheet" href="index.css?v=34.0.0">
 </head>
 <body>
 <a class="skip-link" href="#generator">조합 생성기로 바로가기</a>
@@ -87,6 +88,7 @@
         </a>
         <nav class="top-nav" aria-label="주요 메뉴">
             <a href="#generator">조합 생성</a>
+            <a href="#manual-slip">QR 만들기</a>
             <a href="results.html">당첨번호</a>
             <a href="guide1.html" onclick="return openDocument('guide1.html', '사용 가이드')">사용 가이드</a>
         </nav>
@@ -186,17 +188,57 @@
                 <p id="results-subtitle"></p>
             </div>
             <div class="result-actions">
-                <button type="button" id="save-button" class="save" disabled>기록 저장</button>
-                <button type="button" id="copy-all-button">엑셀용 전체 복사</button>
-                <button type="button" id="download-button">TXT 다운로드</button>
+                <button type="button" id="qr-button" class="qr" disabled>판매점용 QR</button>
+                <button type="button" id="copy-all-button" disabled>엑셀 복사</button>
+                <button type="button" id="copy-text-button" disabled>텍스트 복사</button>
+                <button type="button" id="download-button" disabled>TXT 다운로드</button>
                 <button type="button" id="regenerate-button" class="primary">다시 만들기</button>
             </div>
         </header>
 
         <div class="result-summary" id="result-summary"></div>
         <div class="save-status" id="save-status" role="status" aria-live="polite"></div>
+        <div class="selection-toolbar">
+            <div><strong id="selection-count">0조합 선택</strong><span>체크한 조합만 복사·다운로드·QR에 사용됩니다. 생성 기록은 전체 조합이 자동 저장됩니다.</span></div>
+            <div>
+                <button type="button" id="select-all-button">전체 선택</button>
+                <button type="button" id="clear-selection-button">전체 해제</button>
+            </div>
+        </div>
         <div class="combination-list" id="combination-list"></div>
         <p class="data-notice" id="data-notice"></p>
+    </section>
+
+    <section class="manual-slip" id="manual-slip" aria-labelledby="manual-slip-title">
+        <header class="manual-slip-header">
+            <div>
+                <p class="eyebrow">MANUAL MOBILE SLIP</p>
+                <h2 id="manual-slip-title">직접 입력해서 QR 만들기</h2>
+                <p>가지고 있는 번호를 한 줄에 6개씩 입력하면 판매점용 모바일 슬립 QR로 변환합니다.</p>
+            </div>
+            <span>최대 100조합 · QR당 20조합</span>
+        </header>
+        <div class="manual-slip-grid">
+            <div class="manual-slip-entry">
+                <label for="manual-qr-input">번호 입력</label>
+                <textarea id="manual-qr-input" rows="8" spellcheck="false" placeholder="05 08 16 30 33 41&#10;02 11 19 23 38 44" aria-describedby="manual-qr-help"></textarea>
+                <p id="manual-qr-help">공백·쉼표·하이픈으로 구분할 수 있습니다. 각 줄에는 중복 없는 1~45 번호 6개가 필요합니다.</p>
+                <div class="manual-slip-actions">
+                    <button type="button" id="manual-qr-button">입력 번호로 QR 만들기 <span aria-hidden="true">→</span></button>
+                    <button type="button" id="manual-qr-clear" class="secondary">입력 지우기</button>
+                </div>
+                <div class="manual-qr-errors" id="manual-qr-errors" role="alert" aria-live="polite"></div>
+            </div>
+            <aside class="manual-slip-guide">
+                <strong>이렇게 사용하세요</strong>
+                <ol>
+                    <li>한 줄에 로또 번호 6개를 입력합니다.</li>
+                    <li>여러 조합은 줄을 바꿔 계속 입력합니다.</li>
+                    <li>QR을 저장해 지원되는 판매점 단말기에 보여줍니다.</li>
+                </ol>
+                <p>입력 번호와 QR 이미지는 브라우저 안에서만 처리하며 생성 기록에는 저장하지 않습니다.</p>
+            </aside>
+        </div>
     </section>
 
     <section class="saved-history" id="saved-history" aria-labelledby="saved-history-title">
@@ -219,6 +261,21 @@
                     </div>
                     <strong class="history-group-count" id="current-history-count">0건</strong>
                 </header>
+                <div class="saved-selection-toolbar" aria-label="선택한 저장 기록 작업">
+                    <div class="saved-selection-overview">
+                        <div><strong id="saved-selection-count">0 / 0조합 선택</strong><span>현재 회차 저장 기록에서 필요한 조합을 체크하세요.</span></div>
+                        <div class="saved-selection-toggle">
+                            <button type="button" id="saved-select-all-button" disabled>전체 선택</button>
+                            <button type="button" id="saved-clear-selection-button" disabled>전체 해제</button>
+                        </div>
+                    </div>
+                    <div class="saved-selection-actions">
+                        <button type="button" id="saved-qr-button" class="qr" disabled>판매점용 QR</button>
+                        <button type="button" id="saved-copy-all-button" disabled>엑셀 복사</button>
+                        <button type="button" id="saved-copy-text-button" disabled>텍스트 복사</button>
+                        <button type="button" id="saved-download-button" disabled>TXT 다운로드</button>
+                    </div>
+                </div>
                 <div class="history-list" id="current-history-list" aria-live="polite"><p class="history-empty">저장 기록을 불러오는 중입니다.</p></div>
                 <button type="button" class="history-more hidden" id="current-history-more">20개 더보기</button>
             </section>
@@ -246,7 +303,7 @@
         <div class="step-list">
             <article><span>01</span><h3>전략 선택</h3><p>1~10번 중 데이터 반영 방식에 맞는 전략을 선택합니다.</p></article>
             <article><span>02</span><h3>수량 선택</h3><p>1~30조합 안에서 원하는 수량을 정합니다. 기본값은 5조합입니다.</p></article>
-            <article><span>03</span><h3>복사 또는 저장</h3><p>결과를 엑셀용 탭 형식으로 복사하거나 TXT 파일로 저장합니다.</p></article>
+            <article><span>03</span><h3>QR·복사·저장</h3><p>판매점용 모바일 슬립 QR을 만들거나 결과를 복사·저장합니다.</p></article>
         </div>
     </section>
 
@@ -285,6 +342,39 @@
     <div class="footer-bottom"><span>© 2026 MIX645</span><span>동행복권 비공식 · 복권 판매 및 구매 대행 없음</span></div>
 </footer>
 
+<dialog class="qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
+    <div class="qr-shell">
+        <header class="qr-dialog-header">
+            <div>
+                <span>MIX645 · MOBILE SLIP</span>
+                <h2 id="qr-title">판매점용 모바일 슬립 QR</h2>
+                <p id="qr-meta"></p>
+            </div>
+            <button type="button" id="qr-close">닫기 <b aria-hidden="true">×</b></button>
+        </header>
+        <div class="qr-dialog-body">
+            <div class="qr-preview">
+                <img id="qr-image" alt="판매점용 모바일 슬립 QR">
+                <strong id="qr-page-label"></strong>
+                <span>화면 밝기를 높여 QR 전체가 보이게 해주세요.</span>
+            </div>
+            <div class="qr-details">
+                <div class="qr-game-list" id="qr-game-list"></div>
+                <div class="qr-pager">
+                    <button type="button" id="qr-prev">← 이전 QR</button>
+                    <span id="qr-page-count"></span>
+                    <button type="button" id="qr-next">다음 QR →</button>
+                </div>
+                <a class="qr-download" id="qr-download" href="#" download>QR 이미지 저장</a>
+                <div class="qr-notice">
+                    <strong>QR은 복권이 아닙니다.</strong>
+                    <p>판매점 단말기에 번호를 전달하는 모바일 슬립입니다. 인식 후 결제 전 단말기 번호와 발권된 실물 복권을 반드시 비교하세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</dialog>
+
 <dialog class="document-dialog" id="document-dialog" aria-labelledby="document-title">
     <div class="document-shell">
         <header><div><span>MIX645 · DOCUMENT</span><h2 id="document-title">서비스 문서</h2></div><button type="button" id="document-close">닫기 <b aria-hidden="true">×</b></button></header>
@@ -293,6 +383,7 @@
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="index.js?v=31.1.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="index.js?v=34.0.0"></script>
 </body>
 </html>

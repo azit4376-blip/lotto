@@ -40,7 +40,7 @@
                     <h2>핵심 요약</h2>
                     <div class="fact-grid">
                         <div class="fact-card"><strong>입력 없음</strong><span>이름, 닉네임, 전화번호, 계정 정보를 요구하지 않습니다.</span></div>
-                        <div class="fact-card"><strong>조합 기록</strong><span>대상 회차, 전략명과 생성 번호를 공개 기록으로 저장합니다.</span></div>
+                        <div class="fact-card"><strong>조합 기록</strong><span>조합을 만들면 대상 회차, 전략명과 생성한 전체 번호를 공개 기록으로 저장합니다.</span></div>
                         <div class="fact-card"><strong>판매 없음</strong><span>개인정보를 판매하거나 광고 프로필 목적으로 제공하지 않습니다.</span></div>
                     </div>
                     <div class="callout safe"><strong>현재 버전의 원칙</strong><br>조합 생성과 검증은 브라우저 안에서 처리하고, 당첨 대조에 필요한 최소 기록만 보관합니다. 별도의 회원 계정, 분석 추적기 또는 광고 네트워크는 사용하지 않습니다.</div>
@@ -57,7 +57,7 @@
                 <section class="doc-section" id="storage">
                     <p class="section-kicker">03 · Local storage</p>
                     <h2>브라우저와 공개 기록 저장</h2>
-                    <p>현재 서비스 코드는 쿠키, localStorage 또는 sessionStorage에 이용자 정보와 생성 결과를 저장하지 않습니다. 현재 화면 결과는 새로고침하면 사라지지만, 조합 만들기로 생성된 공개 기록은 저장·당첨 기록 영역에서 다시 표시될 수 있습니다.</p>
+                    <p>현재 서비스 코드는 쿠키, localStorage 또는 sessionStorage에 이용자 정보와 생성 결과를 저장하지 않습니다. 현재 화면 결과와 직접 입력한 QR 번호는 새로고침하면 사라지지만, 조합 만들기로 자동 저장된 공개 기록은 저장·당첨 기록 영역에서 다시 표시될 수 있습니다.</p>
                     <p>공개 조합 기록은 당첨 대조와 서비스 기록 제공 목적이 유지되는 동안 보관되며, 운영자가 오류·중복·운영상 필요를 확인해 삭제할 수 있습니다. 특정 기록 삭제가 필요하면 대상 회차, 전략명과 6개 번호를 이메일로 알려 주세요.</p>
                     <p>브라우저는 성능을 위해 HTML, CSS, JavaScript 파일을 일반 캐시에 임시 보관할 수 있습니다. 이 동작은 브라우저 설정에서 관리할 수 있으며 서비스의 회원 식별이나 추적에 사용되지 않습니다.</p>
                 </section>
@@ -71,11 +71,13 @@
                             <tbody>
                                 <tr><td>GitHub Pages</td><td>사이트 정적 파일 제공</td><td>IP 주소, 접속 시각, 브라우저·기기 정보 등 일반적인 서버 요청 정보</td></tr>
                                 <tr><td>Google</td><td>공개 당첨 회차 확인 및 생성 기록 보관</td><td>생성 기록과 요청 과정의 IP 주소, 접속 시각, 브라우저 정보 등</td></tr>
+                                <tr><td>cdnjs</td><td>QR 생성 프로그램 파일 제공</td><td>IP 주소, 접속 시각, 브라우저·기기 정보 등 일반적인 서버 요청 정보</td></tr>
                                 <tr><td>이메일 서비스</td><td>이용자가 직접 보내는 문의 수신·회신</td><td>발신 이메일 주소와 문의 내용</td></tr>
                             </tbody>
                         </table>
                     </div>
                     <p>이 정보는 각 제공자의 시스템과 개인정보 정책에 따라 처리될 수 있으며 MIX645 운영자가 보유 기간이나 처리 방식을 직접 통제하지 않습니다.</p>
+                    <p>모바일 슬립 QR의 번호 데이터와 이미지는 이용자의 브라우저 안에서 생성되며 cdnjs로 전송되지 않습니다.</p>
                     <p>사이트의 카카오페이 QR은 로컬 이미지로 표시됩니다. 이용자가 휴대전화로 스캔해 후원을 진행하면 결제 정보는 카카오페이의 정책에 따라 처리되며 MIX645 사이트는 카드·계좌·결제 인증 정보를 수집하지 않습니다.</p>
                     <div class="doc-source-list">
                         <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub 개인정보보호정책 ↗</a>

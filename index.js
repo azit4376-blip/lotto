@@ -62,12 +62,18 @@ const state = {
     combinations: [],
     strategy: 8,
     quantity: 5,
+    generatedStrategy: 8,
+    generatedRound: 0,
     dataMode: "loading",
     savedRecords: [],
     currentHistoryVisible: HISTORY_PAGE_SIZE,
     winningHistoryVisible: HISTORY_PAGE_SIZE,
     lastSavedKey: "",
-    saving: false,
+    selectedIndexes: new Set(),
+    selectedSavedRecordKeys: new Set(),
+    qrPages: [],
+    qrPage: 0,
+    qrSourceLabel: "",
     dom: {}
 };
 
@@ -386,6 +392,176 @@ function getTargetRound(history = state.history) {
     return history[0]?.round ? Number(history[0].round) + 1 : 0;
 }
 
+function normalizeMobileSlipGame(numbers) {
+    const game = [...numbers].map(Number).sort((left, right) => left - right);
+    if (game.length !== 6
+        || game.some((number) => !Number.isInteger(number) || number < 1 || number > 45)
+        || new Set(game).size !== 6) {
+        throw new Error("각 조합은 중복 없이 1~45 사이 숫자 6개여야 합니다.");
+    }
+    return game;
+}
+
+function mobileSlipChecksum(text) {
+    let checksum = 0;
+    for (const character of text) {
+        const code = character.charCodeAt(0);
+        if (code > 127) throw new Error("모바일 슬립 데이터는 영문과 숫자 형식만 사용할 수 있습니다.");
+        checksum ^= code;
+        for (let bit = 0; bit < 8; bit += 1) {
+            checksum = checksum & 128 ? ((checksum << 1) ^ 7) & 255 : (checksum << 1) & 255;
+        }
+    }
+    return checksum.toString(16).padStart(2, "0").toUpperCase();
+}
+
+function buildMobileSlipPayload(games) {
+    if (!games.length || games.length > 20) {
+        throw new Error("QR 한 장에는 1~20조합을 담을 수 있습니다.");
+    }
+
+    const normalized = games.map(normalizeMobileSlipGame);
+    const groups = [];
+    for (let start = 0; start < normalized.length; start += 5) {
+        const group = normalized.slice(start, start + 5);
+        const entries = group.map((numbers) => `M:${numbers.map(formatNumber).join("")}`);
+        groups.push(`(${group.length},${entries.join(",")})`);
+    }
+
+    const body = `MSG_ESLIP{10645}{${groups.join("")}}{}`;
+    return `${body}${mobileSlipChecksum(body)}|`;
+}
+
+function splitMobileSlipGames(games) {
+    const normalized = games.map(normalizeMobileSlipGame);
+    const pages = [];
+    for (let start = 0; start < normalized.length; start += 20) {
+        pages.push(normalized.slice(start, start + 20));
+    }
+    return pages;
+}
+
+function parseManualGames(text) {
+    const lines = String(text || "").split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    if (!lines.length) return { games: [], errors: ["번호를 한 줄에 6개씩 입력해 주세요."] };
+    if (lines.length > 100) return { games: [], errors: ["한 번에 최대 100조합까지 만들 수 있습니다."] };
+
+    const games = [];
+    const errors = [];
+    lines.forEach((line, index) => {
+        try {
+            const numbers = (line.match(/\d+/g) || []).map(Number);
+            games.push(normalizeMobileSlipGame(numbers));
+        } catch {
+            errors.push(`${index + 1}번째 줄을 확인해 주세요. 중복 없는 숫자 6개가 필요합니다.`);
+        }
+    });
+    return { games, errors };
+}
+
+function mobileSlipSelfCheck() {
+    return buildMobileSlipPayload([[2, 11, 19, 23, 38, 44]])
+        === "MSG_ESLIP{10645}{(1,M:021119233844)}{}99|";
+}
+
+function mobileSlipPng(payload) {
+    if (typeof globalThis.qrcode !== "function") {
+        throw new Error("QR 생성 프로그램을 불러오지 못했습니다. 인터넷 연결 후 다시 시도해 주세요.");
+    }
+
+    const qr = globalThis.qrcode(0, "M");
+    qr.addData(payload, "Byte");
+    qr.make();
+
+    const moduleCount = qr.getModuleCount();
+    const margin = 4;
+    const cellSize = Math.max(6, Math.floor(680 / (moduleCount + margin * 2)));
+    const imageSize = (moduleCount + margin * 2) * cellSize;
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d", { alpha: false });
+    canvas.width = imageSize;
+    canvas.height = imageSize;
+    context.imageSmoothingEnabled = false;
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, imageSize, imageSize);
+    context.fillStyle = "#05070a";
+
+    for (let row = 0; row < moduleCount; row += 1) {
+        for (let column = 0; column < moduleCount; column += 1) {
+            if (qr.isDark(row, column)) {
+                context.fillRect(
+                    (column + margin) * cellSize,
+                    (row + margin) * cellSize,
+                    cellSize,
+                    cellSize
+                );
+            }
+        }
+    }
+
+    return canvas.toDataURL("image/png");
+}
+
+function renderQrPage() {
+    const games = state.qrPages[state.qrPage];
+    if (!games?.length) return;
+
+    const targetRound = getTargetRound();
+    const totalGames = state.qrPages.reduce((total, page) => total + page.length, 0);
+    const dataUrl = mobileSlipPng(buildMobileSlipPayload(games));
+    const pageNumber = state.qrPage + 1;
+    const pageCount = state.qrPages.length;
+    const firstGameNumber = state.qrPage * 20;
+
+    state.dom["qr-image"].src = dataUrl;
+    state.dom["qr-image"].alt = `판매점용 모바일 슬립 QR ${pageNumber}/${pageCount}`;
+    state.dom["qr-meta"].textContent = `${targetRound ? `${targetRound}회 구매용 · ` : ""}${state.qrSourceLabel} · ${totalGames}조합 · 예상 ${
+        (totalGames * 1000).toLocaleString("ko-KR")
+    }원`;
+    state.dom["qr-page-label"].textContent = `QR ${pageNumber}/${pageCount} · ${games.length}조합`;
+    state.dom["qr-page-count"].textContent = `${pageNumber} / ${pageCount}`;
+    state.dom["qr-game-list"].innerHTML = games.map((numbers, index) => `
+        <div><span>${String(firstGameNumber + index + 1).padStart(2, "0")}</span><strong>${numbers.map(formatNumber).join(" ")}</strong></div>
+    `).join("");
+    state.dom["qr-prev"].disabled = state.qrPage === 0;
+    state.dom["qr-next"].disabled = state.qrPage === pageCount - 1;
+    state.dom["qr-download"].href = dataUrl;
+    state.dom["qr-download"].download = `mix645-mobile-slip-${targetRound || "lotto"}-${pageNumber}.png`;
+}
+
+function openQrDialog(games, sourceLabel) {
+    if (!games?.length) {
+        showToast("QR로 만들 조합을 선택하거나 입력해 주세요.");
+        return;
+    }
+    try {
+        if (!mobileSlipSelfCheck()) throw new Error("모바일 슬립 데이터 자체 검사에 실패했습니다.");
+        state.qrPages = splitMobileSlipGames(games);
+        state.qrPage = 0;
+        state.qrSourceLabel = sourceLabel;
+        renderQrPage();
+        if (typeof state.dom["qr-dialog"].showModal === "function") state.dom["qr-dialog"].showModal();
+        else state.dom["qr-dialog"].setAttribute("open", "");
+    } catch (error) {
+        showToast(error.message || "QR을 만들지 못했습니다.");
+    }
+}
+
+function closeQrDialog() {
+    if (typeof state.dom["qr-dialog"].close === "function") state.dom["qr-dialog"].close();
+    else state.dom["qr-dialog"].removeAttribute("open");
+}
+
+function openManualQr() {
+    const parsed = parseManualGames(state.dom["manual-qr-input"].value);
+    state.dom["manual-qr-errors"].innerHTML = parsed.errors
+        .slice(0, 5)
+        .map((message) => `<p>${escapeHtml(message)}</p>`)
+        .join("");
+    if (parsed.errors.length) return;
+    openQrDialog(parsed.games, "직접 입력");
+}
+
 function parseSavedNumbers(value) {
     const values = Array.isArray(value)
         ? value
@@ -442,8 +618,47 @@ function escapeHtml(value) {
     })[character]);
 }
 
-function currentBatchKey() {
-    return `${getTargetRound()}:${state.strategy}:${state.combinations.map((numbers) => numbers.join("-")).join("|")}`;
+function selectedCombinations() {
+    return [...state.selectedIndexes]
+        .sort((left, right) => left - right)
+        .map((index) => state.combinations[index])
+        .filter(Boolean);
+}
+
+function currentBatchKey(
+    combinations = state.combinations,
+    targetRound = state.generatedRound,
+    strategyNumber = state.generatedStrategy
+) {
+    return `${targetRound}:${strategyNumber}:${combinations.map((numbers) => numbers.join("-")).join("|")}`;
+}
+
+function updateSelectionUi() {
+    const combinations = selectedCombinations();
+    const count = combinations.length;
+    const total = state.combinations.length;
+
+    state.dom["selection-count"].textContent = `${count} / ${total}조합 선택`;
+    state.dom["select-all-button"].disabled = count === total;
+    state.dom["clear-selection-button"].disabled = count === 0;
+    ["qr-button", "copy-all-button", "copy-text-button", "download-button"].forEach((id) => {
+        state.dom[id].disabled = count === 0;
+    });
+    state.dom["qr-button"].textContent = count > 20
+        ? `판매점용 QR ${Math.ceil(count / 20)}장`
+        : "판매점용 QR";
+
+}
+
+function setAllCombinationsSelected(selected) {
+    state.selectedIndexes = selected
+        ? new Set(state.combinations.map((_, index) => index))
+        : new Set();
+    state.dom["combination-list"].querySelectorAll("[data-select-index]").forEach((checkbox) => {
+        checkbox.checked = selected;
+        checkbox.closest(".combination-card")?.classList.toggle("selected", selected);
+    });
+    updateSelectionUi();
 }
 
 function cacheDom() {
@@ -452,11 +667,15 @@ function cacheDom() {
         "generator-form", "strategy-select", "strategy-description", "quantity-input",
         "quantity-minus", "quantity-plus", "generate-button", "generate-button-label",
         "selected-strategy-number", "selected-strategy-name", "selected-strategy-summary",
-        "results", "results-subtitle", "save-button", "save-status", "copy-all-button", "download-button",
-        "regenerate-button", "result-summary", "combination-list", "data-notice", "saved-history",
+        "results", "results-subtitle", "save-status", "qr-button", "copy-all-button", "copy-text-button", "download-button",
+        "regenerate-button", "result-summary", "selection-count", "select-all-button", "clear-selection-button",
+        "combination-list", "data-notice", "manual-qr-input", "manual-qr-button", "manual-qr-clear", "manual-qr-errors", "saved-history",
         "refresh-history-button", "history-summary", "current-history-title", "current-history-count",
         "current-history-list", "current-history-more", "winning-history-count", "winning-history-list", "winning-history-more",
-        "document-dialog", "document-title", "document-close", "document-frame", "toast"
+        "saved-selection-count", "saved-select-all-button", "saved-clear-selection-button", "saved-qr-button",
+        "saved-copy-all-button", "saved-copy-text-button", "saved-download-button",
+        "qr-dialog", "qr-close", "qr-meta", "qr-image", "qr-page-label", "qr-page-count", "qr-game-list",
+        "qr-prev", "qr-next", "qr-download", "document-dialog", "document-title", "document-close", "document-frame", "toast"
     ];
     ids.forEach((id) => { state.dom[id] = document.getElementById(id); });
 }
@@ -522,9 +741,9 @@ function summarizeCombinations(combinations) {
 }
 
 function renderResults() {
-    const strategy = STRATEGIES[state.strategy];
-    const targetRound = getTargetRound();
-    state.dom["results-subtitle"].textContent = `${targetRound ? `${targetRound}회 대상 · ` : ""}${state.strategy}번 ${strategy.name} · ${state.combinations.length}조합`;
+    const strategy = STRATEGIES[state.generatedStrategy];
+    const targetRound = state.generatedRound;
+    state.dom["results-subtitle"].textContent = `${targetRound ? `${targetRound}회 대상 · ` : ""}${state.generatedStrategy}번 ${strategy.name} · ${state.combinations.length}조합`;
 
     const summary = summarizeCombinations(state.combinations);
     state.dom["result-summary"].innerHTML = [
@@ -536,8 +755,12 @@ function renderResults() {
 
     state.dom["combination-list"].innerHTML = state.combinations.map((numbers, index) => {
         const metrics = calculateMetrics(numbers);
-        return `<article class="combination-card">
-            <span class="combo-index">${String(index + 1).padStart(2, "0")}</span>
+        const selected = state.selectedIndexes.has(index);
+        return `<article class="combination-card${selected ? " selected" : ""}">
+            <label class="combo-select">
+                <input type="checkbox" data-select-index="${index}"${selected ? " checked" : ""} aria-label="${index + 1}번 조합 선택">
+                <span class="combo-index">${String(index + 1).padStart(2, "0")}</span>
+            </label>
             <div class="combo-content">
                 <div class="combo-balls" aria-label="${index + 1}번 조합: ${numbers.join(", ")}">${ballsMarkup(numbers)}</div>
                 <div class="combo-metrics">
@@ -555,90 +778,98 @@ function renderResults() {
     state.dom["data-notice"].textContent = state.dataMode === "live"
         ? `최근 ${state.history.length.toLocaleString("ko-KR")}개 회차 데이터를 번호 선택 가중치에 참고했습니다. 과거 출현 기록은 미래 결과를 예측하지 않습니다.`
         : "최신 데이터를 확인하지 못했으므로 일반적인 조합 균형 기준으로 생성했습니다. 인터넷 연결 후 다시 만들면 과거 회차 가중치가 반영됩니다.";
-    if (state.dataMode === "live" && targetRound) setSaveStatus(`${targetRound}회 대상 · ${state.strategy}번 전략의 생성 기록을 저장할 준비가 됐습니다.`);
-    else setSaveStatus("최신 회차를 확인할 수 없어 현재 조합은 저장하지 않습니다.", "error");
+    if (state.dataMode === "live" && targetRound) {
+        setSaveStatus(`${targetRound}회 대상 · ${state.generatedStrategy}번 전략 · 생성한 전체 조합을 자동 저장할 준비가 됐습니다.`);
+    } else {
+        setSaveStatus("최신 회차를 확인할 수 없어 현재 생성 기록은 자동 저장하지 않습니다.", "error");
+    }
+    updateSelectionUi();
     state.dom.results.classList.remove("hidden");
 }
 
 function setSaveStatus(message, status = "") {
     const statusBox = state.dom["save-status"];
-    const button = state.dom["save-button"];
-    if (!statusBox || !button) return;
+    if (!statusBox) return;
 
     statusBox.className = `save-status${status ? ` ${status}` : ""}`;
     statusBox.textContent = message;
-
-    const alreadySaved = state.combinations.length && state.lastSavedKey === currentBatchKey();
-    button.disabled = state.saving || alreadySaved || state.dataMode !== "live" || !state.combinations.length;
-    button.textContent = state.saving ? "저장 중..." : alreadySaved ? "저장됨" : "기록 저장";
 }
 
-function buildSavePayload() {
-    const targetRound = getTargetRound();
-    const strategyName = STRATEGIES[state.strategy].name;
-    const strategyLabel = `${state.strategy}번 ${strategyName}`;
-    return state.combinations.map((numbers, index) => ({
+function buildSavePayload(
+    combinations = state.combinations,
+    strategyNumber = state.generatedStrategy,
+    targetRound = state.generatedRound
+) {
+    const strategyName = STRATEGIES[strategyNumber].name;
+    const strategyLabel = `${strategyNumber}번 ${strategyName}`;
+    return combinations.map((numbers, index) => ({
         round: targetRound,
         mode: "lotto",
         numbers,
         group: "",
         grade: strategyLabel,
-        strategy: state.strategy,
+        strategy: strategyNumber,
         strategyName,
         sequence: index + 1,
         source: "MIX645"
     }));
 }
 
-function currentBatchIsRecorded() {
-    const targetRound = getTargetRound();
-    const strategyLabel = `${state.strategy}번 ${STRATEGIES[state.strategy].name}`;
-    return state.combinations.every((numbers) => state.savedRecords.some((record) => (
+function currentBatchIsRecorded(
+    combinations = state.combinations,
+    targetRound = state.generatedRound,
+    strategyNumber = state.generatedStrategy
+) {
+    if (!combinations.length) return false;
+    const strategyLabel = `${strategyNumber}번 ${STRATEGIES[strategyNumber].name}`;
+    return combinations.every((numbers) => state.savedRecords.some((record) => (
         record.round === targetRound
         && record.numbers.join("-") === numbers.join("-")
-        && (record.grade === strategyLabel || record.strategy === state.strategy)
+        && (record.grade === strategyLabel || record.strategy === strategyNumber)
     )));
 }
 
-async function saveCurrentBatch({ silent = false } = {}) {
-    if (!state.combinations.length || state.dataMode !== "live" || !getTargetRound()) {
+async function saveCurrentBatch() {
+    const combinations = [...state.combinations];
+    const targetRound = state.generatedRound;
+    const strategyNumber = state.generatedStrategy;
+    if (!combinations.length) {
+        setSaveStatus("먼저 조합을 생성해 주세요.", "error");
+        return false;
+    }
+    if (state.dataMode !== "live" || !targetRound) {
         setSaveStatus("최신 회차가 연결된 상태에서 생성한 조합만 저장할 수 있습니다.", "error");
         return false;
     }
 
-    const batchKey = currentBatchKey();
-    if (state.lastSavedKey === batchKey) {
-        if (!silent) showToast("현재 조합은 이미 저장했습니다.");
+    const batchKey = currentBatchKey(combinations, targetRound, strategyNumber);
+    if (state.lastSavedKey === batchKey || currentBatchIsRecorded(combinations, targetRound, strategyNumber)) {
+        state.lastSavedKey = batchKey;
+        setSaveStatus(`생성한 ${combinations.length}조합은 이미 자동 저장되어 있습니다.`, "saved");
         return true;
     }
 
-    state.saving = true;
-    setSaveStatus(`${getTargetRound()}회 대상 조합의 생성 기록을 저장하는 중입니다.`);
+    setSaveStatus(`${targetRound}회 대상 · 생성한 ${combinations.length}조합을 자동 저장하는 중입니다.`);
     try {
         await fetch(SAVE_API_URL, {
             method: "POST",
             mode: "no-cors",
-            body: JSON.stringify(buildSavePayload())
+            body: JSON.stringify(buildSavePayload(combinations, strategyNumber, targetRound))
         });
         state.lastSavedKey = batchKey;
-        setSaveStatus(`${getTargetRound()}회 대상 · ${state.strategy}번 전략 · ${state.combinations.length}조합의 저장 요청을 보냈습니다.`, "saved");
-        if (!silent) showToast(`${state.combinations.length}조합을 저장했습니다.`);
+        setSaveStatus(`${targetRound}회 대상 · ${strategyNumber}번 전략 · 생성한 ${combinations.length}조합을 자동 저장했습니다.`, "saved");
 
         window.setTimeout(async () => {
             await loadSavedHistory({ showLoading: false });
-            if (currentBatchIsRecorded()) {
-                setSaveStatus(`기록 저장 확인 · ${getTargetRound()}회 대상 · ${state.strategy}번 전략 · ${state.combinations.length}조합`, "saved");
+            if (currentBatchIsRecorded(combinations, targetRound, strategyNumber)) {
+                setSaveStatus(`자동 저장 확인 · ${targetRound}회 대상 · ${strategyNumber}번 전략 · ${combinations.length}조합`, "saved");
             }
         }, 1400);
         return true;
     } catch (error) {
         console.error("MIX645 save error:", error);
         setSaveStatus("생성 기록을 저장하지 못했습니다. 잠시 후 다시 시도해 주세요.", "error");
-        if (!silent) showToast("저장하지 못했습니다.");
         return false;
-    } finally {
-        state.saving = false;
-        setSaveStatus(state.dom["save-status"].textContent, state.dom["save-status"].classList.contains("error") ? "error" : "saved");
     }
 }
 
@@ -665,12 +896,67 @@ function partitionSavedHistory(records, currentRound, history) {
     };
 }
 
-function historyCardMarkup({ record, prize }) {
+function savedRecordSelectionKey(record) {
+    return [
+        record.round,
+        record.timestamp,
+        record.strategy,
+        record.grade,
+        record.numbers.join("-")
+    ].join("|");
+}
+
+function currentRoundSavedRecords() {
+    const activeRound = getTargetRound() || Math.max(0, ...state.savedRecords.map((record) => record.round));
+    return state.savedRecords.filter((record) => record.round === activeRound);
+}
+
+function selectedSavedRecords(records = currentRoundSavedRecords()) {
+    return records.filter((record) => state.selectedSavedRecordKeys.has(savedRecordSelectionKey(record)));
+}
+
+function selectedSavedCombinations() {
+    return selectedSavedRecords().map((record) => record.numbers);
+}
+
+function updateSavedSelectionUi(records = currentRoundSavedRecords()) {
+    const selectedCount = selectedSavedRecords(records).length;
+    const total = records.length;
+    state.dom["saved-selection-count"].textContent = `${selectedCount} / ${total}조합 선택`;
+    state.dom["saved-select-all-button"].disabled = !total || selectedCount === total;
+    state.dom["saved-clear-selection-button"].disabled = selectedCount === 0;
+    ["saved-qr-button", "saved-copy-all-button", "saved-copy-text-button", "saved-download-button"].forEach((id) => {
+        state.dom[id].disabled = selectedCount === 0;
+    });
+    state.dom["saved-qr-button"].textContent = selectedCount > 20
+        ? `판매점용 QR ${Math.ceil(selectedCount / 20)}장`
+        : "판매점용 QR";
+}
+
+function setAllSavedRecordsSelected(selected) {
+    const records = currentRoundSavedRecords();
+    state.selectedSavedRecordKeys = selected
+        ? new Set(records.map(savedRecordSelectionKey))
+        : new Set();
+    state.dom["current-history-list"].querySelectorAll("[data-saved-select]").forEach((checkbox) => {
+        checkbox.checked = selected;
+        checkbox.closest(".history-card")?.classList.toggle("selected", selected);
+    });
+    updateSavedSelectionUi(records);
+}
+
+function historyCardMarkup({ record, prize }, selectable = false) {
     const strategyLabel = escapeHtml(strategyLabelForRecord(record));
     const detail = prize.matches === null
         ? "당첨번호 발표 전"
         : `당첨번호 ${prize.matches}개 일치${prize.bonus ? " · 보너스 일치" : ""}`;
-    return `<article class="history-card${prize.status === "winner" ? " is-winner" : ""}">
+    const selectionKey = savedRecordSelectionKey(record);
+    const selected = selectable && state.selectedSavedRecordKeys.has(selectionKey);
+    const selection = selectable
+        ? `<label class="history-select"><input type="checkbox" data-saved-select="${escapeHtml(selectionKey)}"${selected ? " checked" : ""} aria-label="${record.round}회 저장 조합 ${record.numbers.join(", ")} 선택"><span>작업에 포함</span></label>`
+        : "";
+    return `<article class="history-card${prize.status === "winner" ? " is-winner" : ""}${selectable ? " selectable" : ""}${selected ? " selected" : ""}">
+        ${selection}
         <div class="history-card-head">
             <div class="history-card-title">
                 <strong>${record.round}회 · ${strategyLabel}</strong>
@@ -683,10 +969,10 @@ function historyCardMarkup({ record, prize }) {
     </article>`;
 }
 
-function renderHistoryGroup(records, listId, moreId, visibleCount, emptyMessage) {
+function renderHistoryGroup(records, listId, moreId, visibleCount, emptyMessage, selectable = false) {
     const visible = records.slice(0, visibleCount);
     state.dom[listId].innerHTML = visible.length
-        ? visible.map(historyCardMarkup).join("")
+        ? visible.map((entry) => historyCardMarkup(entry, selectable)).join("")
         : `<p class="history-empty">${escapeHtml(emptyMessage)}</p>`;
 
     const moreButton = state.dom[moreId];
@@ -714,7 +1000,8 @@ function renderSavedHistory() {
         "current-history-list",
         "current-history-more",
         state.currentHistoryVisible,
-        grouped.activeRound ? `${grouped.activeRound}회에 저장된 조합이 없습니다.` : "현재 회차를 확인하지 못했습니다."
+        grouped.activeRound ? `${grouped.activeRound}회에 저장된 조합이 없습니다.` : "현재 회차를 확인하지 못했습니다.",
+        true
     );
     renderHistoryGroup(
         grouped.winners,
@@ -723,6 +1010,7 @@ function renderSavedHistory() {
         state.winningHistoryVisible,
         "아직 확인된 당첨 조합이 없습니다."
     );
+    updateSavedSelectionUi(grouped.current.map(({ record }) => record));
 }
 
 async function loadSavedHistory({ showLoading = true } = {}) {
@@ -748,6 +1036,10 @@ async function loadSavedHistory({ showLoading = true } = {}) {
             .map(normalizeSavedRecord)
             .filter((record) => record && (!record.mode || record.mode === "lotto"))
             .sort((left, right) => (Date.parse(right.timestamp) || 0) - (Date.parse(left.timestamp) || 0));
+        const availableKeys = new Set(currentRoundSavedRecords().map(savedRecordSelectionKey));
+        state.selectedSavedRecordKeys = new Set(
+            [...state.selectedSavedRecordKeys].filter((key) => availableKeys.has(key))
+        );
         renderSavedHistory();
         return state.savedRecords;
     } catch (error) {
@@ -757,6 +1049,8 @@ async function loadSavedHistory({ showLoading = true } = {}) {
         state.dom["winning-history-list"].innerHTML = '<p class="history-empty">당첨 기록을 불러오지 못했습니다.</p>';
         state.dom["current-history-more"].classList.add("hidden");
         state.dom["winning-history-more"].classList.add("hidden");
+        state.selectedSavedRecordKeys.clear();
+        updateSavedSelectionUi([]);
         return [];
     } finally {
         if (refreshButton) {
@@ -773,17 +1067,23 @@ function setGenerating(isGenerating) {
     else updateGenerateLabel();
 }
 
-function generateCurrent({ scroll = true, persist = true } = {}) {
+function generateCurrent({ scroll = true } = {}) {
     setGenerating(true);
+    const strategyNumber = state.strategy;
+    const quantity = state.quantity;
     window.setTimeout(() => {
         try {
             state.combinations = generateCombinations({
-                strategy: state.strategy,
-                count: state.quantity,
+                strategy: strategyNumber,
+                count: quantity,
                 history: state.history
             });
+            state.generatedStrategy = strategyNumber;
+            state.generatedRound = getTargetRound();
+            state.selectedIndexes = new Set(state.combinations.map((_, index) => index));
+            state.lastSavedKey = "";
             renderResults();
-            if (persist) saveCurrentBatch();
+            saveCurrentBatch();
             if (scroll) state.dom.results.scrollIntoView({ behavior: "smooth", block: "start" });
         } catch (error) {
             showToast(error.message || "조합 생성에 실패했습니다. 다시 시도해 주세요.");
@@ -825,27 +1125,81 @@ function showToast(message) {
 }
 
 async function copyAll() {
-    if (!state.combinations.length) return;
+    const combinations = selectedCombinations();
+    if (!combinations.length) return;
     try {
-        await copyText(combinationsAsTsv());
-        showToast(`${state.combinations.length}조합을 엑셀용 형식으로 복사했습니다.`);
+        await copyText(combinationsAsTsv(combinations));
+        showToast(`선택한 ${combinations.length}조합을 엑셀용 형식으로 복사했습니다.`);
     } catch {
         showToast("복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.");
     }
 }
 
-function downloadTxt() {
-    if (!state.combinations.length) return;
-    const blob = new Blob(["\uFEFF", combinationsAsTxt()], { type: "text/plain;charset=utf-8" });
+async function copySelectedText() {
+    const combinations = selectedCombinations();
+    if (!combinations.length) return;
+    try {
+        await copyText(combinationsAsTxt(combinations));
+        showToast(`선택한 ${combinations.length}조합을 텍스트로 복사했습니다.`);
+    } catch {
+        showToast("복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.");
+    }
+}
+
+function downloadCombinationsTxt(combinations, filename) {
+    const blob = new Blob(["\uFEFF", combinationsAsTxt(combinations)], { type: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
-    const date = new Date().toISOString().slice(0, 10);
     link.href = URL.createObjectURL(blob);
-    link.download = `mix645_strategy${state.strategy}_${state.combinations.length}_combinations_${date}.txt`;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     link.remove();
     URL.revokeObjectURL(link.href);
-    showToast("TXT 파일을 저장했습니다.");
+}
+
+function downloadTxt() {
+    const combinations = selectedCombinations();
+    if (!combinations.length) return;
+    const date = new Date().toISOString().slice(0, 10);
+    downloadCombinationsTxt(
+        combinations,
+        `mix645_strategy${state.generatedStrategy}_${combinations.length}_combinations_${date}.txt`
+    );
+    showToast(`선택한 ${combinations.length}조합을 TXT 파일로 저장했습니다.`);
+}
+
+async function copySavedAsExcel() {
+    const combinations = selectedSavedCombinations();
+    if (!combinations.length) return;
+    try {
+        await copyText(combinationsAsTsv(combinations));
+        showToast(`저장 기록에서 선택한 ${combinations.length}조합을 엑셀용 형식으로 복사했습니다.`);
+    } catch {
+        showToast("복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.");
+    }
+}
+
+async function copySavedAsText() {
+    const combinations = selectedSavedCombinations();
+    if (!combinations.length) return;
+    try {
+        await copyText(combinationsAsTxt(combinations));
+        showToast(`저장 기록에서 선택한 ${combinations.length}조합을 텍스트로 복사했습니다.`);
+    } catch {
+        showToast("복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.");
+    }
+}
+
+function downloadSavedTxt() {
+    const combinations = selectedSavedCombinations();
+    if (!combinations.length) return;
+    const round = getTargetRound() || currentRoundSavedRecords()[0]?.round || "current";
+    const date = new Date().toISOString().slice(0, 10);
+    downloadCombinationsTxt(
+        combinations,
+        `mix645_round${round}_saved_${combinations.length}_combinations_${date}.txt`
+    );
+    showToast(`저장 기록에서 선택한 ${combinations.length}조합을 TXT 파일로 저장했습니다.`);
 }
 
 function openDocument(path, title) {
@@ -882,9 +1236,27 @@ function bindEvents() {
         button.addEventListener("click", () => updateQuantity(button.dataset.quantity));
     });
     state.dom["copy-all-button"].addEventListener("click", copyAll);
-    state.dom["save-button"].addEventListener("click", () => saveCurrentBatch());
+    state.dom["copy-text-button"].addEventListener("click", copySelectedText);
+    state.dom["qr-button"].addEventListener("click", () => openQrDialog(selectedCombinations(), "선택 조합"));
     state.dom["download-button"].addEventListener("click", downloadTxt);
     state.dom["regenerate-button"].addEventListener("click", () => generateCurrent({ scroll: false }));
+    state.dom["select-all-button"].addEventListener("click", () => setAllCombinationsSelected(true));
+    state.dom["clear-selection-button"].addEventListener("click", () => setAllCombinationsSelected(false));
+    state.dom["saved-select-all-button"].addEventListener("click", () => setAllSavedRecordsSelected(true));
+    state.dom["saved-clear-selection-button"].addEventListener("click", () => setAllSavedRecordsSelected(false));
+    state.dom["saved-qr-button"].addEventListener("click", () => openQrDialog(selectedSavedCombinations(), "저장 기록 선택"));
+    state.dom["saved-copy-all-button"].addEventListener("click", copySavedAsExcel);
+    state.dom["saved-copy-text-button"].addEventListener("click", copySavedAsText);
+    state.dom["saved-download-button"].addEventListener("click", downloadSavedTxt);
+    state.dom["manual-qr-button"].addEventListener("click", openManualQr);
+    state.dom["manual-qr-clear"].addEventListener("click", () => {
+        state.dom["manual-qr-input"].value = "";
+        state.dom["manual-qr-errors"].innerHTML = "";
+        state.dom["manual-qr-input"].focus();
+    });
+    state.dom["manual-qr-input"].addEventListener("input", () => {
+        state.dom["manual-qr-errors"].innerHTML = "";
+    });
     state.dom["refresh-history-button"].addEventListener("click", () => loadSavedHistory());
     state.dom["current-history-more"].addEventListener("click", () => {
         state.currentHistoryVisible += HISTORY_PAGE_SIZE;
@@ -904,6 +1276,36 @@ function bindEvents() {
         } catch {
             showToast("복사하지 못했습니다.");
         }
+    });
+    state.dom["combination-list"].addEventListener("change", (event) => {
+        const checkbox = event.target.closest("[data-select-index]");
+        if (!checkbox) return;
+        const index = Number(checkbox.dataset.selectIndex);
+        if (checkbox.checked) state.selectedIndexes.add(index);
+        else state.selectedIndexes.delete(index);
+        checkbox.closest(".combination-card")?.classList.toggle("selected", checkbox.checked);
+        updateSelectionUi();
+    });
+    state.dom["current-history-list"].addEventListener("change", (event) => {
+        const checkbox = event.target.closest("[data-saved-select]");
+        if (!checkbox) return;
+        const key = checkbox.dataset.savedSelect;
+        if (checkbox.checked) state.selectedSavedRecordKeys.add(key);
+        else state.selectedSavedRecordKeys.delete(key);
+        checkbox.closest(".history-card")?.classList.toggle("selected", checkbox.checked);
+        updateSavedSelectionUi();
+    });
+    state.dom["qr-close"].addEventListener("click", closeQrDialog);
+    state.dom["qr-prev"].addEventListener("click", () => {
+        state.qrPage = Math.max(0, state.qrPage - 1);
+        renderQrPage();
+    });
+    state.dom["qr-next"].addEventListener("click", () => {
+        state.qrPage = Math.min(state.qrPages.length - 1, state.qrPage + 1);
+        renderQrPage();
+    });
+    state.dom["qr-dialog"].addEventListener("click", (event) => {
+        if (event.target === state.dom["qr-dialog"]) closeQrDialog();
     });
     state.dom["document-close"].addEventListener("click", closeDocument);
     state.dom["document-dialog"].addEventListener("click", (event) => {
@@ -962,6 +1364,11 @@ if (typeof module !== "undefined" && module.exports) {
         partitionSavedHistory,
         HISTORY_PAGE_SIZE,
         combinationsAsTsv,
-        combinationsAsTxt
+        combinationsAsTxt,
+        mobileSlipChecksum,
+        buildMobileSlipPayload,
+        splitMobileSlipGames,
+        parseManualGames,
+        mobileSlipSelfCheck
     };
 }
