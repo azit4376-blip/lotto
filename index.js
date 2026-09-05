@@ -533,6 +533,33 @@ function mobileSlipPng(payload, games = [], firstGameNumber = 0, caption = "") {
     return canvas.toDataURL("image/png");
 }
 
+function dataUrlToPngFile(dataUrl, filename) {
+    const encoded = String(dataUrl).split(",")[1];
+    if (!encoded) throw new Error("저장할 QR 이미지를 만들지 못했습니다.");
+    const binary = atob(encoded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    return new File([bytes], filename, { type: "image/png" });
+}
+
+function canShareQrImage() {
+    if (typeof navigator.share !== "function" || typeof navigator.canShare !== "function") return false;
+    try {
+        return navigator.canShare({ files: [new File([new Uint8Array(1)], "mix645.png", { type: "image/png" })] });
+    } catch {
+        return false;
+    }
+}
+
+async function shareQrImage() {
+    try {
+        const file = dataUrlToPngFile(state.dom["qr-download"].href, state.dom["qr-download"].download);
+        if (!navigator.canShare({ files: [file] })) throw new Error("이미지 공유를 지원하지 않습니다.");
+        await navigator.share({ files: [file], title: "MIX645 판매점용 QR" });
+    } catch (error) {
+        if (error?.name !== "AbortError") showToast("공유 메뉴를 열지 못했습니다. 파일 다운로드를 이용해 주세요.");
+    }
+}
+
 function renderQrPage() {
     const games = state.qrPages[state.qrPage];
     if (!games?.length) return;
@@ -565,6 +592,9 @@ function renderQrPage() {
     state.dom["qr-next"].disabled = state.qrPage === pageCount - 1;
     state.dom["qr-download"].href = downloadDataUrl;
     state.dom["qr-download"].download = `mix645-mobile-slip-${targetRound || "lotto"}-${pageNumber}.png`;
+    const shareAvailable = canShareQrImage();
+    state.dom["qr-share"].hidden = !shareAvailable;
+    state.dom["qr-save-help"].hidden = !shareAvailable;
 }
 
 function openQrDialog(games, sourceLabel) {
@@ -713,7 +743,7 @@ function cacheDom() {
         "saved-selection-count", "saved-select-all-button", "saved-clear-selection-button", "saved-qr-button",
         "saved-copy-all-button", "saved-copy-text-button", "saved-download-button",
         "qr-dialog", "qr-close", "qr-meta", "qr-image", "qr-page-label", "qr-page-count", "qr-game-list",
-        "qr-prev", "qr-next", "qr-download", "document-dialog", "document-title", "document-close", "document-frame", "toast"
+        "qr-prev", "qr-next", "qr-share", "qr-download", "qr-save-help", "document-dialog", "document-title", "document-close", "document-frame", "toast"
     ];
     ids.forEach((id) => { state.dom[id] = document.getElementById(id); });
 }
@@ -1371,6 +1401,7 @@ function bindEvents() {
         state.qrPage = Math.min(state.qrPages.length - 1, state.qrPage + 1);
         renderQrPage();
     });
+    state.dom["qr-share"].addEventListener("click", shareQrImage);
     state.dom["qr-dialog"].addEventListener("click", (event) => {
         if (event.target === state.dom["qr-dialog"]) closeQrDialog();
     });

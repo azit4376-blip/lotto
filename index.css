@@ -1941,21 +1941,56 @@ a {
     font-weight: 900;
 }
 
+.qr-save-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.qr-share,
 .qr-download {
     display: flex;
     min-height: 44px;
     align-items: center;
     justify-content: center;
-    margin-top: 10px;
-    color: #fff;
     border-radius: 10px;
-    background: var(--teal-dark);
     font-size: 12px;
     font-weight: 900;
 }
 
-.qr-download:hover {
+.qr-share {
+    color: #fff;
+    border: 0;
+    background: var(--teal-dark);
+    cursor: pointer;
+}
+
+.qr-share:hover {
     background: var(--teal);
+}
+
+.qr-share[hidden],
+.qr-save-help[hidden] {
+    display: none;
+}
+
+.qr-download {
+    color: var(--ink-2);
+    border: 1px solid var(--line-dark);
+    background: #fff;
+}
+
+.qr-download:hover {
+    color: var(--teal-dark);
+    border-color: var(--teal);
+}
+
+.qr-save-help {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 9px;
+    line-height: 1.5;
+    text-align: center;
 }
 
 .qr-notice {

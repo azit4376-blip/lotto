@@ -75,7 +75,7 @@
     }
     </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23152533%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-weight=%22900%22 font-size=%2244%22 fill=%22%235ee0bd%22>645</text></svg>">
-    <link rel="stylesheet" href="index.css?v=34.3.0">
+    <link rel="stylesheet" href="index.css?v=34.4.0">
 </head>
 <body>
 <a class="skip-link" href="#generator">조합 생성기로 바로가기</a>
@@ -365,7 +365,11 @@
                     <span id="qr-page-count"></span>
                     <button type="button" id="qr-next">다음 QR →</button>
                 </div>
-                <a class="qr-download" id="qr-download" href="#" download>QR·조합 이미지 저장</a>
+                <div class="qr-save-actions">
+                    <button type="button" class="qr-share" id="qr-share" hidden>사진첩 저장·공유</button>
+                    <a class="qr-download" id="qr-download" href="#" download>파일 다운로드</a>
+                </div>
+                <p class="qr-save-help" id="qr-save-help" hidden>모바일 공유 메뉴에서 ‘이미지 저장’ 또는 ‘사진에 저장’을 선택하세요.</p>
                 <div class="qr-notice">
                     <strong>QR은 복권이 아닙니다.</strong>
                     <p>판매점 단말기에 번호를 전달하는 모바일 슬립입니다. 인식 후 결제 전 단말기 번호와 발권된 실물 복권을 반드시 비교하세요.</p>
@@ -384,6 +388,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="index.js?v=34.3.0"></script>
+<script src="index.js?v=34.4.0"></script>
 </body>
 </html>
