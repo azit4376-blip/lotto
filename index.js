@@ -17,8 +17,8 @@ const STRATEGIES = Object.freeze({
     },
     3: {
         name: "최근 20~50주 추세 전략",
-        description: "중기 빈도와 최근 변화 폭을 함께 비교해 상승 흐름을 참고합니다.",
-        summary: "일시적인 한두 번의 출현보다 20~50회 구간에서 이어지는 흐름에 무게를 둡니다."
+        description: "최근 20회 출현률을 최근 50회 기준선과 비교해 중기 상승 흐름에 가중치를 줍니다.",
+        summary: "최근 20회 빈도와 50회 기준선의 차이를 반영하되 공통 균형 기준으로 번호 쏠림을 제한합니다."
     },
     4: {
         name: "장기 누적 빈도 전략",
@@ -51,9 +51,9 @@ const STRATEGIES = Object.freeze({
         summary: "같은 시기의 과거 기록을 보조 신호로 사용하며 표본 부족은 중기 빈도로 보완합니다."
     },
     10: {
-        name: "고위험 랜덤 분산 전략",
-        description: "통계 편향을 최소화하고 무작위성과 조합 간 분산을 더 강하게 적용합니다.",
-        summary: "번호 선택은 넓게 분산하되 기본적인 홀짝·저고·구간 검증은 유지하는 변동성 높은 전략입니다."
+        name: "무작위 분산 전략",
+        description: "과거 출현 통계 대신 매 선택마다 새로운 무작위 가중치를 적용합니다.",
+        summary: "번호 재사용 패널티를 다른 전략보다 강하게 적용해 조합 간 중복을 줄이면서 공통 균형 기준은 유지합니다."
     }
 });
 
@@ -143,11 +143,13 @@ function normalize(values) {
 
 function buildStats(history) {
     const recent10Rows = history.slice(0, 10);
+    const recent20Rows = history.slice(0, 20);
     const recent50Rows = history.slice(0, 50);
     const currentMonth = new Date().getMonth() + 1;
     const sameMonthRows = history.filter((row) => row.month === currentMonth);
 
     const recent10Raw = countFrequency(recent10Rows);
+    const recent20Raw = countFrequency(recent20Rows);
     const recent50Raw = countFrequency(recent50Rows);
     const longRaw = countFrequency(history);
     const monthRaw = countFrequency(sameMonthRows);
@@ -157,12 +159,13 @@ function buildStats(history) {
     for (let number = 1; number <= 45; number += 1) {
         const lastIndex = history.findIndex((row) => row.numbers.includes(number));
         gapRaw[number] = lastIndex === -1 ? Math.max(20, history.length) : lastIndex;
-        const shortRate = recent10Raw[number] / Math.max(1, recent10Rows.length);
-        const mediumRate = recent50Raw[number] / Math.max(1, recent50Rows.length);
-        trendRaw[number] = shortRate - mediumRate;
+        const recent20Rate = recent20Raw[number] / Math.max(1, recent20Rows.length);
+        const recent50Rate = recent50Raw[number] / Math.max(1, recent50Rows.length);
+        trendRaw[number] = recent20Rate - recent50Rate;
     }
 
     const recent10 = normalize(recent10Raw);
+    const recent20 = normalize(recent20Raw);
     const recent50 = normalize(recent50Raw);
     const long = normalize(longRaw);
     const month = normalize(monthRaw);
@@ -176,7 +179,7 @@ function buildStats(history) {
         cold[number] = (1 - recent50[number]) * 0.55 + gap[number] * 0.45;
     }
 
-    return { recent10, recent50, long, month, gap, trend, hot, cold };
+    return { recent10, recent20, recent50, long, month, gap, trend, hot, cold };
 }
 
 function makeSignal(strategy, stats) {
@@ -190,7 +193,7 @@ function makeSignal(strategy, stats) {
             signal[number] = 0.15 + stats.recent10[number] * 1.55 + stats.recent50[number] * 0.2;
             break;
         case 3:
-            signal[number] = 0.15 + stats.trend[number] * 1.05 + stats.recent50[number] * 0.65;
+            signal[number] = 0.15 + stats.trend[number] * 1.05 + stats.recent20[number] * 0.65;
             break;
         case 4:
             signal[number] = 0.18 + stats.long[number] * 1.65;
@@ -211,7 +214,7 @@ function makeSignal(strategy, stats) {
             signal[number] = 0.16 + stats.month[number] * 1.05 + stats.recent50[number] * 0.38;
             break;
         case 10:
-            signal[number] = 0.55 + randomFloat() * 1.15 + (number > 31 ? 0.12 : 0);
+            signal[number] = 0.55 + randomFloat() * 1.15;
             break;
         default:
             signal[number] = 1;
@@ -220,13 +223,13 @@ function makeSignal(strategy, stats) {
     return signal;
 }
 
-function weightedPick(signal, excluded, usage) {
+function weightedPick(signal, excluded, usage, usagePenaltyFactor = 0.24) {
     const candidates = [];
     let total = 0;
 
     for (let number = 1; number <= 45; number += 1) {
         if (excluded.has(number)) continue;
-        const usagePenalty = 1 + (usage[number] || 0) * 0.24;
+        const usagePenalty = 1 + (usage[number] || 0) * usagePenaltyFactor;
         const weight = Math.max(0.001, signal[number] / usagePenalty);
         total += weight;
         candidates.push([number, total]);
@@ -242,6 +245,7 @@ function weightedPick(signal, excluded, usage) {
 function createCandidate(strategy, stats, usage) {
     const selected = new Set();
     const mixedSignal = makeSignal(strategy, stats);
+    const usagePenaltyFactor = Number(strategy) === 10 ? 0.6 : 0.24;
 
     if (Number(strategy) === 8) {
         [stats.hot, stats.cold, stats.long, stats.trend, mixedSignal, mixedSignal]
@@ -249,7 +253,7 @@ function createCandidate(strategy, stats, usage) {
     } else {
         while (selected.size < 6) {
             const signal = Number(strategy) === 10 ? makeSignal(10, stats) : mixedSignal;
-            selected.add(weightedPick(signal, selected, usage));
+            selected.add(weightedPick(signal, selected, usage, usagePenaltyFactor));
         }
     }
 
