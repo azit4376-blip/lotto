@@ -8,6 +8,7 @@ const resultsState = {
     filtered: [],
     page: 1,
     query: "",
+    expandedRound: null,
     dom: {}
 };
 
@@ -24,12 +25,22 @@ function parseResultsCsv(csv) {
         .filter((line) => line.trim())
         .slice(1)
         .map(parseResultsCsvLine)
-        .map((cells) => ({
-            round: Number(String(cells[0] || "").replace(/\D/g, "")),
-            date: cells[1] || "",
-            numbers: cells.slice(2, 8).map(Number),
-            bonus: Number(cells[8])
-        }))
+        .map((cells) => {
+            const prizeCells = cells.slice(9, 24);
+            return {
+                round: Number(String(cells[0] || "").replace(/\D/g, "")),
+                date: cells[1] || "",
+                numbers: cells.slice(2, 8).map(Number),
+                bonus: Number(cells[8]),
+                prizeAvailable: prizeCells.some((cell) => String(cell || "").trim()),
+                prizes: Array.from({ length: 5 }, (_, index) => ({
+                    rank: index + 1,
+                    winners: parseLocalizedNumber(cells[9 + index * 3]),
+                    perWinner: parseLocalizedNumber(cells[10 + index * 3]),
+                    total: parseLocalizedNumber(cells[11 + index * 3])
+                }))
+            };
+        })
         .filter((draw) => (
             draw.round > 0 &&
             draw.numbers.length === 6 &&
@@ -37,6 +48,11 @@ function parseResultsCsv(csv) {
             draw.bonus >= 1 && draw.bonus <= 45
         ))
         .sort((a, b) => b.round - a.round);
+}
+
+function parseLocalizedNumber(value) {
+    const digits = String(value ?? "").replace(/[^\d-]/g, "");
+    return digits ? Number(digits) : null;
 }
 
 function calculateDrawMetrics(draw) {
@@ -88,6 +104,14 @@ function ballMarkup(number, bonus = false) {
     return `<span class="ball ${ballRangeClass(number)}${bonus ? " is-bonus" : ""}">${number}</span>`;
 }
 
+function formatCount(value) {
+    return Number.isFinite(value) ? `${value.toLocaleString("ko-KR")}명` : "-";
+}
+
+function formatWon(value) {
+    return Number.isFinite(value) ? `${value.toLocaleString("ko-KR")}원` : "-";
+}
+
 function cacheResultsDom() {
     [
         "draws-data-chip", "draws-data-status", "latest-draw-round", "latest-draw-date",
@@ -119,13 +143,49 @@ function renderLatestResult() {
     ].map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("");
 }
 
-function drawRowMarkup(draw) {
+function drawPrizeMarkup(draw) {
+    if (!draw.prizeAvailable) {
+        return '<p class="draw-prize-empty">이 회차의 상세 당첨금 정보는 준비 중입니다.</p>';
+    }
+
+    const metrics = calculateDrawMetrics(draw);
+    const prizeCards = draw.prizes.map((prize) => `
+        <article class="draw-prize-card rank-${prize.rank}">
+            <header><span>${prize.rank}</span><strong>${prize.rank}등</strong></header>
+            <dl>
+                <div><dt>당첨 게임</dt><dd>${formatCount(prize.winners)}</dd></div>
+                <div><dt>1인당</dt><dd>${formatWon(prize.perWinner)}</dd></div>
+                <div><dt>총 당첨금</dt><dd>${formatWon(prize.total)}</dd></div>
+            </dl>
+        </article>`).join("");
+
     return `
-        <tr>
+        <div class="draw-prize-heading">
+            <div><span>ROUND ${draw.round}</span><h3>${draw.round.toLocaleString("ko-KR")}회 당첨금 상세</h3></div>
+            <p>${formatDrawDate(draw.date)} 추첨</p>
+        </div>
+        <div class="draw-prize-grid">${prizeCards}</div>
+        <div class="draw-detail-metrics" aria-label="${draw.round}회 번호 구성">
+            <span>홀짝 <strong>${metrics.odd}:${metrics.even}</strong></span>
+            <span>저고 <strong>${metrics.low}:${metrics.high}</strong></span>
+            <span>번호 합 <strong>${metrics.sum.toLocaleString("ko-KR")}</strong></span>
+            <span>연속수 <strong>${metrics.consecutive}쌍</strong></span>
+        </div>`;
+}
+
+function drawRowMarkup(draw) {
+    const isExpanded = resultsState.expandedRound === draw.round;
+    const detailId = `draw-detail-${draw.round}`;
+    return `
+        <tr class="draw-row${isExpanded ? " is-expanded" : ""}" data-round="${draw.round}">
             <td><strong>${draw.round.toLocaleString("ko-KR")}회</strong></td>
             <td>${formatDrawDate(draw.date)}</td>
             <td><div class="draw-number-set" aria-label="${draw.round}회 당첨번호">${draw.numbers.map((number) => ballMarkup(number)).join("")}</div></td>
             <td>${ballMarkup(draw.bonus, true)}</td>
+            <td><button class="draw-detail-toggle" type="button" aria-expanded="${isExpanded}" aria-controls="${detailId}">${isExpanded ? "접기" : "당첨금 보기"}</button></td>
+        </tr>
+        <tr class="draw-prize-row${isExpanded ? "" : " hidden"}" id="${detailId}">
+            <td colspan="5"><div class="draw-prize-panel">${drawPrizeMarkup(draw)}</div></td>
         </tr>`;
 }
 
@@ -162,7 +222,16 @@ function applyRoundSearch() {
     resultsState.query = digits;
     resultsState.filtered = filterDrawsByRound(resultsState.draws, digits);
     resultsState.page = 1;
+    resultsState.expandedRound = resultsState.filtered.length === 1 ? resultsState.filtered[0].round : null;
     renderDrawArchive();
+}
+
+function toggleDrawDetail(round) {
+    resultsState.expandedRound = resultsState.expandedRound === round ? null : round;
+    renderDrawArchive();
+    if (resultsState.expandedRound) {
+        document.getElementById(`draw-detail-${round}`)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
 }
 
 function bindResultsEvents() {
@@ -175,13 +244,20 @@ function bindResultsEvents() {
         applyRoundSearch();
         resultsState.dom["round-query"].focus();
     });
+    resultsState.dom["draws-table-body"].addEventListener("click", (event) => {
+        const row = event.target.closest(".draw-row");
+        if (!row) return;
+        toggleDrawDetail(Number(row.dataset.round));
+    });
     resultsState.dom["draws-prev"].addEventListener("click", () => {
         resultsState.page -= 1;
+        resultsState.expandedRound = null;
         renderDrawArchive();
         document.getElementById("draw-archive").scrollIntoView({ behavior: "smooth" });
     });
     resultsState.dom["draws-next"].addEventListener("click", () => {
         resultsState.page += 1;
+        resultsState.expandedRound = null;
         renderDrawArchive();
         document.getElementById("draw-archive").scrollIntoView({ behavior: "smooth" });
     });
@@ -227,6 +303,10 @@ if (typeof module !== "undefined" && module.exports) {
         filterDrawsByRound,
         paginateDraws,
         formatDrawDate,
+        parseLocalizedNumber,
+        formatCount,
+        formatWon,
+        drawPrizeMarkup,
         RESULTS_PAGE_SIZE
     };
 }
